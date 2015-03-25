@@ -112,30 +112,34 @@ current_database = [current_database s];
 
 formatSpec = 'b%d.reflect[%d] = %f;\n';
 fid = fopen('test.txt', 'w');
-fprintf(fid, '#include "load_db.h" \n\nvoid load_db(db_t* current_db){\n\n');
+fprintf(fid, '#include "load_db.h" \n\n');
 
 counter = 0;
 
-
 for i = 1:N_WORDS
-    for j = 1:N_VERSIONS   
+    formatWord = 'word_t const pm word%d = {"%s", ';
+    for j = 1:N_VERSIONS
+        counter = counter + 1;
+        formatSpec = 'version_t const pm version%d%d = {\n \t\t //version \n';
+        fprintf(fid, formatSpec, i,j);
         for col = 1:SUBSET_LENGTH
-            formatSpec = 'const float pm reflec%d%d%d%d[N_REFLEC] = {';
-            fprintf(fid, formatSpec, i,j,col, row);
+            fprintf(fid, '\t\t0, ');
             for row = 1:N_REFLEC
-                formatSpec('%f, ');
-                fprintf(fid, formatSpec, current_database(counter).reflec(row, col));
-            end            
-
+                fprintf(fid, '%d, ', current_database(counter).reflec(row, col));
+            end
+            fprintf(fid, ' //block %d \n', col);
         end
-
-
+        fprintf(fid, '}; \n\n');   
+        formatWord = strcat(formatWord, ' &version', num2str(i), num2str(j), ', ');
     end
-
+    fprintf(fid, formatWord, i, current_database(counter).name);
+    fprintf(fid,'\n\n');
+    
+    
 end
 
 
-fprintf(fid, '\t*current_db = db; \n');
+fprintf(fid, 'void load_db(void){\n\n');
 fprintf(fid, '\treturn; \n');
 fprintf(fid, '} \n');
 fclose(fid);
