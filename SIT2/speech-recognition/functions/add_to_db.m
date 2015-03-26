@@ -11,10 +11,10 @@ function add_to_db(input, string, L, D, P, M, fs, gamma, sound)
 %   *fs* is the sample frequency the input signal was sampled with
 %   *threshold* is the threshold the cut function uses
 
-
+input = input.*10;
 
 if sound == 1
-    %soundsc(input, fs)
+    soundsc(input, fs)
     figure (1)
     subplot(221)
     plot(input)
@@ -31,11 +31,9 @@ end
 % removing low frequency noise with filter(-s)
 input_0 = rm_noise(input);
 
-
-
 if sound ==1
-    %pause(3)
-    %soundsc(input_0, fs);
+    pause(3)
+    soundsc(input_0, fs);
     figure (1)
     subplot(222)
     plot(input_0)
@@ -50,10 +48,9 @@ end
 % pre-emhasis filter with a = 0.95-98, function
 input_1 = pre_emph(input_0, gamma);
 
-
 if sound ==1
-    %pause(3)
-    %soundsc(input_1, fs);
+    pause(3)
+    soundsc(input_1, fs);
     figure (1)
     subplot(223)
     plot(input_1)
@@ -69,7 +66,7 @@ end
 [input_2, norm] = cut_baby(input_1, L, D);
 
 if sound == 1
-    %pause(3)
+    pause(3)
     soundsc(input_2, fs);
     
     figure (1)
@@ -79,14 +76,9 @@ if sound == 1
     xlabel('Samples');
     ylabel('Amplitude');
     
-    figure (2)
-    
+    figure (2)    
     fft_(input_2, length(input_2), fs, 224)
 end
-
-% Add zeros such that there will be a multiple of L samples
-%input_3 = [input_2' zeros(1, L - mod(length(input_2), L))];
-
 
 % Block framing the signal
 input_4 = block_frame(input_2, L, D);

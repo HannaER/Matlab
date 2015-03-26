@@ -6,7 +6,7 @@ function [ output, norms ] = cut_baby( input, b_length, threshold )
     % threshold = when to start listening. Around 1.
     
     y = buffer(input, b_length, 0);
-    
+    cutting_const = 1.09; % 1.09
     n_cols = length(y(1,:));
     h = hamming(length(y(:,1)));
 
@@ -22,9 +22,9 @@ function [ output, norms ] = cut_baby( input, b_length, threshold )
     for i = 1:n_cols
         temp = y(:,i);
         new_threshold = sum(abs(temp))*0.05 + threshold*0.95;
-        if new_threshold > 1.12*threshold % 1.09
+        if new_threshold > cutting_const*threshold 
             counter = counter+9;
-            if counter > 45
+            if counter > 36
                 first = ((i-4)*b_length);
                 break;
             end
@@ -47,9 +47,9 @@ function [ output, norms ] = cut_baby( input, b_length, threshold )
     for i = fliplr(1:n_cols)
         temp = y(:,i);
         new_threshold = sum(abs(temp))*0.05 + threshold*0.95;
-        if new_threshold > 1.12 * threshold
+        if new_threshold > cutting_const * threshold
             counter = counter+9;
-            if counter > 45
+            if counter > 36
             last = (i + 2) * b_length;
             break;
             end

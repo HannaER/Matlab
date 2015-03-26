@@ -125,7 +125,7 @@ for i = 1:N_WORDS
         for col = 1:SUBSET_LENGTH
             fprintf(fid, '\t\t0, ');
             for row = 1:N_REFLEC
-                fprintf(fid, '%d, ', current_database(counter).reflec(row, col))
+                fprintf(fid, '%d, ', current_database(counter).reflec(row, col));
             end
             fprintf(fid, ' //block %d \n', col);
         end
@@ -137,7 +137,7 @@ for i = 1:N_WORDS
     
     
 end
-
+fprint
 
 fprintf(fid, 'void load_db(void){\n\n');
 fprintf(fid, '\treturn; \n');

@@ -1,56 +1,47 @@
-% function output = create_subsets(input, N)
-% % N the is number of featurevectors the subsets are createt with
-% s = size(input); % s(2) gives the number of featurevectors 
-% integer = fix(s(2)/N); % integer is the number of subsets
-% remainder = mod(s(2), integer); % remainder the number of excess vectors
-% output = zeros(s(1), integer);
-% for i = 1:integer
-%     if i <= remainder
-%         for k = i + (i-1)*N : i*N + i
-%             output(:, i) = output(:, i) + input(:, k);
-%         end
-%         output(:, i) = output(:, i)./(N + 1); % calc. mean
-%     end
-%     if i > remainder
-%         for k = 2 + (i-1)*N : i*N  + remainder
-%             output(:, i) = output(:, i) + input(:, k);
-%         end
-%         output(:, i) = output(:, i)./(N); % calc. mean
-%     end
-% end
-% end
-
-
 function output = create_subsets(input, M)
+s = size(input)
+N_REFLEC = s(1);
+N_FEATURE_VECTORS = s(2);
+N_SUBSETS = M
+output = zeros(N_REFLEC, N_SUBSETS);
+integer = fix(N_FEATURE_VECTORS/N_SUBSETS)
+remainder = mod(N_FEATURE_VECTORS, N_SUBSETS)
 
-%M is the number of subsets the featurevectors are split into
-s = size(input);
-output = zeros(s(1), M);
-
-integer = fix(s(2)/M);
-remainder = mod(s(2), M);
-
-for i = 1:M
-    if i <= remainder
-        for k = i + (i-1)*integer : i*integer + i
-            output(:, i) = output(:, i) + input(:, k);
+start = 1;
+stop = 0;
+if integer  > 1
+    for i = 1:N_SUBSETS
+        if i <= remainder % remainder
+            stop = stop + integer + 1;
+            for j = 1:N_REFLEC
+                for k = start:stop
+                    output(j, i) = output(j, i) + input(j, k);
+                end
+                output(j, i) = output(j, i)/(integer + 1);
+            end
+            start = start + integer + 1;
         end
-        output(:, i) = output(:, i)./(integer + 1); % calc. mean
-    end
-    if i > remainder
-        for k = i + (i-1)*integer : i*integer  + remainder
-            output(:, i) = output(:, i) + input(:, k);
+        if i > remainder % no remainder
+            stop = stop + integer;
+            for j = 1:N_REFLEC
+                for k = start:stop
+                    output(j, i) = output(j, i) + input(j, k);
+                end
+                output(j, i) = output(j, i)/(integer);
+            end
+            start = start + integer;
         end
-        output(:, i) = output(:, i)./(integer); % calc. mean
     end
+    
+    
 end
 
-
-
-
-
-
-
-
-
-
+if integer <= 1
+    for i = 1: N_FEATURE_VECTORS
+        for j = 1: N_REFLEC
+            output(j, i) = input(j, i);
+        end
+    end
+    
+end
+end
