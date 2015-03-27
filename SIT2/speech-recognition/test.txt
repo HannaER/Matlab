@@ -1,4 +1,6 @@
-#include "load_db.h" 
+#ifndef LOAD_DB 
+#define LOAD_DB
+#include "constants.h" 
 
 version_t const pm version11 = {
  		 //version 
@@ -390,7 +392,7 @@ version_t const pm version212 = {
 word_t const pm word2 = {"left", &version21, &version22, &version23, &version24, &version25, &version26, &version27, &version28, &version29, &version210, &version211, &version212,
 };
 
-void load_db(void){
+extern db_t const pm current_db = {&word1, &word2};
 
-	return; 
-} 
+#endif
+

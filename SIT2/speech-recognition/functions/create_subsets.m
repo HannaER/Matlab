@@ -1,11 +1,11 @@
 function output = create_subsets(input, M)
-s = size(input)
+s = size(input);
 N_REFLEC = s(1);
 N_FEATURE_VECTORS = s(2);
-N_SUBSETS = M
+N_SUBSETS = M;
 output = zeros(N_REFLEC, N_SUBSETS);
-integer = fix(N_FEATURE_VECTORS/N_SUBSETS)
-remainder = mod(N_FEATURE_VECTORS, N_SUBSETS)
+integer = fix(N_FEATURE_VECTORS/N_SUBSETS);
+remainder = mod(N_FEATURE_VECTORS, N_SUBSETS);
 
 start = 1;
 stop = 0;

@@ -63,7 +63,7 @@ if sound ==1
 end
 
 % Remove unecessary parts of signal at beginning and end
-[input_2, norm] = cut_baby(input_1, L, D);
+[input_2, norm] = cut(input_1, L, D);
 
 if sound == 1
     pause(3)

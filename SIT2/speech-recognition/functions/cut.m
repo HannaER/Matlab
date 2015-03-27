@@ -1,4 +1,4 @@
-function [ output, norms ] = cut( input, b_length, threshold )
+function [ output, norms ] = cut(input, b_length, threshold )
 % Cut out the important values of a speech signal.
     % cut(signal, b_length, overlap, threshold)
     % b_length = block length
@@ -6,43 +6,67 @@ function [ output, norms ] = cut( input, b_length, threshold )
     % threshold = when to start listening. Around 1.
     
     y = buffer(input, b_length, 0);
-    
+    cutting_const = 1.09; % 1.09
     n_cols = length(y(1,:));
-    
+    h = hamming(length(y(:,1)));
+
     norms = [];
     for i = 1:n_cols
-        norms = [norms, norm(y(:,i))]; 
+        y(:,i) = y(:,i).*h;
+        norms = [norms, sum(abs(y(:,i)))]; 
     end
-    
-    
+
+    counter = 0;
     first = 0;
+    threshold = sum(abs((y(:,1))));
     for i = 1:n_cols
         temp = y(:,i);
-        if norm(temp) > threshold
-            first = ((i -4) * b_length);
-            break;
+        new_threshold = sum(abs(temp))*0.05 + threshold*0.95;
+        if new_threshold > cutting_const*threshold 
+            counter = counter+9;
+            if counter > 36
+                first = ((i-4)*b_length);
+                break;
+            end
+        else 
+            counter = counter-10;
+            if counter<0
+                counter=0;
+            end
         end
+        threshold = new_threshold;
     end
+    
     
     if first < 1
         first = 1;
     end
-    
     last = n_cols * b_length;
+    threshold = sum(abs(y(:,n_cols)));
+    counter = 0;
     for i = fliplr(1:n_cols)
         temp = y(:,i);
-        if norm(temp) > threshold
+        new_threshold = sum(abs(temp))*0.05 + threshold*0.95;
+        if new_threshold > cutting_const * threshold
+            counter = counter+9;
+            if counter > 36
             last = (i + 2) * b_length;
             break;
+            end
+        else
+            counter = counter-10;
+            if counter<0
+                counter = 0;
+            end
         end
+        threshold = new_threshold;
     end
     
     if last > length(input)
         last = length(input);
     end
     
-    output = y(:);
-    output = output(first:last);
+     output = y(first:last);
     
 end
 
