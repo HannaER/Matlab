@@ -4,11 +4,9 @@ function output = cut_new( input, b_length)
     % b_length = block length
     % overlap = amount of overlap in samples
     
-    
-    %a = 0.99, b = 0.6 t = 5
-    alfa = 0.99; % långsamt integrerande för bakgrundsbrus
-    beta = 0.8; % snabbare integrering för tal(korttidsenergi)
-    threshold = 5;
+    alfa = 0.4;
+    beta = 0.999;
+    threshold = 2;
 
     first = 1;
     last = length(input);
@@ -21,13 +19,13 @@ function output = cut_new( input, b_length)
         y(:,i) = y(:,i).*h;
         energy = [energy, sum(abs(y(:,i)).^2)]; 
     end
-    P_L = energy(1); 
+    P_L = energy(1);
     P_S = energy(1);
     %FORWARD
     for i = 1:n_cols
         P_L = alfa*P_L + (1 - alfa)*energy(i);
         P_S = beta*P_S + (1 - beta)*energy(i);
-        R = P_S/P_L;
+        R = P_L/P_S;
         if R > threshold              
             first = i*b_length;%((i-4)*b_length);
             break;
@@ -37,8 +35,8 @@ function output = cut_new( input, b_length)
         first = 1;
     end
 
-    P_L = energy(n_cols); 
-    P_S = energy(n_cols); 
+    P_L = energy(n_cols); % lå
+    P_S = energy(n_cols);
     %BACKWARD
     for i = fliplr(1:n_cols)
         P_L = alfa*P_L + (1 - alfa)*energy(i);
