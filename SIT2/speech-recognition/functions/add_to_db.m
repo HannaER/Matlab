@@ -78,6 +78,7 @@ if sound == 1
     
     figure (2)    
     fft_(input_2, length(input_2), fs, 224)
+
 end
 
 % Block framing the signal

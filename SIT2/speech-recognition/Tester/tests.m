@@ -1,3 +1,87 @@
+%% plot till rapporten%
+
+load Hanna_db/original/h6.mat
+input = rec;
+gamma = 0.5;
+L = 160;
+D = 80;
+
+
+input = input.*10;
+input_0 = rm_noise(input);
+input_1 = pre_emph(input_0, gamma);
+b_length = L;
+    alfa = 0.99; % långsamt integrerande för bakgrundsbrus
+    beta = 0.8; % snabbare integrering för tal(korttidsenergi)
+    threshold = 5;
+
+    first = 1;
+    last = length(input_1);
+    y = buffer(input_1, b_length, 0); % delar upp i block med overlap
+    n_cols = length(y(1,:));
+    h = hamming(length(y(:,1))); % kör blocken genom ett hamming fönster
+
+    energy = [];
+    for i = 1:n_cols % calc. the energy of each block by sum([a^2  b^2 c^2])
+        y(:,i) = y(:,i).*h;
+        energy = [energy, sum(abs(y(:,i)).^2)]; 
+    end
+    P_L = energy(1); 
+    P_S = energy(1);
+    %FORWARD
+    for i = 1:n_cols
+        P_L = alfa*P_L + (1 - alfa)*energy(i);
+        P_S = beta*P_S + (1 - beta)*energy(i);
+        R = P_S/P_L;
+        if R > threshold              
+            first = i*b_length;%((i-4)*b_length);
+            break;
+        end
+    end    
+    if first < 1
+        first = 1;
+    end
+
+figure (1)
+subplot(211);
+plot(input_1(first:last));
+title('The recordning before cutting');
+
+    P_L = energy(n_cols); 
+    P_S = energy(n_cols); 
+    %BACKWARD
+    for i = fliplr(1:n_cols)
+        P_L = alfa*P_L + (1 - alfa)*energy(i);
+        P_S = beta*P_S + (1 - beta)*energy(i);
+        R = P_S/P_L;
+        if R > threshold
+            last = i*b_length;  %(i + 2) * b_length;
+            break;
+        end       
+    end
+    
+    if last > length(input)
+        last = length(input);
+    end
+    if first > last
+        fprintf('\nERROR!!\nfirst > last, first = %d, last = %d\n\n', first , last);
+        first = 1;
+        last = length(input);
+        output = input(first:last);
+        return;
+    end
+    fprintf('\nfirst < last, first = %d, last = %d\n\n', first , last);
+    output = input_1(first:last);
+  
+
+subplot(212);
+plot(output);
+title('The recording after cutting');
+xlabel('Samples');
+ylabel('Amplitude');
+
+
+%%
 % testing create_subset
 clc;
 clear all;
