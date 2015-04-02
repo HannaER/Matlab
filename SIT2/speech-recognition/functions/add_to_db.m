@@ -23,7 +23,7 @@ if sound == 1
     ylabel('Amplitude');
     
     figure (2)
-    fft_(input, length(input), fs, 221)
+    fft_(input, length(input), fs, 221, 'b')
 end
 
 
@@ -42,7 +42,7 @@ if sound ==1
     ylabel('Amplitude');
     
     figure (2)
-    fft_(input_0, length(input_0), fs, 222)
+    fft_(input_0, length(input_0), fs, 222, 'b')
 end
 
 % pre-emhasis filter with a = 0.95-98, function
@@ -59,7 +59,7 @@ if sound ==1
     ylabel('Amplitude');
     
     figure (2)
-    fft_(input_1, length(input_1), fs, 223)
+    fft_(input_1, length(input_1), fs, 223, 'b')
 end
 
 % Remove unecessary parts of signal at beginning and end
@@ -77,7 +77,7 @@ if sound == 1
     ylabel('Amplitude');
     
     figure (2)    
-    fft_(input_2, length(input_2), fs, 224)
+    fft_(input_2, length(input_2), fs, 224, 'b')
 
 end
 

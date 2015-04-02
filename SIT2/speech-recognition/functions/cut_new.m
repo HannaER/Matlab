@@ -60,7 +60,7 @@ function output = cut_new( input, b_length)
         output = input(first:last);
         return;
     end
-    fprintf('\nfirst < last, first = %d, last = %d\n\n', first , last);
+    %fprintf('\nfirst < last, first = %d, last = %d\n\n', first , last);
     output = input(first:last);
     
 end
