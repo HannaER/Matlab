@@ -121,18 +121,6 @@ load Hanna_db/database/l12.mat;
 s.name = 'left';
 s.reflec = db;
 current_database = [current_database s];
-load Hanna_db/database/l13.mat;
-s.name = 'left';
-s.reflec = db;
-current_database = [current_database s];
-load Hanna_db/database/l14.mat;
-s.name = 'left';
-s.reflec = db;
-current_database = [current_database s];
-load Hanna_db/database/l15.mat;
-s.name = 'left';
-s.reflec = db;
-current_database = [current_database s];
 
 formatSpec = 'b%d.reflect[%d] = %f;\n';
 fid = fopen('test.txt', 'w');
