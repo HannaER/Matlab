@@ -50,10 +50,10 @@ load Hanna_db/database/l2.mat;
 s.name = 'left';
 s.reflec = db;
 current_database = [current_database s];
-% load Hanna_db/database/l3.mat;
-% s.name = 'left';
-% s.reflec = db;
-% current_database = [current_database s];
+load Hanna_db/database/l3.mat;
+s.name = 'left';
+s.reflec = db;
+current_database = [current_database s];
 load Hanna_db/database/l4.mat;
 s.name = 'left';
 s.reflec = db;
@@ -70,10 +70,10 @@ load Hanna_db/database/l7.mat;
 s.name = 'left';
 s.reflec = db;
 current_database = [current_database s];
-load Hanna_db/database/l9.mat;
-s.name = 'left';
-s.reflec = db;
-current_database = [current_database s];
+% load Hanna_db/database/l9.mat;
+% s.name = 'left';
+% s.reflec = db;
+% current_database = [current_database s];
 
 
 

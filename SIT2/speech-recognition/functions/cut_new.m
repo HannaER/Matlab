@@ -8,7 +8,7 @@ function output = cut_new( input, b_length)
     %a = 0.99, b = 0.6 t = 5
     alfa = 0.99; % långsamt integrerande för bakgrundsbrus
     beta = 0.8; % snabbare integrering för tal(korttidsenergi)
-    threshold = 5;
+    threshold = 4;
 
     first = 1;
     last = length(input);

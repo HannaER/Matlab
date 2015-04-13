@@ -52,7 +52,7 @@ load Hanna_db/original/h1.mat
 add_to_db(rec, 'Hanna_db/database/r1', L, D, P, M, 8000, GAMMA, 0);
 
 load Hanna_db/original/h2.mat
-add_to_db(rec, 'Hanna_db/database/r2', L, D, P, M, 8000, GAMMA, 0);
+add_to_db(rec, 'Hanna_db/database/r2', L, D, P, M, 8000, GAMMA, 1);
 
 load Hanna_db/original/h3.mat
 add_to_db(rec, 'Hanna_db/database/r3', L, D, P, M, 8000, GAMMA, 0);
