@@ -14,7 +14,7 @@ function add_to_db(input, string, L, D, P, M, fs, gamma, sound)
 
 
 if sound == 1
-    %soundsc(input, fs)
+    soundsc(input, fs)
     figure (1)
     subplot(221)
     plot(input)
@@ -34,8 +34,8 @@ input_0 = rm_noise(input);
 
 
 if sound ==1
-    %pause(3)
-    %soundsc(input_0, fs);
+    pause(3)
+    soundsc(input_0, fs);
     figure (1)
     subplot(222)
     plot(input_0)
@@ -52,8 +52,8 @@ input_1 = pre_emph(input_0, gamma);
 
 
 if sound ==1
-    %pause(3)
-    %soundsc(input_1, fs);
+    pause(3)
+    soundsc(input_1, fs);
     figure (1)
     subplot(223)
     plot(input_1)
@@ -69,7 +69,7 @@ end
 [input_2, norm] = cut_baby(input_1, L, D);
 
 if sound == 1
-    %pause(3)
+    pause(3)
     soundsc(input_2, fs);
     
     figure (1)
