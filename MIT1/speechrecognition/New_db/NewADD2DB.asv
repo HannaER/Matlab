@@ -60,46 +60,46 @@ load New_db/original/r1.mat
 add_to_db(rec(1500:end), 'New_db/database/r1', L, D, P, M, 8000, GAMMA, 1);
 
 load New_db/original/r2.mat
-add_to_db(rec(1500:end), 'New_db/database/r2', L, D, P, M, 8000, GAMMA, 0);
+add_to_db(rec(1500:end), 'New_db/database/r2', L, D, P, M, 8000, GAMMA, 1);
 
 load New_db/original/r3.mat
-add_to_db(rec(1500:end), 'New_db/database/r3', L, D, P, M, 8000, GAMMA, 0);
+add_to_db(rec(1500:end), 'New_db/database/r3', L, D, P, M, 8000, GAMMA, 1);
 
 load New_db/original/r4.mat
-add_to_db(rec(1500:end), 'New_db/database/r4', L, D, P, M, 8000, GAMMA, 0);
+add_to_db(rec(1500:end), 'New_db/database/r4', L, D, P, M, 8000, GAMMA, 1);
 
 load New_db/original/r5.mat
-add_to_db(rec(1500:end), 'New_db/database/r5', L, D, P, M, 8000, GAMMA, 0);
+add_to_db(rec(1500:end), 'New_db/database/r5', L, D, P, M, 8000, GAMMA, 1);
 
 load New_db/original/r6.mat
-add_to_db(rec(1500:end), 'New_db/database/r6', L, D, P, M, 8000, GAMMA, 0);
+add_to_db(rec(1500:end), 'New_db/database/r6', L, D, P, M, 8000, GAMMA, 1);
 
 load New_db/original/r7.mat
-add_to_db(rec(1500:end), 'New_db/database/r7', L, D, P, M, 8000, GAMMA, 0);
+add_to_db(rec(1500:end), 'New_db/database/r7', L, D, P, M, 8000, GAMMA, 1);
 
 load New_db/original/r8.mat
-add_to_db(rec(1500:end), 'New_db/database/r8', L, D, P, M, 8000, GAMMA, 0);
+add_to_db(rec(1500:end), 'New_db/database/r8', L, D, P, M, 8000, GAMMA, 1);
 
 load New_db/original/r9.mat
-add_to_db(rec(1500:end), 'New_db/database/r9', L, D, P, M, 8000, GAMMA, 0);
+add_to_db(rec(1500:end), 'New_db/database/r9', L, D, P, M, 8000, GAMMA, 1);
 
 load New_db/original/r10.mat
-add_to_db(rec(2700:8100), 'New_db/database/r10', L, D, P, M, 8000, GAMMA, 0);
+add_to_db(rec(2700:8000), 'New_db/database/r10', L, D, P, M, 8000, GAMMA, 1);
 
 load New_db/original/r11.mat
-add_to_db(rec(1500:end), 'New_db/database/r11', L, D, P, M, 8000, GAMMA, 0);
+add_to_db(rec(1500:end), 'New_db/database/r11', L, D, P, M, 8000, GAMMA, 1);
 
 load New_db/original/r12.mat
-add_to_db(rec(1500:end), 'New_db/database/r12', L, D, P, M, 8000, GAMMA, 0);
+add_to_db(rec(1500:end), 'New_db/database/r12', L, D, P, M, 8000, GAMMA, 1);
 
 load New_db/original/r13.mat
-add_to_db(rec(1500:end), 'New_db/database/r13', L, D, P, M, 8000, GAMMA, 0);
+add_to_db(rec(1500:end), 'New_db/database/r13', L, D, P, M, 8000, GAMMA, 1);
 
 load New_db/original/r14.mat
-add_to_db(rec(1500:end), 'New_db/database/r14', L, D, P, M, 8000, GAMMA, 0);
+add_to_db(rec(1500:end), 'New_db/database/r14', L, D, P, M, 8000, GAMMA, 1);
 
 load New_db/original/r15.mat
-add_to_db(rec(1500:end), 'New_db/database/r15', L, D, P, M, 8000, GAMMA, 0);
+add_to_db(rec(1500:end), 'New_db/database/r15', L, D, P, M, 8000, GAMMA, 1);
 
 
 
