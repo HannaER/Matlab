@@ -1,4 +1,4 @@
-function [W] = A_inv_iter(X,D,L);
+function [W] = LS_opt(X,D,L);
 %xx=[];
 [XM,XN]=size(X);
 Pxx=zeros(XM*L,XM*L);
