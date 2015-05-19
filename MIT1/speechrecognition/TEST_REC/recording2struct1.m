@@ -2,7 +2,7 @@ close all;
 clear all;
 clc;
 
-%% %%%%%%%% 1 meter %%%%%%%%%%%%%%
+%%%%%%%%% 1 meter %%%%%%%%%%%%%%
 rec1v = [];
 rec1h = [];
 
@@ -72,6 +72,7 @@ for i = 1:length(rec1v)
     temp = rec1v(1,i).ch1;
     plot(temp);
     title(num2str(i));
+    soundsc(temp);
     pause(1);   
 end
 
@@ -141,6 +142,7 @@ for i = 1:length(rec1h)
     temp = rec1h(1,i).ch1;
     plot(temp);
     title(num2str(i));
+    soundsc(temp);
     pause(1);   
 end
 

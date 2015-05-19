@@ -1,4 +1,4 @@
-%% %%%%%%%% 2 meter %%%%%%%%%%%%%%
+%%%%%%%%%% 2 meter %%%%%%%%%%%%%%
 close all;
 clc;
 clear all;
@@ -95,6 +95,7 @@ save('TEST_REC\2\v.mat', 'rec2v');
 %     temp = rec2v(1,i).ch1;
 %     plot(temp);
 %     title(num2str(i));
+%     soundsc(temp);
 %     pause(1);   
 % end
 
@@ -187,6 +188,7 @@ save('TEST_REC\2\h.mat', 'rec2h');
 %     temp = rec2h(1,i).ch1;
 %     plot(temp);
 %     title(num2str(i));
+%     soundsc(temp);
 %     pause(1);   
 % end
 
