@@ -46,6 +46,10 @@ y4v15 = audioread('\Recordings\test1\4meter\vänster\2015-05-12-085027\recording1
 [y4v15, ps] = removerows(y4v15, [232900:240000]);
 y4v.y4v15 = y4v15;
 
+%y4v16-17 är väldigt brusiga
+y4v16 = audioread('\Recordings\test1\4meter\vänster\2015-05-20-131556\recording1.wav');
+y4v17 = audioread('\Recordings\test1\4meter\vänster\2015-05-20-131556\recording2.wav');
+
 
 
 finished = 0;
@@ -143,6 +147,15 @@ y4h.y4h15 = y4h15;
 y4h16 = audioread('\Recordings\test1\4meter\höger\2015-05-12-090907\recording10.wav');
 [y4h16, ps] = removerows(y4h16, [13340:16830 44990:48810 108900:114200]);
 y4h.y4h16 = y4h16;
+
+%y4h17-20 är väldigt brusiga
+y4h17 = audioread('\Recordings\test1\4meter\höger\2015-05-20-132022\recording1.wav');
+y4h18 = audioread('\Recordings\test1\4meter\höger\2015-05-20-132022\recording2.wav');
+
+y4h19 = audioread('\Recordings\test1\4meter\höger\2015-05-20-131756\recording1.wav');
+y4h20 = audioread('\Recordings\test1\4meter\höger\2015-05-20-131756\recording2.wav');
+
+
 
 
 

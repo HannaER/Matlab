@@ -58,6 +58,14 @@ y2v17 = audioread('\Recordings\test1\2meter\vänster\2015-05-11-143646\recording1
 y2v.y2v17 = y2v17;
 
 
+y2v18 = audioread('\Recordings\test1\2meter\vänster\2015-05-20-131203\recording1.wav');
+y2v19 = audioread('\Recordings\test1\2meter\vänster\2015-05-20-131203\recording2.wav');
+y2v20 = audioread('\Recordings\test1\2meter\vänster\2015-05-20-131203\recording3.wav');
+y2v21 = audioread('\Recordings\test1\2meter\vänster\2015-05-20-131203\recording4.wav');
+y2v22 = audioread('\Recordings\test1\2meter\vänster\2015-05-20-131203\recording5.wav');
+
+
+
 finished = 0;
 N = 17;
 filename = 'y2v';
