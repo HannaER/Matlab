@@ -202,6 +202,19 @@ save('TEST_REC\2\h.mat', 'rec2h');
 
 
 
+% count = 0;
+% for i = 1:length(rec2h)
+%    temp_energy = rec2h(1,i).energy; 
+%    if temp_energy < 0.463
+%       count = count + 1; 
+%    end
+% end
+% count
+
+
+
+
+
 
 
 

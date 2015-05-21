@@ -67,15 +67,15 @@ for i = 1:N
 end
 
 save('TEST_REC\1\v.mat', 'rec1v');
-
-for i = 1:length(rec1v)
-    temp = rec1v(1,i).ch1;
-    plot(temp);
-    title(num2str(i));
-    soundsc(temp);
-    pause(1);   
-end
-
+% 
+% % for i = 1:length(rec1v)
+% %     temp = rec1v(1,i).ch1;
+% %     plot(temp);
+% %     title(num2str(i));
+% %     soundsc(temp);
+% %     pause(1);   
+% % end
+% 
 %%%%%%%%%%% 1:HÖGER %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 y1h.y1h1 = audioread('\Recordings\test1\1meter\höger\2015-05-11-141101\recording1.wav');
@@ -123,7 +123,7 @@ for i = 1:N
             s.ch4 = word(:,4);
             s.name = 'höger';
             s.energy = sum(word(:,1).^2) + sum(word(:,2).^2) +  sum(word(:,3).^2)+ sum(word(:,4).^2);
-            if s.energy > 0.1
+            if s.energy >  1
                 rec1h = [rec1h s];
                 filename = filename(index + word_length:end,:);
             end
@@ -136,15 +136,25 @@ for i = 1:N
 end
 
 save('TEST_REC\1\h.mat', 'rec1h');
+% count = 0;
+% for i = 1:length(rec1h)
+%    temp_energy = rec1h(1,i).energy; 
+%    if temp_energy < 1.13
+%       count = count + 1; 
+%    end
+% end
+% count
 
 
-for i = 1:length(rec1h)
-    temp = rec1h(1,i).ch1;
-    plot(temp);
-    title(num2str(i));
-    soundsc(temp);
-    pause(1);   
-end
+
+
+% for i = 1:length(rec1h)
+%     temp = rec1h(1,i).ch1;
+%     plot(temp);
+%     title(num2str(i));
+%     soundsc(temp);
+%     pause(1);   
+% end
 
 
 
