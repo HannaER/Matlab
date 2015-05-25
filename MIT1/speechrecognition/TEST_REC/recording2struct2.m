@@ -58,26 +58,28 @@ y2v17 = audioread('\Recordings\test1\2meter\vänster\2015-05-11-143646\recording1
 y2v.y2v17 = y2v17;
 
 
-y2v18 = audioread('\Recordings\test1\2meter\vänster\2015-05-20-131203\recording1.wav');
-y2v19 = audioread('\Recordings\test1\2meter\vänster\2015-05-20-131203\recording2.wav');
-y2v20 = audioread('\Recordings\test1\2meter\vänster\2015-05-20-131203\recording3.wav');
-y2v21 = audioread('\Recordings\test1\2meter\vänster\2015-05-20-131203\recording4.wav');
-y2v22 = audioread('\Recordings\test1\2meter\vänster\2015-05-20-131203\recording5.wav');
-
-
+y2v18 = audioread('\Recordings\test1\2meter\vänster\2015-05-25-154358\recording1.wav');
+[y2v18, ps] = removerows(y2v18, [1:16260 113500:125100 182900:240000]);
+y2v.y2v18 = y2v18;
+y2v19 = audioread('\Recordings\test1\2meter\vänster\2015-05-25-154358\recording2.wav');
+[y2v19, ps] = removerows(y2v19, [1:91280]);
+y2v.y2v19 = y2v19;
+y2v20 = audioread('\Recordings\test1\2meter\vänster\2015-05-25-154358\recording3.wav');
+y2v.y2v20 = y2v20;
+y2v21 = audioread('\Recordings\test1\2meter\vänster\2015-05-25-154358\recording4.wav');
+[y2v21, ps] = removerows(y2v21, [234700:240000]);
+y2v.y2v21 = y2v21;
 
 finished = 0;
-N = 17;
+N = 21;
 filename = 'y2v';
-word_length = 5000;
+word_length = 4999;
 for i = 1:N
     filename = getfield(y2v, strcat('y2v', num2str(i)));
     while finished == 0
         index = vad(filename(:,2), 160, 8);
         if(length(filename(:,2)) > index + word_length) && index ~= 1
             word = filename(index:index + word_length,:);
-            %plot(word(:,1));
-            %pause(2);
             s.ch1 = word(:,1);
             s.ch2 = word(:,2);
             s.ch3 = word(:,3);
@@ -162,15 +164,13 @@ y2h.y2h16 = y2h16;
 finished = 0;
 N = 16;
 filename = 'y2h';
-word_length = 5000;
+word_length = 4999;
 for i = 1:N
     filename = getfield(y2h, strcat('y2h', num2str(i)));
     while finished == 0
         index = vad(filename(:,2), 160, 8);
         if(length(filename(:,2)) > index + word_length) && index ~= 1
             word = filename(index:index + word_length,:);
-            %plot(word(:,1));
-            %pause(2);
             s.ch1 = word(:,1);
             s.ch2 = word(:,2);
             s.ch3 = word(:,3);

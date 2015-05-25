@@ -6,30 +6,39 @@ clc;
 L = 4; % antal micar som amn ska testa för, dvs. anatlet kurvor i grafen
 M = 50; % antal brusnivåer, mätpunkter/kurva
 N = 100; % 100 ord ska testas, 50/50 höger/vänster
-P = 180; % antal ord(vänster/höger) / avstånd
-%%%%%%%%%%%%% 1 meter %%%%%%%%%%%%%%%%%%%%%%%%%
+P = 200; % antal ord(vänster/höger) / avstånd
+
+
+%% %%%%%%%%%%% 1 meter %%%%%%%%%%%%%%%%%%%%%%%%%
 
 result11 = [];
 result12 = [];
 result13 = [];
 result14 = [];
 snr1 = []; % x-vector - the same for all 4
-%calc the mean energy of the signal
-load TEST_REC\1\v.mat;
-load TEST_REC\1\h.mat;
-mean_h = 0;
-mean_v = 0;
-mean_1 = 0;
-for i = 1:P
-    mean_h = mean_h + rec1h(1,i).energy*(1/P);
-    mean_v = mean_v + rec1v(1,i).energy*(1/P);
-    mean_1 = (mean_h + mean_v)*(1/2);
+
+%calc the db of the signals as a mean. Use thresholding to only look at the
+%speech(the top peaks). Use var() of the cut signal. Then use pow2db() of
+%the var()-output
+
+decibel_ = 0;
+for i = 1:P % all words to iterate through
+    % thresholding and cut signal
+    temp = [];
+%     for j = 1:Length of signal
+%         if  i > threshold
+%             temp = [temp signal(i)]
+%         end
+%     end
+    variance_ = var(temp);
+    decibel_ = decibel_ + pow2db(variance_)*(1/P);
+    
 end
 
-% ta och dela upp bruset om 5001 samples och beräkna medelvärdet av så
-% många 5001-object som finns. Sätt startnivån till 1 dB, öka med ~2-5 dB
-% per steg, beräkna snr och lägg ihop till vektor
+% anpassa noise till decibel_ så att start värdet på SNR är 0. SNR =
+% decibel_speech - decibel_noise = 0.
 
+% Skapa snr vektorn som är x-axeln
 for i = 1:M
     temp = 0; % snr = energy(signal)/energy(noise)
     snr1 = [snr1 temp]; % calc. the snr vector
@@ -68,17 +77,26 @@ end
 
 
 
-%%%%%%%%%%%%% 2 meter %%%%%%%%%%%%%%%%%%%%%%%%%
+%% %%%%%%%%%%% 2 meter %%%%%%%%%%%%%%%%%%%%%%%%%
 
+result21 = [];
+result22 = [];
+result23 = [];
+result24 = [];
+snr2 = []; % x-vector - the same for all 4
 
 
 %%%%% PLOTTA 2 meter %%%%%
 
 
 
-%%%%%%%%%%%%% 4 meter %%%%%%%%%%%%%%%%%%%%%%%%%
+%% %%%%%%%%%%% 4 meter %%%%%%%%%%%%%%%%%%%%%%%%%
 
-
+result41 = [];
+result42 = [];
+result43 = [];
+result44 = [];
+snr4 = []; % x-vector - the same for all 4
 
 %%%%% PLOTTA 4 meter %%%%%
 
