@@ -15,7 +15,6 @@ result13 = [];
 result14 = [];
 snr1 = []; % x-vector - the same for all 4
 %calc the mean energy of the signal
-mean_energy_signal_1 = 0;
 load TEST_REC\1\v.mat;
 load TEST_REC\1\h.mat;
 mean_h = 0;
@@ -26,15 +25,19 @@ for i = 1:P
     mean_v = mean_v + rec1v(1,i).energy*(1/P);
     mean_1 = (mean_h + mean_v)*(1/2);
 end
-%calc the snr vector
+
+% ta och dela upp bruset om 5001 samples och beräkna medelvärdet av så
+% många 5001-object som finns. Sätt startnivån till 1 dB, öka med ~2-5 dB
+% per steg, beräkna snr och lägg ihop till vektor
+
 for i = 1:M
     temp = 0; % snr = energy(signal)/energy(noise)
     snr1 = [snr1 temp]; % calc. the snr vector
 end
+
 for h = 1:L
     for i = 1:M
         wer_curr = 0;
-        snr_curr = 0; % noise energy
         for j = 1:N
             snr_temp = 0;
             % beamforming
@@ -51,10 +54,10 @@ for h = 1:L
             if strcmp(match,'y') == 1
                 wer_curr = wer_curr + 1;
             end
-            snr_curr = snr_curr + snr_temp;
         end
         s.wer = wer_curr;
-        s.snr = 0; % calc. the snr for this noise level
+        s.snr = snr1(i); % calc. the snr for this noise level
+        result11 = [result11 s];
     end
 end
 
