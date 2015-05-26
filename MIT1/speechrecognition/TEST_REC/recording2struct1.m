@@ -39,15 +39,13 @@ y1v18 = audioread('\Recordings\test1\1meter\vänster\2015-05-11-132656\recording1
 finished = 0;
 N = 18;
 filename = 'y1v';
-word_length = 5000;
+word_length = 4999;
 for i = 1:N
     filename = getfield(y1v, strcat('y1v', num2str(i)));
     while finished == 0
         index = vad(filename(:,2), 160, 8);
         if(length(filename(:,2)) > index + word_length) && index ~= 1
             word = filename(index:index + word_length,:);
-            %plot(word(:,1));
-            %pause(2);
             s.ch1 = word(:,1);
             s.ch2 = word(:,2);
             s.ch3 = word(:,3);
@@ -108,22 +106,20 @@ y1h.y1h20 = audioread('\Recordings\test1\1meter\höger\2015-05-11-140357\recordin
 finished = 0;
 N = 20;
 filename = 'y1h';
-word_length = 5000;
+word_length = 4999;
 for i = 1:N
     filename = getfield(y1h, strcat('y1h', num2str(i)));
     while finished == 0
         index = vad(filename(:,2), 160, 8);
         if(length(filename(:,2)) > index + word_length) && index ~= 1
             word = filename(index:index + word_length,:);
-            %plot(word(:,1));
-            %pause(2);
             s.ch1 = word(:,1);
             s.ch2 = word(:,2);
             s.ch3 = word(:,3);
             s.ch4 = word(:,4);
             s.name = 'höger';
             s.energy = sum(word(:,1).^2) + sum(word(:,2).^2) +  sum(word(:,3).^2)+ sum(word(:,4).^2);
-            if s.energy >  1
+            if s.energy >  0.1
                 rec1h = [rec1h s];
                 filename = filename(index + word_length:end,:);
             end
@@ -144,8 +140,6 @@ save('TEST_REC\1\h.mat', 'rec1h');
 %    end
 % end
 % count
-
-
 
 
 % for i = 1:length(rec1h)

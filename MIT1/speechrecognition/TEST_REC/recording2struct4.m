@@ -45,17 +45,17 @@ y4v.y4v14 = y4v14;
 y4v15 = audioread('\Recordings\test1\4meter\vänster\2015-05-12-085027\recording10.wav');
 [y4v15, ps] = removerows(y4v15, [232900:240000]);
 y4v.y4v15 = y4v15;
-
-%y4v16-17 är väldigt brusiga
-y4v16 = audioread('\Recordings\test1\4meter\vänster\2015-05-20-131556\recording1.wav');
-y4v17 = audioread('\Recordings\test1\4meter\vänster\2015-05-20-131556\recording2.wav');
+y4v16 = audioread('\Recordings\test1\4meter\vänster\2015-05-25-154838\recording1.wav');
+y4v.y4v16 = y4v16;
+y4v17 = audioread('\Recordings\test1\4meter\vänster\2015-05-25-154838\recording2.wav');
+y4v.y4v17 = y4v17;
 
 
 
 finished = 0;
-N = 15;
+N = 17;
 filename = 'y4v';
-word_length = 5000;
+word_length = 4999;
 for i = 1:N
     filename = getfield(y4v, strcat('y4v', num2str(i)));
     while finished == 0
@@ -84,17 +84,34 @@ end
 
 save('TEST_REC\4\v.mat', 'rec4v');
 
-% remove no 68!
+%remove no 54 68 106 197 218 
 % for i = 1:length(rec4v)
 %     temp = rec4v(1,i).ch1;
 %     plot(temp);
 %     title(num2str(i));
-%     soundsc(temp);
+%     %soundsc(temp);
 %     pause(1);   
 % end
-
-
-
+% soundsc(rec4v(1,54).ch1);
+% plot(rec4v(1,54).ch1);
+rec4v(54) = [];
+% pause(1);
+% soundsc(rec4v(1,67).ch1);
+% plot(rec4v(1,67).ch1);
+rec4v(67) = [];
+% pause(1);
+% soundsc(rec4v(1,104).ch1);
+% plot(rec4v(1,104).ch1);
+rec4v(104) = [];
+% pause(1);
+% soundsc(rec4v(1,194).ch1);
+% plot(rec4v(1,194).ch1);
+rec4v(194) = [];
+% pause(1);
+% soundsc(rec4v(1,214).ch1);
+% plot(rec4v(1,214).ch1);
+rec4v(214) = [];
+% pause(1);
 %%%%%%%%%%% 4:HÖGER %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 y4h1 = audioread('\Recordings\test1\4meter\höger\2015-05-12-092021\recording1.wav');
@@ -147,26 +164,25 @@ y4h.y4h15 = y4h15;
 y4h16 = audioread('\Recordings\test1\4meter\höger\2015-05-12-090907\recording10.wav');
 [y4h16, ps] = removerows(y4h16, [13340:16830 44990:48810 108900:114200]);
 y4h.y4h16 = y4h16;
-
-%y4h17-20 är väldigt brusiga
-y4h17 = audioread('\Recordings\test1\4meter\höger\2015-05-20-132022\recording1.wav');
-y4h18 = audioread('\Recordings\test1\4meter\höger\2015-05-20-132022\recording2.wav');
-
-y4h19 = audioread('\Recordings\test1\4meter\höger\2015-05-20-131756\recording1.wav');
-y4h20 = audioread('\Recordings\test1\4meter\höger\2015-05-20-131756\recording2.wav');
+y4h17 = audioread('\Recordings\test1\4meter\höger\2015-05-25-155005\recording1.wav');
+[y4h17, ps] = removerows(y4h17, [174600:178300 233600:114200]);
+y4h.y4h17 = y4h17;
+y4h18 = audioread('\Recordings\test1\4meter\höger\2015-05-25-155005\recording2.wav');
+[y4h18, ps] = removerows(y4h18, [87410:151600 203300:114200]);
+y4h.y4h18 = y4h18;
 
 
 
 
 
 finished = 0;
-N = 16;
+N = 18;
 filename = 'y4h';
-word_length = 5000;
+word_length = 4999;
 for i = 1:N
     filename = getfield(y4h, strcat('y4h', num2str(i)));
     while finished == 0
-        index = vad(filename(:,2), 160, 8);
+        index = vad(filename(:,2), 160, 7);
         if(length(filename(:,2)) > index + word_length) && index ~= 1
             word = filename(index:index + word_length,:);
             %plot(word(:,1));
@@ -191,7 +207,7 @@ end
 
 save('TEST_REC\4\h.mat', 'rec4h');
 
-
+% 
 % for i = 1:length(rec4h)
 %     temp = rec4h(1,i).ch1;
 %     plot(temp);
@@ -199,6 +215,13 @@ save('TEST_REC\4\h.mat', 'rec4h');
 %     soundsc(temp);
 %     pause(1);   
 % end
+% 168 210 att ta bort
+% plot(rec4h(1,168).ch1)
+% soundsc(rec4h(1,168).ch1);
+rec4h(168) = [];
+% plot(rec4h(1,209).ch1)
+% soundsc(rec4h(1,209).ch1);
+rec4h(209) = [];
 
 
 

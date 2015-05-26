@@ -1,4 +1,4 @@
-%%%%%%%%%% 2 meter %%%%%%%%%%%%%%
+%%%%%%%%%% Database %%%%%%%%%%%%%%
 close all;
 clc;
 clear all;
@@ -6,7 +6,7 @@ dbv = [];
 dbh = [];
 
 
-%%%%%%%%%%%%% 2:VÄNSTER %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%% VÄNSTER %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 v1 = audioread('\Recordings\db\vänster\2015-05-11-111219\recording1.wav');
 [v1, ps] = removerows(v1, [188800:240000]);
 v.v1 = v1;
@@ -20,15 +20,13 @@ v.v3 = v3;
 finished = 0;
 N = 3;
 filename = 'v';
-word_length = 5000;
+word_length = 4999;
 for i = 1:N
     filename = getfield(v, strcat('v', num2str(i)));
     while finished == 0
-        index = vad(filename, 160, 8);
+        index = vad(filename, 160, 7);
         if(length(filename) > index + word_length) && index ~= 1
             word = filename(index:index + word_length);
-            %plot(word(:,1));
-            %pause(2);
             s.ch1 = word;
             s.name = 'vänster';
             s.energy = sum(word.^2);
@@ -55,7 +53,7 @@ save('DB\v.mat', 'dbv');
 %     pause(1);   
 % end
 
-%%%%%%%%%%% 2:HÖGER %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%% HÖGER %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 h1 = audioread('\Recordings\db\höger\2015-05-11-125242\recording1.wav');
 [h1, ps] = removerows(h1, [214600:240000]);
@@ -72,15 +70,13 @@ h.h3 = h3;
 finished = 0;
 N = 3;
 filename = 'h';
-word_length = 5000;
+word_length = 4999;
 for i = 1:N
     filename = getfield(h, strcat('h', num2str(i)));
     while finished == 0
-        index = vad(filename, 160, 8);
+        index = vad(filename, 160, 7);
         if(length(filename) > index + word_length) && index ~= 1
             word = filename(index:index + word_length);
-            %plot(word(:,1));
-            %pause(2);
             s.ch1 = word;
             s.name = 'höger';
             s.energy = sum(word.^2);
@@ -98,7 +94,8 @@ end
 
 save('DB\h.mat', 'dbh');
 
-
+% 
+% % remove no. 6 8 17 30
 % for i = 1:length(dbh)
 %     temp = dbh(1,i).ch1;
 %     plot(temp);
@@ -107,7 +104,21 @@ save('DB\h.mat', 'dbh');
 %     pause(1);   
 % end
 
-
+% soundsc(dbh(1,6).ch1);
+% plot(dbh(1,6).ch1);
+dbh(6) = [];
+% pause(1);
+% soundsc(dbh(1,7).ch1);
+% plot(dbh(1,7).ch1);
+dbh(7) = [];
+% pause(1);
+% soundsc(dbh(1,15).ch1);
+% plot(dbh(1,15).ch1);
+dbh(15) = [];
+% pause(1);
+% soundsc(dbh(1,27).ch1);
+% plot(dbh(1,27).ch1);
+dbh(27) = [];
 
 
 
