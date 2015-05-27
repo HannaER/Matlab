@@ -26,7 +26,7 @@ for i = 1:P % all words to iterate through
     % thresholding and cut signal
     temp = [];
 %     for j = 1:Length of signal
-%         if  i > threshold
+%        if  i > threshold
 %             temp = [temp signal(i)]
 %         end
 %     end

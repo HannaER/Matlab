@@ -64,7 +64,7 @@ decibel_env = pow2db(mean([var(env.ch1) var(env.ch2) var(env.ch3) var(env.ch4)])
 decibel_enh = pow2db(mean([var(enh.ch1) var(enh.ch2) var(enh.ch3) var(enh.ch4)]));
 ratio = decibel_enh/decibel_env;
 count = 1;
-while(abs(ratio - 1) > 0.001)    
+while(abs(ratio - 1) > 0.0001)    
     decibel_env = pow2db(mean([var(env.ch1) var(env.ch2) var(env.ch3) var(env.ch4)]));
     decibel_enh = pow2db(mean([var(enh.ch1) var(enh.ch2) var(enh.ch3) var(enh.ch4)]));
     ratio = decibel_enh/decibel_env;
@@ -111,7 +111,6 @@ for i = 1:N
     fav.ch4 = [fav.ch4 word(:,4)'];
 end
 fav.name = 'vänster';
-
 save('NOISE\factory\v.mat', 'fav');
 
 %%%%%%%%%%%%% FACTORY:HÖGER %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -136,6 +135,29 @@ save('NOISE\factory\h.mat', 'fah');
 
 
 %%%%%%%%%%%%% FACTORY:BALANSERA:SUMMERA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+decibel_fav = pow2db(mean([var(fav.ch1) var(fav.ch2) var(fav.ch3) var(fav.ch4)]));
+decibel_fah = pow2db(mean([var(fah.ch1) var(fah.ch2) var(fah.ch3) var(fah.ch4)]));
+ratio = decibel_fah/decibel_fav;
+count = 1;
+while(abs(ratio - 1) > 0.0001)    
+    decibel_fav = pow2db(mean([var(fav.ch1) var(fav.ch2) var(fav.ch3) var(fav.ch4)]));
+    decibel_fah = pow2db(mean([var(fah.ch1) var(fah.ch2) var(fah.ch3) var(fah.ch4)]));
+    ratio = decibel_fah/decibel_fav;
+    if ratio < 1
+        fav.ch1 = sqrt(ratio)*fav.ch1;
+        fav.ch2 = sqrt(ratio)*fav.ch2;
+        fav.ch3 = sqrt(ratio)*fav.ch3;
+        fav.ch4 = sqrt(ratio)*fav.ch4;
+    else
+        fah.ch1 = sqrt(ratio)*fah.ch1;
+        fah.ch2 = sqrt(ratio)*fah.ch2;
+        fah.ch3 = sqrt(ratio)*fah.ch3;
+        fah.ch4 = sqrt(ratio)*fah.ch4;
+    end   
+    count = count + 1;
+end
 
 
 
