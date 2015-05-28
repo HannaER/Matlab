@@ -35,6 +35,7 @@ for i = 1:N
     env.ch4 = [env.ch4 word(:,4)'];
 end
 env.name = 'vänster';
+env.decibel = pow2db(mean([var(env.ch1) var(env.ch2) var(env.ch3) var(env.ch4)]));
 save('NOISE\engine\v.mat', 'env');
 
 %%%%%%%%%%%%% ENGINE:HÖGER %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -55,26 +56,15 @@ for i = 1:N
     enh.ch4 = [enh.ch4 word(:,4)'];
 end
 enh.name = 'höger';
+enh.decibel = pow2db(mean([var(enh.ch1) var(enh.ch2) var(enh.ch3) var(enh.ch4)]));
 save('NOISE\engine\h.mat', 'enh');
 
 
 %%%%%%%%%%%%% ENGINE:BALANSERA:SUMMERA %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %BALANSERA
-decibel_env = pow2db(mean([var(env.ch1) var(env.ch2) var(env.ch3) var(env.ch4)]));
-decibel_enh = pow2db(mean([var(enh.ch1) var(enh.ch2) var(enh.ch3) var(enh.ch4)]));
-diff =  decibel_env - decibel_enh;
-if diff < 0
-    env.ch1 = decibel_inc_dec(env.ch1, diff);
-    env.ch2 = decibel_inc_dec(env.ch2, diff);
-    env.ch3 = decibel_inc_dec(env.ch3, diff);
-    env.ch4 = decibel_inc_dec(env.ch4, diff);
-else
-    enh.ch1 = decibel_inc_dec(enh.ch1, diff);
-    enh.ch2 = decibel_inc_dec(enh.ch2, diff);
-    enh.ch3 = decibel_inc_dec(enh.ch3, diff);
-    enh.ch4 = decibel_inc_dec(enh.ch4, diff);
-end
+decibel_diff = env.decibel - enh.decibel;
+enh = set_decibel(enh, decibel_diff);
 
 %SUMMERA
 engine.ch1 = env.ch1(1:end-30000) + enh.ch1(1:end-30000);
@@ -114,6 +104,7 @@ for i = 1:N
     fav.ch4 = [fav.ch4 word(:,4)'];
 end
 fav.name = 'vänster';
+fav.decibel = pow2db(mean([var(fav.ch1) var(fav.ch2) var(fav.ch3) var(fav.ch4)]));
 save('NOISE\factory\v.mat', 'fav');
 
 %%%%%%%%%%%%% FACTORY:HÖGER %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -134,27 +125,15 @@ for i = 1:N
     fah.ch4 = [fah.ch4 word(:,4)'];
 end
 fah.name = 'höger';
+fah.decibel = pow2db(mean([var(fah.ch1) var(fah.ch2) var(fah.ch3) var(fah.ch4)]));
 save('NOISE\factory\h.mat', 'fah');
 
 
 %%%%%%%%%%%%% FACTORY:BALANSERA:SUMMERA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %BALANSERA
-decibel_fav = pow2db(mean([var(fav.ch1) var(fav.ch2) var(fav.ch3) var(fav.ch4)]));
-decibel_fah = pow2db(mean([var(fah.ch1) var(fah.ch2) var(fah.ch3) var(fah.ch4)]));
-diff =  decibel_fav - decibel_fah;
-if diff < 0
-    fav.ch1 = decibel_inc_dec(fav.ch1, diff);
-    fav.ch2 = decibel_inc_dec(fav.ch2, diff);
-    fav.ch3 = decibel_inc_dec(fav.ch3, diff);
-    fav.ch4 = decibel_inc_dec(fav.ch4, diff);
-else
-    fah.ch1 = decibel_inc_dec(fah.ch1, diff);
-    fah.ch2 = decibel_inc_dec(fah.ch2, diff);
-    fah.ch3 = decibel_inc_dec(fah.ch3, diff);
-    fah.ch4 = decibel_inc_dec(fah.ch4, diff);
-end
-
+decibel_diff = fav.decibel - fah.decibel
+fah = set_decibel(fah, decibel_diff);
 %SUMMERA
 factory.ch1 = fav.ch1(25800:end-4201) + fah.ch1(1:end-30000);
 factory.ch2 = fav.ch2(25800:end-4201) + fah.ch2(1:end-30000);
