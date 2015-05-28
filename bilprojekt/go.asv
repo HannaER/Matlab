@@ -16,8 +16,6 @@ noise=Xbu(:,1:size(sp,2))/max(max(abs(Xbu(:,1:size(sp,2)))));
 L=16; %Filter length
 
 %%%%%%%%%%%%%%%%%%%%%%  LS  Beamformer %%%%%%%%%%%%%%%%%%%%%%%
-
-% varför nollor? varför just ch3?
 [W1] = LS_opt(sp+noise,[zeros(1,L/2) sp(3,1:end-L/2)],L);
 
 [y_ls] = filt_beam((sp+noise),W1); % Here we can filter any noise + speech sequence
