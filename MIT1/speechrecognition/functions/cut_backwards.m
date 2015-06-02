@@ -1,8 +1,7 @@
-function output = cut_new( input, b_length, overlap)
+function output = cut_backwards(input, b_length, overlap)
 % Cut out the important values of a speech signal.
     % cut(signal, b_length, overlap, threshold)
     % b_length = block length
-    % overlap = amount of overlap in samples
     
     
     %a = 0.99, b = 0.6 t = 5
@@ -23,29 +22,14 @@ function output = cut_new( input, b_length, overlap)
     end
     P_L = energy(1); 
     P_S = energy(1);
-    %FORWARD
-    for i = 1:n_cols
-        P_L = alfa*P_L + (1 - alfa)*energy(i);
-        P_S = beta*P_S + (1 - beta)*energy(i);
-        R = P_S/P_L;
-        if R > threshold              
-            first = i*b_length;%((i-4)*b_length);
-            break;
-        end
-    end    
-    if first < 1
-        first = 1;
-    end
 
-    P_L = energy(n_cols); 
-    P_S = energy(n_cols); 
     %BACKWARD
     for i = fliplr(1:n_cols)
         P_L = alfa*P_L + (1 - alfa)*energy(i);
         P_S = beta*P_S + (1 - beta)*energy(i);
         R = P_S/P_L;
         if R > threshold
-            last = i*b_length;  %(i + 2) * b_length;
+            last = (i + 2)*b_length;  %(i + 2) * b_length;
             break;
         end       
     end

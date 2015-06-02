@@ -11,6 +11,13 @@ N = 100; % 100 ord ska testas, 50/50 höger/vänster. Måste vara ett jämnt tal
 P = 200; % antal ord(vänster/höger)/avstånd
 
 
+N_REFLEC = 9; %N_REFLEC
+BLOCK_LENGTH = 160; %BLOCK_LENGTH
+OVERLAP = L/2; %OVERLAP
+SUBSET_LENGTH = 12; %SUBSET_LENGTH
+GAMMA = 0.5; % coefficient for pre_emhp
+
+
 %% %%%%%%%%%%% 1 meter %%%%%%%%%%%%%%%%%%%%%%%%%
 
 result11 = [];
@@ -19,11 +26,11 @@ result13 = [];
 result14 = [];
 snr1 = []; % x-vector - the same for all 4
 
+
+
 %calc the db of the signals as a mean. Use thresholding to only look at the
 %speech(the top peaks). Use var() of the cut signal. Then use pow2db() of
 %the var()-output
-
-
 
 %VÄNSTER
 decibel_v = 0;
@@ -82,37 +89,23 @@ decibel_diff = decibel_1 - factory_noise.decibel;
 factory_noise = set_decibel(factory_noise, decibel_diff);
 
 %DELA UPP NOISE OM 5000 SAMPLES
-temp = factory_noise;
-startindex = 1;
-for i = 1:size(factory_noise.ch1,2)/5000
-    temp.words(1,i).ch1 = factory_noise.ch1(startindex:startindex + 4999);
-    temp.words(1,i).ch2 = factory_noise.ch2(startindex:startindex + 4999);
-    temp.words(1,i).ch3 = factory_noise.ch3(startindex:startindex + 4999);
-    temp.words(1,i).ch4 = factory_noise.ch4(startindex:startindex + 4999);
-    startindex = startindex  + 4999;
-end
-factory_noise = temp;
+factory_noise = divide_into_segments(factory_noise, 5000);
+engine_noise = divide_into_segments(engine_noise, 5000);
 
-temp = engine_noise;
-startindex = 1;
-for i = 1:size(engine_noise.ch1,2)/5000
-    temp.words(1,i).ch1 = engine_noise.ch1(startindex:startindex + 4999);
-    temp.words(1,i).ch2 = engine_noise.ch2(startindex:startindex + 4999);
-    temp.words(1,i).ch3 = engine_noise.ch3(startindex:startindex + 4999);
-    temp.words(1,i).ch4 = engine_noise.ch4(startindex:startindex + 4999);
-    startindex = startindex  + 4999;
-end
-engine_noise = temp;
-% Skapa snr vektorn som är x-axeln
+%SKAPA SNR VEKTORN SOM ÄR X-AXELN
 for i = 1:M
     snr1 = [snr1 i]; % calc. the snr vector
 end
 
-
-
+ch1=rec1v(1,1).ch1;
+ch2=rec1v(1,1).ch2;
+ch3=rec1v(1,1).ch3;
+ch4=rec1v(1,1).ch4;
+current_word = [ch1';ch2';ch3';ch4'];
+noise = engine_noise;
 for h = 1:L % L = antal micar
     % räkna ut filter
-    [W1] = LS_opt(sp+noise,[zeros(1,K/2) sp(2,1:end-K/2)],K);
+    [W1] = LS_optimal(current_word + noise.segments(1,1),[zeros(1,K/2) current_word(2,1:end-K/2)],K);
     for i = 1:M % M = antal brusnivåer
         wer_curr = 0;
         deletion = 0;
@@ -140,14 +133,18 @@ for h = 1:L % L = antal micar
             end
             current_word = [ch1';ch2';ch3';ch4'];            
             % beamforming
-            [y_1] = filter_beam((sp+noise),W1)
+            [y_1] = filter_beam((current_word+noise),W1)
             % VAD --> y/n?
-            if strcmp(match,'y') ~= 1
+            index = vad(y_1, BLOCK_LENGTH, 6);
+            if index > length(y_1)/2 %strcmp(match,'y') ~= 1
                 deletion = deletion + 1;
             else
                 % rm_noise
+                y_2 = rm_noise(y_1);
                 % pre_emph
-                % maybe cut the signal again
+                y_3 = pre_emph(y_2, GAMMA);
+                % maybe cut the signal backwards
+                y_4 = 
                 % block_frame
                 % schur_algo
                 % create_subsets
