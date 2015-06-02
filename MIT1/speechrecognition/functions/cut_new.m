@@ -1,4 +1,4 @@
-function output = cut_new( input, b_length, overlap)
+function output = cut_new( input, b_length, overlap, threshold)
 % Cut out the important values of a speech signal.
     % cut(signal, b_length, overlap, threshold)
     % b_length = block length
@@ -8,7 +8,7 @@ function output = cut_new( input, b_length, overlap)
     %a = 0.99, b = 0.6 t = 5
     alfa = 0.99; % långsamt integrerande för bakgrundsbrus
     beta = 0.8; % snabbare integrering för tal(korttidsenergi)
-    threshold = 4;
+    %threshold = 4;
 
     first = 1;
     last = length(input);
@@ -29,7 +29,7 @@ function output = cut_new( input, b_length, overlap)
         P_S = beta*P_S + (1 - beta)*energy(i);
         R = P_S/P_L;
         if R > threshold              
-            first = i*b_length;%((i-4)*b_length);
+            first = (i-4)*b_length;%((i-4)*b_length);
             break;
         end
     end    
@@ -45,7 +45,7 @@ function output = cut_new( input, b_length, overlap)
         P_S = beta*P_S + (1 - beta)*energy(i);
         R = P_S/P_L;
         if R > threshold
-            last = i*b_length;  %(i + 2) * b_length;
+            last = (i+2)*b_length;  %(i + 2) * b_length;
             break;
         end       
     end

@@ -17,7 +17,7 @@ load db
 db_total(1,2).name
 
 
-N_WORDS = size(db_total(1,1),2);
+N_WORDS = size
 
 end
 

@@ -1,4 +1,4 @@
-function output = cut_backwards(input, b_length, overlap)
+function output = cut_backwards(input, b_length, overlap, threshold)
 % Cut out the important values of a speech signal.
     % cut(signal, b_length, overlap, threshold)
     % b_length = block length
@@ -7,7 +7,7 @@ function output = cut_backwards(input, b_length, overlap)
     %a = 0.99, b = 0.6 t = 5
     alfa = 0.99; % långsamt integrerande för bakgrundsbrus
     beta = 0.8; % snabbare integrering för tal(korttidsenergi)
-    threshold = 4;
+   
 
     first = 1;
     last = length(input);

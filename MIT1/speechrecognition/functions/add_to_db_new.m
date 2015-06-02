@@ -1,17 +1,16 @@
 
-function add_to_db(input, string, L, D, P, M, fs, gamma, threshold, sound)
+function output = add_to_db_new(input, L, D, P, M, fs, gamma, threshold, sound)
 
-% ADD_TO_DB  = (input, string, L, D, P, fs, sound)
+% ADD_TO_DB_NEW  = (input, L, D, P, fs, gamma, theshold, sound)
 %   Adds a sound signals features vectors in the library, saved as a .mat file.
 %   *input* is the soundsignal as a columnvector
-%   *string* is the name of the file,
 %   *L* is the length of the blocks, *D* is the overlap,
 %   *P* is the number of reflections coefficients,
 %   *sound* set to 1 to listen to the signal along the steps
 %   *fs* is the sample frequency the input signal was sampled with
 %   *threshold* is the threshold the cut function uses
 
-input = input.*10;
+%input = input.*10;
 
 if sound == 1
     soundsc(input, fs)
@@ -45,7 +44,7 @@ if sound ==1
     fft_(input_0, length(input_0), fs, 222, 'b')
 end
 
-% pre-emhasis filter with a = 0.95-98, function
+% pre-emhasis filter function
 input_1 = pre_emph(input_0, gamma);
 
 if sound ==1
@@ -76,9 +75,9 @@ if sound == 1
     xlabel('Samples');
     ylabel('Amplitude');
     
-    figure (2)    
+    figure (2)
     fft_(input_2, length(input_2), fs, 224, 'b')
-
+    
 end
 
 % Block framing the signal
@@ -92,10 +91,7 @@ input_5 = schur_algo(input_4, P);
 % Divide into subsets and calculate the mean of the coefficients
 
 db = create_subsets(input_5, M);
+output = db;
 
 
-string = strcat(string, '.mat');
-%string = strcat('databases/', string);
-
-save(string, 'db');
 end
