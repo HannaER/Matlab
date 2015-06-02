@@ -16,7 +16,7 @@ end
 W1=Pxx\Pdx; % inverse of Pxx w_opt = R^{-1}p --> wiener solution?
 
 W=[];
-
+% not sure what this does
 for i=L:L:L*XM
     W=[W;W1(i-L+1:i)'];
 end

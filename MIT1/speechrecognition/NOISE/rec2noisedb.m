@@ -132,7 +132,7 @@ save('NOISE\factory\h.mat', 'fah');
 %%%%%%%%%%%%% FACTORY:BALANSERA:SUMMERA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %BALANSERA
-decibel_diff = fav.decibel - fah.decibel
+decibel_diff = fav.decibel - fah.decibel;
 fah = set_decibel(fah, decibel_diff);
 %SUMMERA
 factory.ch1 = fav.ch1(25800:end-4201) + fah.ch1(1:end-30000);

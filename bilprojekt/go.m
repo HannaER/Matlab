@@ -1,3 +1,8 @@
+clc;
+clear all;
+close all;
+
+
 load tal_brus_signaler
 
 % Xtd is the speech recording on 6-channels
