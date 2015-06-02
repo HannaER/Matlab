@@ -144,9 +144,9 @@ for i = 1:length(dbh.rec)
 end
 save('DB\h.mat', 'dbh');
 
-db_total = [dbv dbh];
+db = [dbv dbh];
 
-save('DB\db.mat','db_total');
+save('DB\db.mat','db');
 
 
 

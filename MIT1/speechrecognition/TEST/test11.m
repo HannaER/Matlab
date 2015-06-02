@@ -153,7 +153,7 @@ for h = 1:L % L = antal micar
                 y_7 = create_subsets(y_6, SUBSET_LENGTH);
                 % matching against database --> y/n?
                 match = 'y/n?';
-                matching(y_7, 'DB\db.mat');
+                matching(y_7, 'DB\db.mat', SUBSET_LENGTH, N_REFLEC);
                 if strcmp(match,'y') == 1
                     wer_curr = wer_curr + 1;
                 else
