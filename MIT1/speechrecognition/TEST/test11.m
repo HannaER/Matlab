@@ -103,6 +103,7 @@ ch3=rec1v(1,1).ch3;
 ch4=rec1v(1,1).ch4;
 current_word = [ch1';ch2';ch3';ch4'];
 noise = engine_noise;
+current_word_name = '';
 for h = 1:L % L = antal micar
     % räkna ut filter
     [W1] = LS_optimal(current_word + noise.segments(1,1),[zeros(1,K/2) current_word(2,1:end-K/2)],K);
@@ -120,6 +121,7 @@ for h = 1:L % L = antal micar
                 ch2 = rec1v(1,index).ch2;
                 ch3 = rec1v(1,index).ch3;
                 ch4 = rec1v(1,index).ch4;
+                current_word_name = rec1v(1).name;
             else % take 'höger'
                 if j == (N/2 + 1)
                     exceptions  = []; % resetting the used indices vector exceptions
@@ -130,6 +132,7 @@ for h = 1:L % L = antal micar
                 ch2 = rec1h(1,index).ch2;
                 ch3 = rec1h(1,index).ch3;
                 ch4 = rec1h(1,index).ch4;
+                current_word_name = rec1h(1).name;
             end
             current_word = [ch1';ch2';ch3';ch4'];            
             % beamforming
@@ -153,7 +156,7 @@ for h = 1:L % L = antal micar
                 y_7 = create_subsets(y_6, SUBSET_LENGTH);
                 % matching against database --> y/n?
                 match = 'y/n?';
-                matching(y_7, 'DB\db.mat', SUBSET_LENGTH, N_REFLEC);
+                matching(y_7, 'DB\db.mat', current_word_name, SUBSET_LENGTH, N_REFLEC);
                 if strcmp(match,'y') == 1
                     wer_curr = wer_curr + 1;
                 else

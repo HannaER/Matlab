@@ -12,7 +12,7 @@ OVERLAP = BLOCK_LENGTH/2; %OVERLAP
 SUBSET_LENGTH = 12; %SUBSET_LENGTH
 GAMMA = 0.5; % coefficient for pre_emhp
 FS = 8000;
-THRESHOLD = 4;
+THRESHOLD = 5;
 
 
 %%%%%%%%%%%%% VÄNSTER %%%%%%%%%%%%%%%%%%%%%%%%%%%%

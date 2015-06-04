@@ -6,7 +6,7 @@ L = 160; %BLOCK_LENGTH
 D = L/2; %OVERLAP
 M = 12; %SUBSET_LENGTH
 GAMMA = 0.5; % coefficient for pre_emhp
-THRESHOLD = 4;
+THRESHOLD = 5;
 
 %%%%%%% VÄNSTER %%%%%%%
 load Hanna_db/original/v1.mat

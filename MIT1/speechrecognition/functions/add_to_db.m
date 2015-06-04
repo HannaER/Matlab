@@ -11,7 +11,7 @@ function add_to_db(input, string, L, D, P, M, fs, gamma, threshold, sound)
 %   *fs* is the sample frequency the input signal was sampled with
 %   *threshold* is the threshold the cut function uses
 
-input = input.*10;
+%input = input.*10;
 
 if sound == 1
     soundsc(input, fs)
