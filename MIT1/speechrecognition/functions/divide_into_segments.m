@@ -9,5 +9,5 @@ for i = 1:size(input.ch1,2)/length
     input.segments(1,i).ch4 = input.ch4(startindex:startindex + length - 1);
     startindex = startindex  + length - 1;
 end
-output = input
+output = input;
 end

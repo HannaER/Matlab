@@ -12,9 +12,10 @@ load db
 
 N_WORDS = size(db,2);
 N_VERSIONS = size(db(1,2).db,2);
-THRESHOLD_MIN = N_REFLEC*0.14*N_VERSIONS;
-THRESHOLD_RIGHT = THRESHOLD_MIN*1.2
-THRESHOLD_LEFT = THRESHOLD_MIN
+% THRESHOLD_MIN = N_REFLEC*0.037*N_VERSIONS;
+THRESHOLD_MIN = N_REFLEC*0.037*N_VERSIONS*1.2;
+THRESHOLD_RIGHT = THRESHOLD_MIN*1.2;
+THRESHOLD_LEFT = THRESHOLD_MIN;
 div1 = 1/(N_VERSIONS);
 div2 = 1/(SUBSET_LENGTH);
 min_error = 0;
@@ -44,8 +45,6 @@ for i = 1:N_WORDS
         min_error = 0;
     end
 end
-result(1)
-result(2)
 
 %VALIDATION of the result struct vector
 temp_min_error = intmax;
@@ -63,10 +62,10 @@ for i = 1:N_WORDS
    end
 end
 if temp_min_error < THRESHOLD_RIGHT
-   if strcmp(name_min, current_word_name) == 1 && temp_min_error < THRESHOLD_RIGHT       
+   if strcmp(name_min, current_word_name) == 1 && temp_min_error < THRESHOLD_MIN       
         output = 'yes';
-   elseif strcmp(name_min, current_word_name) == 1 && temp_min_error < THRESHOLD_LEFT       
-       output = 'yes';
+%    elseif strcmp(name_min, current_word_name) == 1 && temp_min_error < THRESHOLD_LEFT       
+%        output = 'yes';
    else
        output = 'no';       
    end

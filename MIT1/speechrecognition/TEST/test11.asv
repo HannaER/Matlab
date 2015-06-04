@@ -109,11 +109,11 @@ ch1 = noise.segments(1,1).ch1;
 ch2 = noise.segments(1,1).ch2;
 ch3 = noise.segments(1,1).ch3;
 ch4 = noise.segments(1,1).ch4;
-noise_4_wiener = [ch1;ch2;ch3;ch4];
+noise_4_beam = [ch1;ch2;ch3;ch4];
 current_word_name = '';
 for h = 1:L % L = antal micar
     % räkna ut filter
-    [W1] = LS_optimal(current_word(1:h,:) + noise_4_wiener(1:h,:),[zeros(1,K/2) current_word(2,1:end-K/2)],K);
+    [W1] = LS_optimal(current_word(1:h,:) + noise_4_beam(1:h,:),[zeros(1,K/2) current_word(2,1:end-K/2)],K);
     for i = 1:M % M = antal brusnivåer
         wer_curr = 0;
         deletion = 0;
