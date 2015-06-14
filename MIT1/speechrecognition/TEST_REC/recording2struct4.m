@@ -82,6 +82,36 @@ for i = 1:N
     
 end
 
+
+for i = 1:length(rec4v)
+    db1 = pow2db(var(rec4v(1,i).ch1));
+    db2 = pow2db(var(rec4v(1,i).ch2));
+    db3 = pow2db(var(rec4v(1,i).ch3));
+    db4 = pow2db(var(rec4v(1,i).ch4));
+    db_mean = mean([db1 db2 db3 db4]);
+    diff1 = db_mean - db1;
+    diff2 = db_mean - db2;
+    diff3 = db_mean - db3;
+    diff4 = db_mean - db4;
+    
+    rec4v(1,i).ch1 = decibel_inc_dec(rec4v(1,i).ch1, diff1);
+    rec4v(1,i).ch2 = decibel_inc_dec(rec4v(1,i).ch2, diff2);
+    rec4v(1,i).ch3 = decibel_inc_dec(rec4v(1,i).ch3, diff3);
+    rec4v(1,i).ch4 = decibel_inc_dec(rec4v(1,i).ch4, diff4);
+    
+    
+%     db1 = pow2db(var(rec4v(1,i).ch1));
+%     db2 = pow2db(var(rec4v(1,i).ch2));
+%     db3 = pow2db(var(rec4v(1,i).ch3));
+%     db4 = pow2db(var(rec4v(1,i).ch4));
+%     db_mean = mean([db1 db2 db3 db4]);
+%     diff1 = db_mean - db1;
+%     diff2 = db_mean - db2;
+%     diff3 = db_mean - db3;
+%     diff4 = db_mean - db4;
+end
+
+
 save('TEST_REC\4\v.mat', 'rec4v');
 
 %remove no 54 68 106 197 218 
@@ -204,6 +234,36 @@ for i = 1:N
     finished = 0;
     
 end
+
+
+for i = 1:length(rec4h)
+    db1 = pow2db(var(rec4h(1,i).ch1));
+    db2 = pow2db(var(rec4h(1,i).ch2));
+    db3 = pow2db(var(rec4h(1,i).ch3));
+    db4 = pow2db(var(rec4h(1,i).ch4));
+    db_mean = mean([db1 db2 db3 db4]);
+    diff1 = db_mean - db1;
+    diff2 = db_mean - db2;
+    diff3 = db_mean - db3;
+    diff4 = db_mean - db4;
+    
+    rec4h(1,i).ch1 = decibel_inc_dec(rec4h(1,i).ch1, diff1);
+    rec4h(1,i).ch2 = decibel_inc_dec(rec4h(1,i).ch2, diff2);
+    rec4h(1,i).ch3 = decibel_inc_dec(rec4h(1,i).ch3, diff3);
+    rec4h(1,i).ch4 = decibel_inc_dec(rec4h(1,i).ch4, diff4);
+    
+    
+%     db1 = pow2db(var(rec4h(1,i).ch1));
+%     db2 = pow2db(var(rec4h(1,i).ch2));
+%     db3 = pow2db(var(rec4h(1,i).ch3));
+%     db4 = pow2db(var(rec4h(1,i).ch4));
+%     db_mean = mean([db1 db2 db3 db4]);
+%     diff1 = db_mean - db1;
+%     diff2 = db_mean - db2;
+%     diff3 = db_mean - db3;
+%     diff4 = db_mean - db4;
+end
+
 
 save('TEST_REC\4\h.mat', 'rec4h');
 

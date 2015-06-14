@@ -47,13 +47,13 @@ for i = 1:N
     % ch4 = rec1v(1,index).ch4;
     % current_word_name = rec1v(1).name;
     %
-    index = get_random_word_index(1:1:P, exceptions);
-    exceptions = [exceptions index];
-    ch1 = rec1h(1,index).ch1;
-    ch2 = rec1h(1,index).ch2;
-    ch3 = rec1h(1,index).ch3;
-    ch4 = rec1h(1,index).ch4;
-    current_word_name = rec1h(1).name;
+%     index = get_random_word_index(1:1:P, exceptions);
+%     exceptions = [exceptions index];
+%     ch1 = rec1h(1,index).ch1;
+%     ch2 = rec1h(1,index).ch2;
+%     ch3 = rec1h(1,index).ch3;
+%     ch4 = rec1h(1,index).ch4;
+%     current_word_name = rec1h(1).name;
     
     
     %%% 2 meter %%%
@@ -82,12 +82,12 @@ for i = 1:N
 %     ch3 = rec4v(1,index).ch3;
 %     ch4 = rec4v(1,index).ch4;
 %     current_word_name = rec4v(1).name;
-    
+%     
 %     index = get_random_word_index(1:1:P, exceptions);
 %     exceptions = [exceptions index];
 %     ch1 = rec4h(1,index).ch1;
 %     ch2 = rec4h(1,index).ch2;
-%     ch3 = rec4h(1,index).ch3;
+%     ch3 = rec4h(1,index).ch3; 
 %     ch4 = rec4h(1,index).ch4;
 %     current_word_name = rec4h(1).name;
 %     

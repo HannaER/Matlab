@@ -81,18 +81,25 @@ decibel_1 = mean([decibel_v decibel_h]);
 load NOISE/factory/factory.mat
 load NOISE/engine/engine.mat
 
-engine_noise = engine;
-factory_noise = factory;
+engine_noise = engine
+factory_noise = factory
+figure (1)
+plot(factory_noise.ch2)
+hold on;
 
 %BALANSERA NOISE mot SNR = 0
-decibel_diff = decibel_1 - engine_noise.decibel;
+decibel_diff = decibel_1 - engine_noise.decibel + 10
 t1 = set_decibel(engine_noise, decibel_diff);
-decibel_diff = decibel_1 - factory_noise.decibel;
+decibel_diff = decibel_1 - factory_noise.decibel - 10
 t2 = set_decibel(factory_noise, decibel_diff)
-
-t3 = set_decibel(t2, -2)
+t3 = decibel_1 - t2.decibel
+plot(t2.ch2, 'r')
+t3 = set_decibel(t2, 2)
 t4 = decibel_1 - t3.decibel
 
+
+t3 = set_decibel(t3, -2)
+t4 = decibel_1 - t3.decibel
 
 
 
