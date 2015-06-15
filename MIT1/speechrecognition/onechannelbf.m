@@ -43,11 +43,14 @@ y_1 = filter_beam(x',W1);
 % y_1 = x;
 figure(2)
 plot(y_1);
-
-% pwelch(s)
-% pwelch(x)
-% pwelch(y_1)
-% pwelch(n)
+figure(1)
+pwelch(s)
+figure(2)
+pwelch(x)
+figure(3)
+pwelch(y_1)
+figure(4)
+pwelch(n)
 
 % VAD --> y/n?
 index = vad(y_1, BLOCK_LENGTH, 6);
