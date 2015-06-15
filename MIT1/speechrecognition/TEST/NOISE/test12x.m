@@ -4,9 +4,9 @@ close all;
 clc;
 
 Fs = 8000;
-K = 32; % filter length
+K = 16; % filter length
 L = 4; % antal micar som amn ska testa för, dvs. antalet kurvor i grafen
-M = 25;%20; % antal brusnivåer, mätpunkter/kurva
+M = 13;%20; % antal brusnivåer, mätpunkter/kurva
 N = 100;%100; % 100 ord ska testas, 50/50 höger/vänster. Måste vara ett jämnt tal
 P = 200; % antal ord(vänster/höger)/avstånd som finns att utnyttja till tester
 
@@ -17,11 +17,11 @@ OVERLAP = BLOCK_LENGTH/2; %OVERLAP
 SUBSET_LENGTH = 12; %SUBSET_LENGTH
 GAMMA = 0.5; % coefficient for pre_emhp
 THRESHOLD = 4;
-START_SNR = -5;
-DECIBEL_STEP = 1;
+START_SNR = -6;
+DECIBEL_STEP = 2;
 
 
-%%%%%%%%%%% 1 meter %%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%% 2 meter %%%%%%%%%%%%%%%%%%%%%%%%%
 
 result2.result21 = [];
 result2.result22 = [];
@@ -81,19 +81,24 @@ decibel_2 = mean([decibel_v decibel_h]);
 % decibel_speech - decibel_noise = 0.
 load NOISE/factory/factory.mat
 load NOISE/engine/engine.mat
+load NOISE/white/white.mat
 
 engine_noise = engine;
 factory_noise = factory;
+white_noise = white;
 
 %BALANSERA NOISE mot SNR = START_SNR
 decibel_diff = decibel_2 - engine_noise.decibel - START_SNR;
 engine_noise = set_decibel(engine_noise, decibel_diff);
 decibel_diff = decibel_2 - factory_noise.decibel - START_SNR;
 factory_noise = set_decibel(factory_noise, decibel_diff);
+decibel_diff = decibel_2 - white_noise.decibel - START_SNR;
+white_noise = set_decibel(white_noise, decibel_diff);
 
 %DELA UPP NOISE OM 5000 SAMPLES
 factory_noise = divide_into_segments(factory_noise, 5000);
 engine_noise = divide_into_segments(engine_noise, 5000);
+white_noise = divide_into_segments(white_noise, 5000);
 
 %SKAPA SNR VEKTORN SOM ÄR X-AXELN
 for i = 1:M
@@ -120,17 +125,25 @@ exceptions = [exceptions temp];
 
 
 %GET ONE WORD AND NOISE FOR THE LS_OPTIMAL FILTER FUNCTION
-index = get_random_word_index(1:1:P, []);
+%index = get_random_word_index(1:1:P, []);
+index = exceptions(1);
 ch1=rec2v(1,index).ch1;
 ch2=rec2v(1,index).ch2;
 ch3=rec2v(1,index).ch3;
 ch4=rec2v(1,index).ch4;
+index = exceptions(2);
+ch1= ch1 + rec2v(1,index).ch1;
+ch2= ch2 + rec2v(1,index).ch2;
+ch3= ch3 + rec2v(1,index).ch3;
+ch4= ch4 + rec2v(1,index).ch4;
 word_4_wiener = [ch1';ch2';ch3';ch4'];
-noise = engine_noise;%factory_noise
-ch1 = noise.segments(1,index).ch1;
-ch2 = noise.segments(1,index).ch2;
-ch3 = noise.segments(1,index).ch3;
-ch4 = noise.segments(1,index).ch4;
+
+noise = factory_noise;%engine_noise; % white_noise;
+
+ch1 = noise.segments(1,index).ch1 + noise.segments(1,index + 1).ch1;
+ch2 = noise.segments(1,index).ch2 + noise.segments(1,index + 1).ch2;
+ch3 = noise.segments(1,index).ch3 + noise.segments(1,index + 1).ch3;
+ch4 = noise.segments(1,index).ch4 + noise.segments(1,index + 1).ch4;
 noise_4_wiener = [ch1;ch2;ch3;ch4];
 % 
 % noise = factory_noise;
@@ -347,7 +360,7 @@ y = extractfield(result2.result23, 'wer');
 plot(snr2, y, 'g');
 y = extractfield(result2.result24, 'wer');
 plot(snr2, y, 'm');
-legend('1 mic  + noise - bf','2 mics + noise + bf','3 mics + noise + bf','4 mics + noise + bf');
+legend('1 mic   + noise - bf','2 mics + noise + bf','3 mics + noise + bf','4 mics + noise + bf');
 %axis([START_SNR temp 0 100]);
 
 
