@@ -6,7 +6,7 @@ clc;
 Fs = 8000;
 K = 32; % filter length
 L = 4; % antal micar som amn ska testa för, dvs. antalet kurvor i grafen
-M = 6;%20; % antal brusnivåer, mätpunkter/kurva
+M = 30;%20; % antal brusnivåer, mätpunkter/kurva
 N = 100;%100; % 100 ord ska testas, 50/50 höger/vänster. Måste vara ett jämnt tal
 P = 200; % antal ord(vänster/höger)/avstånd som finns att utnyttja till tester
 
@@ -17,8 +17,8 @@ OVERLAP = BLOCK_LENGTH/2; %OVERLAP
 SUBSET_LENGTH = 12; %SUBSET_LENGTH
 GAMMA = 0.5; % coefficient for pre_emhp
 THRESHOLD = 4;
-START_SNR = -5;
-DECIBEL_STEP = 5;
+START_SNR = -10;
+DECIBEL_STEP = 1;
 
 
 %%%%%%%%%%% 1 meter %%%%%%%%%%%%%%%%%%%%%%%%%

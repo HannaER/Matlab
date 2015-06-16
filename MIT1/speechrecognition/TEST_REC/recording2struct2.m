@@ -113,17 +113,7 @@ for i = 1:length(rec2v)
     rec2v(1,i).ch2 = decibel_inc_dec(rec2v(1,i).ch2, diff2);
     rec2v(1,i).ch3 = decibel_inc_dec(rec2v(1,i).ch3, diff3);
     rec2v(1,i).ch4 = decibel_inc_dec(rec2v(1,i).ch4, diff4);
-    
-    
-%     db1 = pow2db(var(rec2v(1,i).ch1));
-%     db2 = pow2db(var(rec2v(1,i).ch2));
-%     db3 = pow2db(var(rec2v(1,i).ch3));
-%     db4 = pow2db(var(rec2v(1,i).ch4));
-%     db_mean = mean([db1 db2 db3 db4]);
-%     diff1 = db_mean - db1;
-%     diff2 = db_mean - db2;
-%     diff3 = db_mean - db3;
-%     diff4 = db_mean - db4;
+
 end
 
 save('TEST_REC\2\v.mat', 'rec2v');
@@ -232,17 +222,7 @@ for i = 1:length(rec2h)
     rec2h(1,i).ch2 = decibel_inc_dec(rec2h(1,i).ch2, diff2);
     rec2h(1,i).ch3 = decibel_inc_dec(rec2h(1,i).ch3, diff3);
     rec2h(1,i).ch4 = decibel_inc_dec(rec2h(1,i).ch4, diff4);
-    
-    
-%     db1 = pow2db(var(rec2h(1,i).ch1));
-%     db2 = pow2db(var(rec2h(1,i).ch2));
-%     db3 = pow2db(var(rec2h(1,i).ch3));
-%     db4 = pow2db(var(rec2h(1,i).ch4));
-%     db_mean = mean([db1 db2 db3 db4]);
-%     diff1 = db_mean - db1;
-%     diff2 = db_mean - db2;
-%     diff3 = db_mean - db3;
-%     diff4 = db_mean - db4;
+
 end
 
 
