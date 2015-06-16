@@ -6,7 +6,7 @@ clc;
 Fs = 8000;
 K = 32; % filter length
 L = 4; % antal micar som amn ska testa för, dvs. antalet kurvor i grafen
-M = 50;%20; % antal brusnivåer, mätpunkter/kurva
+M = 6;%20; % antal brusnivåer, mätpunkter/kurva
 N = 100;%100; % 100 ord ska testas, 50/50 höger/vänster. Måste vara ett jämnt tal
 P = 200; % antal ord(vänster/höger)/avstånd som finns att utnyttja till tester
 
@@ -17,8 +17,8 @@ OVERLAP = BLOCK_LENGTH/2; %OVERLAP
 SUBSET_LENGTH = 12; %SUBSET_LENGTH
 GAMMA = 0.5; % coefficient for pre_emhp
 THRESHOLD = 4;
-START_SNR =-5;
-DECIBEL_STEP = 0.5;
+START_SNR = -5;
+DECIBEL_STEP = 5;
 
 
 %%%%%%%%%%% 1 meter %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -126,18 +126,27 @@ exceptions = [exceptions temp];
 
 
 %GET ONE WORD AND NOISE FOR THE LS_OPTIMAL FILTER FUNCTION
-index_4_filter = get_random_word_index(1:1:P, []);
-ch1=rec1v(1,index_4_filter).ch1;
-ch2=rec1v(1,index_4_filter).ch2;
-ch3=rec1v(1,index_4_filter).ch3;
-ch4=rec1v(1,index_4_filter).ch4;
+%index_4_filter = get_random_word_index(1:1:P, []);
+index = exceptions(1);
+ch1=rec1v(1,index).ch1;
+ch2=rec1v(1,index).ch2;
+ch3=rec1v(1,index).ch3;
+ch4=rec1v(1,index).ch4;
+index = exceptions(2);
+ch1= ch1 + rec1v(1,index).ch1;
+ch2= ch2 + rec1v(1,index).ch2;
+ch3= ch3 + rec1v(1,index).ch3;
+ch4= ch4 + rec1v(1,index).ch4;
 word_4_wiener = [ch1';ch2';ch3';ch4'];
-noise = engine_noise;%factory_noise; white_noise;
-ch1 = noise.segments(1,index_4_filter).ch1;
-ch2 = noise.segments(1,index_4_filter).ch2;
-ch3 = noise.segments(1,index_4_filter).ch3;
-ch4 = noise.segments(1,index_4_filter).ch4;
+
+noise = engine_noise;% factory_noise; %white_noise;
+index = exceptions2(1);
+ch1 = noise.segments(1,index).ch1 + noise.segments(1,index + 1).ch1;
+ch2 = noise.segments(1,index).ch2 + noise.segments(1,index + 1).ch2;
+ch3 = noise.segments(1,index).ch3 + noise.segments(1,index + 1).ch3;
+ch4 = noise.segments(1,index).ch4 + noise.segments(1,index + 1).ch4;
 noise_4_wiener = [ch1;ch2;ch3;ch4];
+
 % 
 % noise = factory_noise;
 % 
@@ -188,7 +197,7 @@ noise_orig = noise;
 
 for h = 1:L % L = antal micar
     % räkna ut filter
-    W1 = LS_optimal(word_4_wiener(1:h,:) + noise_4_wiener(1:h,:),[zeros(1,K/2) word_4_wiener(2,1:end-K/2)],K);
+%     W1 = LS_optimal(word_4_wiener(1:h,:) + noise_4_wiener(1:h,:),[zeros(1,K/2) word_4_wiener(2,1:end-K/2)],K);
     display(strcat(num2str(h), ' mic(s)'));
     noise = noise_orig;
     for i = 1:M % M = antal brusnivåer
@@ -201,13 +210,13 @@ for h = 1:L % L = antal micar
         noise = set_decibel(noise, -DECIBEL_STEP);
         noise = divide_into_segments(noise, 5000);
         current_snr = decibel_1 - noise.decibel;
-        
-%         ch1 = noise.segments(1,index_4_filter).ch1;
-%         ch2 = noise.segments(1,index_4_filter).ch2;
-%         ch3 = noise.segments(1,index_4_filter).ch3;
-%         ch4 = noise.segments(1,index_4_filter).ch4;
-%         noise_4_wiener = [ch1;ch2;ch3;ch4];        
-%         W1 = LS_optimal(word_4_wiener(1:h,:) + noise_4_wiener(1:h,:),[zeros(1,K/2) word_4_wiener(2,1:end-K/2)],K);        
+        index = exceptions2(1);
+        ch1 = noise.segments(1,index).ch1 + noise.segments(1,index + 1).ch1;
+        ch2 = noise.segments(1,index).ch2 + noise.segments(1,index + 1).ch2;
+        ch3 = noise.segments(1,index).ch3 + noise.segments(1,index + 1).ch3;
+        ch4 = noise.segments(1,index).ch4 + noise.segments(1,index + 1).ch4;
+        noise_4_wiener = [ch1;ch2;ch3;ch4];
+        W1 = LS_optimal(word_4_wiener(1:h,:) + noise_4_wiener(1:h,:),[zeros(1,K/2) word_4_wiener(2,1:end-K/2)],K);
         for j = 1:N  % N = antal ord
             % randomly pick a word which have not been used yet
             index = exceptions(j);

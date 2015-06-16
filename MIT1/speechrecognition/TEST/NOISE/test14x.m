@@ -4,9 +4,9 @@ close all;
 clc;
 
 Fs = 8000;
-K = 16; % filter length
+K = 32; % filter length
 L = 4; % antal micar som amn ska testa för, dvs. antalet kurvor i grafen
-M = 25;%20; % antal brusnivåer, mätpunkter/kurva
+M = 30;%20; % antal brusnivåer, mätpunkter/kurva
 N = 100;%100; % 100 ord ska testas, 50/50 höger/vänster. Måste vara ett jämnt tal
 P = 200; % antal ord(vänster/höger)/avstånd som finns att utnyttja till tester
 
@@ -17,7 +17,7 @@ OVERLAP = BLOCK_LENGTH/2; %OVERLAP
 SUBSET_LENGTH = 12; %SUBSET_LENGTH
 GAMMA = 0.5; % coefficient for pre_emhp
 THRESHOLD = 4;
-START_SNR = -5;
+START_SNR = -10;
 DECIBEL_STEP = 1;
 
 
@@ -137,7 +137,9 @@ ch2= ch2 + rec4v(1,index).ch2;
 ch3= ch3 + rec4v(1,index).ch3;
 ch4= ch4 + rec4v(1,index).ch4;
 word_4_wiener = [ch1';ch2';ch3';ch4'];
-noise = factory_noise;
+
+noise = engine_noise;%factory_noise;
+index = exceptions2(1);
 ch1 = noise.segments(1,index).ch1 + noise.segments(1,index + 1).ch1;
 ch2 = noise.segments(1,index).ch2 + noise.segments(1,index + 1).ch2;
 ch3 = noise.segments(1,index).ch3 + noise.segments(1,index + 1).ch3;
@@ -193,12 +195,7 @@ noise_orig = noise;
 
 for h = 1:L % L = antal micar
     % räkna ut filter
-%     t1 = word_4_wiener(1:h,:);
-%     t2 = noise_4_wiener(1:h,:);
-%     t3 = word_4_wiener(h,1:end-K/2);
-    W1 = LS_optimal(word_4_wiener(1:h,:) + noise_4_wiener(1:h,:),[zeros(1,K/2) word_4_wiener(2,1:end-K/2)],K);
-    %W1 = LS_optimal(t1(h,:) + t2(h,: ),[zeros(1,K/2) t3],K);
-
+ %   W1 = LS_optimal(word_4_wiener(1:h,:) + noise_4_wiener(1:h,:),[zeros(1,K/2) word_4_wiener(2,1:end-K/2)],K);
     display(strcat(num2str(h), ' mic(s)'));
     noise = noise_orig;
     for i = 1:M % M = antal brusnivåer
@@ -211,6 +208,13 @@ for h = 1:L % L = antal micar
         noise = set_decibel(noise, -DECIBEL_STEP);
         noise = divide_into_segments(noise, 5000);
         current_snr = decibel_4 - noise.decibel;
+        index = exceptions2(1);
+        ch1 = noise.segments(1,index).ch1 + noise.segments(1,index + 1).ch1;
+        ch2 = noise.segments(1,index).ch2 + noise.segments(1,index + 1).ch2;
+        ch3 = noise.segments(1,index).ch3 + noise.segments(1,index + 1).ch3;
+        ch4 = noise.segments(1,index).ch4 + noise.segments(1,index + 1).ch4;
+        noise_4_wiener = [ch1;ch2;ch3;ch4];   
+        W1 = LS_optimal(word_4_wiener(1:h,:) + noise_4_wiener(1:h,:),[zeros(1,K/2) word_4_wiener(2,1:end-K/2)],K);        
         for j = 1:N  % N = antal ord
             % randomly pick a word which have not been used yet
             index = exceptions(j);
@@ -252,10 +256,7 @@ for h = 1:L % L = antal micar
                 y_1 = current_word(h,:) + noise_4_beam(h,:);
             else
                 y_1 = filter_beam((current_word + noise_4_beam),W1);
-            end
-            
-            %y_1 = filter_beam((current_word(h,:)+noise_4_beam(h,:)),W1);            
-            %y_1 = current_word(h,:) + noise_4_beam(h,:);
+            end         
             
 %             soundsc(current_word(1,:));
 %             pause(1);
@@ -265,9 +266,6 @@ for h = 1:L % L = antal micar
 %             pause(1);
 %             soundsc(y_1);
 %             pause(1);
-            
-            
-            
 
             % VAD --> y/n?
             vad_index = vad(y_1, BLOCK_LENGTH, THRESHOLD);
@@ -358,6 +356,7 @@ y = extractfield(result4.result43, 'wer');
 plot(snr4, y, 'g');
 y = extractfield(result4.result44, 'wer');
 plot(snr4, y, 'm');
+title('4 meters');
 legend('1 mic  + noise - bf','2 mics + noise + bf','3 mics + noise + bf','4 mics + noise + bf');
 %axis([START_SNR temp 0 100]);
 

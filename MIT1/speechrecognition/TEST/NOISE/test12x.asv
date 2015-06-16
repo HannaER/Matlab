@@ -267,6 +267,9 @@ for h = 1:L % L = antal micar
 %             pause(1);
 %             soundsc(y_1);
 %             pause(1);
+            
+            
+            
 
             % VAD --> y/n?
             vad_index = vad(y_1, BLOCK_LENGTH, THRESHOLD);
