@@ -133,13 +133,13 @@ ch2=rec1v(1,index).ch2;
 ch3=rec1v(1,index).ch3;
 ch4=rec1v(1,index).ch4;
 index = exceptions(2);
-ch1= ch1 + rec1v(1,index).ch1;
-ch2= ch2 + rec1v(1,index).ch2;
-ch3= ch3 + rec1v(1,index).ch3;
-ch4= ch4 + rec1v(1,index).ch4;
+ch1= ch1 + rec1h(1,index).ch1;
+ch2= ch2 + rec1h(1,index).ch2;
+ch3= ch3 + rec1h(1,index).ch3;
+ch4= ch4 + rec1h(1,index).ch4;
 word_4_wiener = [ch1';ch2';ch3';ch4'];
 
-noise = engine_noise;% factory_noise; %white_noise;
+noise = white_noise;% factory_noise;% engine_noise; 
 index = exceptions2(1);
 ch1 = noise.segments(1,index).ch1 + noise.segments(1,index + 1).ch1;
 ch2 = noise.segments(1,index).ch2 + noise.segments(1,index + 1).ch2;
@@ -254,7 +254,7 @@ for h = 1:L % L = antal micar
             noise_4_beam = [ch1;ch2;ch3;ch4];
             noise_4_beam = noise_4_beam(1:h,:); % pick out the # of channels = # mics
             % beamforming
-            if h == 1
+            if h == 8
                 y_1 = current_word(h,:) + noise_4_beam(h,:);
             else
                 y_1 = filter_beam((current_word + noise_4_beam),W1);
@@ -271,9 +271,7 @@ for h = 1:L % L = antal micar
 %             pause(1);
 %             
 %             
-            
-
-            % VAD --> y/n?
+       % VAD --> y/n?
             vad_index = vad(y_1, BLOCK_LENGTH, THRESHOLD);
             if vad_index > length(y_1)/2 % !detection
                 deletion = deletion + 1;
@@ -354,17 +352,18 @@ xlabel('SNR');
 
 figure (2)
 y = extractfield(result1.result11, 'wer');
-plot(snr1,y);
+plot(snr4,y, 'k-o');
 hold on;
 y = extractfield(result1.result12, 'wer');
-plot(snr1,y, 'r');
+plot(snr4,y, 'k-x');
 y = extractfield(result1.result13, 'wer');
-plot(snr1, y, 'g');
+plot(snr4, y, 'k-s');
 y = extractfield(result1.result14, 'wer');
-plot(snr1, y, 'm');
-title('1 meter');
+plot(snr4, y, 'k-d');
+title('1 meters');
 legend('1 mic  + noise - bf','2 mics + noise + bf','3 mics + noise + bf','4 mics + noise + bf');
-%axis([START_SNR temp 0 100]);
+xlabel('SNR [dB]');
+ylabel('Recognition rate [%]');
 
 
 

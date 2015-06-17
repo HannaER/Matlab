@@ -145,6 +145,85 @@ save('NOISE\factory\factory.mat', 'factory');
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% WHITE %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+whv.ch1 = [];
+whv.ch2 = [];
+whv.ch3 = [];
+whv.ch4 = [];
+whh.ch1 = [];
+whh.ch2 = [];
+whh.ch3 = [];
+whh.ch4 = [];
+
+
+%%%%%%%%%%%%% WHITE:VÄNSTER %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+wv.wv1 = audioread('\Recordings\noise\white\vänster\2015-06-16-091625\recording1.wav');
+wv.wv2 = audioread('\Recordings\noise\white\vänster\2015-06-16-091625\recording2.wav');
+wv.wv3 = audioread('\Recordings\noise\white\vänster\2015-06-16-091625\recording3.wav');
+wv.wv4 = audioread('\Recordings\noise\white\vänster\2015-06-16-091625\recording4.wav');
+wv.wv5 = audioread('\Recordings\noise\white\vänster\2015-06-16-091625\recording5.wav');
+wv.wv6 = audioread('\Recordings\noise\white\vänster\2015-06-16-091625\recording6.wav');
+wv.wv7 = audioread('\Recordings\noise\white\vänster\2015-06-16-091625\recording7.wav');
+wv.wv8 = audioread('\Recordings\noise\white\vänster\2015-06-16-091625\recording8.wav');
+
+N = 4;
+filename = 'wv';
+for i = 1:N
+    filename = getfield(wv, strcat('wv', num2str(i)));
+    word = filename;
+    whv.ch1 = [whv.ch1 word(:,1)'];
+    whv.ch2 = [whv.ch2 word(:,2)'];
+    whv.ch3 = [whv.ch3 word(:,3)'];
+    whv.ch4 = [whv.ch4 word(:,4)'];
+end
+whv.name = 'vänster';
+whv.decibel = pow2db(mean([var(whv.ch1) var(whv.ch2) var(whv.ch3) var(whv.ch4)]));
+save('NOISE\white\v.mat', 'whv');
+
+%%%%%%%%%%%%% WHITE:HÖGER %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+wh.wh1 = audioread('\Recordings\noise\white\höger\2015-06-16-090903\recording1.wav');
+wh.wh2 = audioread('\Recordings\noise\white\höger\2015-06-16-090903\recording2.wav');
+wh.wh3 = audioread('\Recordings\noise\white\höger\2015-06-16-090903\recording3.wav');
+wh.wh4 = audioread('\Recordings\noise\white\höger\2015-06-16-090903\recording4.wav');
+wh.wh5 = audioread('\Recordings\noise\white\höger\2015-06-16-090903\recording5.wav');
+wh.wh6 = audioread('\Recordings\noise\white\höger\2015-06-16-090903\recording6.wav');
+wh.wh7 = audioread('\Recordings\noise\white\höger\2015-06-16-090903\recording7.wav');
+wh.wh8 = audioread('\Recordings\noise\white\höger\2015-06-16-090903\recording8.wav');
+
+
+N = 4;
+filename = 'wh';
+for i = 1:N
+    filename = getfield(wh, strcat('wh', num2str(i)));
+    word = filename;
+    whh.ch1 = [whh.ch1 word(:,1)'];
+    whh.ch2 = [whh.ch2 word(:,2)'];
+    whh.ch3 = [whh.ch3 word(:,3)'];
+    whh.ch4 = [whh.ch4 word(:,4)'];
+end
+whh.name = 'höger';
+whh.decibel = pow2db(mean([var(whh.ch1) var(whh.ch2) var(whh.ch3) var(whh.ch4)]));
+save('NOISE\white\h.mat', 'whh');
+
+
+%%%%%%%%%%%%% WHITE:BALANSERA:SUMMERA %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%BALANSERA
+decibel_diff = whv.decibel - whh.decibel;
+whh = set_decibel(whh, decibel_diff);
+
+%SUMMERA
+white.ch1 = whv.ch1(1:end-30000) + whh.ch1(1:end-30000);
+white.ch2 = whv.ch2(1:end-30000) + whh.ch2(1:end-30000);
+white.ch3 = whv.ch3(1:end-30000) + whh.ch3(1:end-30000);
+white.ch4 = whv.ch4(1:end-30000) + whh.ch4(1:end-30000);
+white.decibel = pow2db(mean([var(white.ch1) var(white.ch2) var(white.ch3) var(white.ch4)]));
+white.name = 'white';
+save('NOISE\white\white.mat', 'white');
+
+
 
 
 

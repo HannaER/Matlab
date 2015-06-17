@@ -132,13 +132,13 @@ ch2=rec4v(1,index).ch2;
 ch3=rec4v(1,index).ch3;
 ch4=rec4v(1,index).ch4;
 index = exceptions(2);
-ch1= ch1 + rec4v(1,index).ch1;
-ch2= ch2 + rec4v(1,index).ch2;
-ch3= ch3 + rec4v(1,index).ch3;
-ch4= ch4 + rec4v(1,index).ch4;
+ch1= ch1 + rec4h(1,index).ch1;
+ch2= ch2 + rec4h(1,index).ch2;
+ch3= ch3 + rec4h(1,index).ch3;
+ch4= ch4 + rec4h(1,index).ch4;
 word_4_wiener = [ch1';ch2';ch3';ch4'];
 
-noise = engine_noise;%factory_noise;
+noise = factory_noise; % white_noise; % engine_noise; 
 index = exceptions2(1);
 ch1 = noise.segments(1,index).ch1 + noise.segments(1,index + 1).ch1;
 ch2 = noise.segments(1,index).ch2 + noise.segments(1,index + 1).ch2;
@@ -348,17 +348,18 @@ xlabel('SNR');
 
 figure (2)
 y = extractfield(result4.result41, 'wer');
-plot(snr4,y);
+plot(snr4,y, 'k-o');
 hold on;
 y = extractfield(result4.result42, 'wer');
-plot(snr4,y, 'r');
+plot(snr4,y, 'k-x');
 y = extractfield(result4.result43, 'wer');
-plot(snr4, y, 'g');
+plot(snr4, y, 'k-s');
 y = extractfield(result4.result44, 'wer');
-plot(snr4, y, 'm');
+plot(snr4, y, 'k-d');
 title('4 meters');
 legend('1 mic  + noise - bf','2 mics + noise + bf','3 mics + noise + bf','4 mics + noise + bf');
-%axis([START_SNR temp 0 100]);
+xlabel('SNR [dB]');
+ylabel('Recognition rate [%]');
 
 
 

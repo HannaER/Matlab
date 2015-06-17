@@ -132,13 +132,13 @@ ch2=rec2v(1,index).ch2;
 ch3=rec2v(1,index).ch3;
 ch4=rec2v(1,index).ch4;
 index = exceptions(2);
-ch1= ch1 + rec2v(1,index).ch1;
-ch2= ch2 + rec2v(1,index).ch2;
-ch3= ch3 + rec2v(1,index).ch3;
-ch4= ch4 + rec2v(1,index).ch4;
+ch1= ch1 + rec2h(1,index).ch1;
+ch2= ch2 + rec2h(1,index).ch2;
+ch3= ch3 + rec2h(1,index).ch3;
+ch4= ch4 + rec2h(1,index).ch4;
 word_4_wiener = [ch1';ch2';ch3';ch4'];
 
-noise = engine_noise; %factory_noise;% white_noise;
+noise = white_noise;% factory_noise;% engine_noise; 
 index = exceptions2(1);
 ch1 = noise.segments(1,index).ch1 + noise.segments(1,index + 1).ch1;
 ch2 = noise.segments(1,index).ch2 + noise.segments(1,index + 1).ch2;
@@ -252,7 +252,7 @@ for h = 1:L % L = antal micar
             noise_4_beam = [ch1;ch2;ch3;ch4];
             noise_4_beam = noise_4_beam(1:h,:); % pick out the # of channels = # mics
             % beamforming
-            if h == 1
+            if h == 8
                 y_1 = current_word(h,:) + noise_4_beam(h,:);
             else
                 y_1 = filter_beam((current_word + noise_4_beam),W1);
@@ -349,17 +349,18 @@ xlabel('SNR');
 
 figure (2)
 y = extractfield(result2.result21, 'wer');
-plot(snr2,y);
+plot(snr4,y, 'k-o');
 hold on;
 y = extractfield(result2.result22, 'wer');
-plot(snr2,y, 'r');
+plot(snr4,y, 'k-x');
 y = extractfield(result2.result23, 'wer');
-plot(snr2, y, 'g');
+plot(snr4, y, 'k-s');
 y = extractfield(result2.result24, 'wer');
-plot(snr2, y, 'm');
+plot(snr4, y, 'k-d');
 title('2 meters');
-legend('1 mic   + noise - bf','2 mics + noise + bf','3 mics + noise + bf','4 mics + noise + bf');
-%axis([START_SNR temp 0 100]);
+legend('1 mic  + noise - bf','2 mics + noise + bf','3 mics + noise + bf','4 mics + noise + bf');
+xlabel('SNR [dB]');
+ylabel('Recognition rate [%]');
 
 
 
