@@ -226,6 +226,85 @@ save('NOISE\white\white.mat', 'white');
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% BABBLE %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+bav.ch1 = [];
+bav.ch2 = [];
+bav.ch3 = [];
+bav.ch4 = [];
+bah.ch1 = [];
+bah.ch2 = [];
+bah.ch3 = [];
+bah.ch4 = [];
+
+
+%%%%%%%%%%%%% BABBLE:VÄNSTER %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+bv.bv1 = audioread('\Recordings\noise\babble\vänster\2015-06-18-090805\recording1.wav');
+bv.bv2 = audioread('\Recordings\noise\babble\vänster\2015-06-18-090805\recording2.wav');
+bv.bv3 = audioread('\Recordings\noise\babble\vänster\2015-06-18-090805\recording3.wav');
+bv.bv4 = audioread('\Recordings\noise\babble\vänster\2015-06-18-090805\recording4.wav');
+bv.bv5 = audioread('\Recordings\noise\babble\vänster\2015-06-18-090805\recording5.wav');
+bv.bv6 = audioread('\Recordings\noise\babble\vänster\2015-06-18-090805\recording6.wav');
+bv.bv7 = audioread('\Recordings\noise\babble\vänster\2015-06-18-090805\recording7.wav');
+bv.bv8 = audioread('\Recordings\noise\babble\vänster\2015-06-18-090805\recording8.wav');
+
+N = 4;
+filename = 'bv';
+for i = 1:N
+    filename = getfield(bv, strcat('bv', num2str(i)));
+    word = filename;
+    bav.ch1 = [bav.ch1 word(:,1)'];
+    bav.ch2 = [bav.ch2 word(:,2)'];
+    bav.ch3 = [bav.ch3 word(:,3)'];
+    bav.ch4 = [bav.ch4 word(:,4)'];
+end
+bav.name = 'vänster';
+bav.decibel = pow2db(mean([var(bav.ch1) var(bav.ch2) var(bav.ch3) var(bav.ch4)]));
+save('NOISE\babble\v.mat', 'bav');
+
+%%%%%%%%%%%%% BABBLE:HÖGER %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+bh.bh1 = audioread('\Recordings\noise\babble\höger\2015-06-18-090245\recording1.wav');
+bh.bh2 = audioread('\Recordings\noise\babble\höger\2015-06-18-090245\recording2.wav');
+bh.bh3 = audioread('\Recordings\noise\babble\höger\2015-06-18-090245\recording3.wav');
+bh.bh4 = audioread('\Recordings\noise\babble\höger\2015-06-18-090245\recording4.wav');
+bh.bh5 = audioread('\Recordings\noise\babble\höger\2015-06-18-090245\recording5.wav');
+bh.bh6 = audioread('\Recordings\noise\babble\höger\2015-06-18-090245\recording6.wav');
+bh.bh7 = audioread('\Recordings\noise\babble\höger\2015-06-18-090245\recording7.wav');
+bh.bh8 = audioread('\Recordings\noise\babble\höger\2015-06-18-090245\recording8.wav');
+
+
+N = 4;
+filename = 'bh';
+for i = 1:N
+    filename = getfield(bh, strcat('bh', num2str(i)));
+    word = filename;
+    bah.ch1 = [bah.ch1 word(:,1)'];
+    bah.ch2 = [bah.ch2 word(:,2)'];
+    bah.ch3 = [bah.ch3 word(:,3)'];
+    bah.ch4 = [bah.ch4 word(:,4)'];
+end
+bah.name = 'höger';
+bah.decibel = pow2db(mean([var(bah.ch1) var(bah.ch2) var(bah.ch3) var(bah.ch4)]));
+save('NOISE\babble\h.mat', 'bah');
+
+
+%%%%%%%%%%%%% BABBLE:BALANSERA:SUMMERA %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%BALANSERA
+decibel_diff = bav.decibel - bah.decibel;
+bah = set_decibel(bah, decibel_diff);
+
+%SUMMERA
+babble.ch1 = bav.ch1(1:end-30000) + bah.ch1(1:end-30000);
+babble.ch2 = bav.ch2(1:end-30000) + bah.ch2(1:end-30000);
+babble.ch3 = bav.ch3(1:end-30000) + bah.ch3(1:end-30000);
+babble.ch4 = bav.ch4(1:end-30000) + bah.ch4(1:end-30000);
+babble.decibel = pow2db(mean([var(babble.ch1) var(babble.ch2) var(babble.ch3) var(babble.ch4)]));
+babble.name = 'babble';
+save('NOISE\babble\babble.mat', 'babble');
+
+
 
 
 
