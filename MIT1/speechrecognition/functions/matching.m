@@ -1,4 +1,4 @@
-function output = matching(input, db, current_word_name, SUBSET_LENGTH, N_REFLEC)
+function [output, reason] = matching(input, db, current_word_name, SUBSET_LENGTH, N_REFLEC)
 % MATCHING = (input, db)
 % This function calculates the matching error
 % input and db are of equal size
@@ -64,13 +64,21 @@ end
 if temp_min_error < THRESHOLD_RIGHT
    if strcmp(name_min, current_word_name) == 1 && temp_min_error < THRESHOLD_MIN       
         output = 'yes';
-%    elseif strcmp(name_min, current_word_name) == 1 && temp_min_error < THRESHOLD_LEFT       
-%        output = 'yes';
-   else
-       output = 'no';       
+        reason = current_word_name;
+   elseif temp_min_error > THRESHOLD_MIN 
+       output = 'no';
+       reason = 'no match';
+   elseif strcmp(name_min, current_word_name) == 0
+       output = 'no';
+       if strcmp(name_min, 'höger') == 1
+           reason = 'höger';
+       else
+           reason = 'vänster';
+       end
    end
 else   
    output = 'no';
+   reason = 'no match';
 end
 end
 

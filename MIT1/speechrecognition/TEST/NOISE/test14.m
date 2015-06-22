@@ -144,27 +144,27 @@ ch3= ch3 + rec4h(1,index).ch3;
 ch4= ch4 + rec4h(1,index).ch4;
 word_4_wiener = [ch1';ch2';ch3';ch4'];
 
-noise =  engine_noise;% factory_noise;  % white_noise;  % babble_noise;
+noise =  babble_noise;%engine_noise;% factory_noise;  % white_noise;   
 index = exceptions2(1);
 ch1 = noise.segments(1,index).ch1 + noise.segments(1,index + 1).ch1;
 ch2 = noise.segments(1,index).ch2 + noise.segments(1,index + 1).ch2;
 ch3 = noise.segments(1,index).ch3 + noise.segments(1,index + 1).ch3;
 ch4 = noise.segments(1,index).ch4 + noise.segments(1,index + 1).ch4;
 noise_4_wiener = [ch1;ch2;ch3;ch4];
-% 
+%
 % noise = factory_noise;
-% 
+%
 % ch1_w = [];
 % ch2_w = [];
 % ch3_w = [];
 % ch4_w = [];
-% 
-% 
+%
+%
 % ch1_n = [];
 % ch2_n = [];
 % ch3_n = [];
 % ch4_n = [];
-% 
+%
 % for i = 1:N
 %     index_w = exceptions(i);
 %     index_n = exceptions2(i);
@@ -173,21 +173,21 @@ noise_4_wiener = [ch1;ch2;ch3;ch4];
 %         ch2_w = [ch2_w rec4v(1,index_w).ch2'];
 %         ch3_w = [ch3_w rec4v(1,index_w).ch3'];
 %         ch4_w = [ch4_w rec4v(1,index_w).ch4'];
-%         
+%
 %     else
 %         ch1_w = [ch1_w rec4h(1,index_w).ch1'];
 %         ch2_w = [ch2_w rec4h(1,index_w).ch2'];
 %         ch3_w = [ch3_w rec4h(1,index_w).ch3'];
 %         ch4_w = [ch4_w rec4h(1,index_w).ch4'];
-%         
+%
 %     end
 %     ch1_n = [ch1_n noise.segments(1,index_n).ch1];
 %     ch2_n = [ch2_n noise.segments(1,index_n).ch2];
 %     ch3_n = [ch3_n noise.segments(1,index_n).ch3];
 %     ch4_n = [ch4_n noise.segments(1,index_n).ch4];
-%     
+%
 % end
-%  
+%
 % % word_4_wiener = [[ch1_w(1:5000*N/4) ch1_w(5000*N*3/4:end)];[ch2_w(1:5000*N/4) ch2_w(5000*N*3/4:end)];[ch3_w(1:5000*N/4) ch3_w(5000*N*3/4:end)];[ch4_w(1:5000*N/4) ch4_w(5000*N*3/4:end)]];
 % % noise_4_wiener = [[ch1_n(1:5000*N/4) ch1_n(5000*N*3/4:end)];[ch2_n(1:5000*N/4) ch2_n(5000*N*3/4:end)];[ch3_n(1:5000*N/4) ch3_n(5000*N*3/4:end)];[ch4_n(1:5000*N/4) ch4_n(5000*N*3/4:end)]];
 % word_4_wiener = [ch1_w(1:4*5000);ch2_w(1:4*5000);ch3_w(1:4*5000);ch4_w(1:4*5000)];
@@ -201,13 +201,16 @@ noise_orig = noise;
 
 for h = 1:L % L = antal micar
     % räkna ut filter
- %   W1 = LS_optimal(word_4_wiener(1:h,:) + noise_4_wiener(1:h,:),[zeros(1,K/2) word_4_wiener(2,1:end-K/2)],K);
+    %   W1 = LS_optimal(word_4_wiener(1:h,:) + noise_4_wiener(1:h,:),[zeros(1,K/2) word_4_wiener(2,1:end-K/2)],K);
     display(strcat(num2str(h), ' mic(s)'));
     noise = noise_orig;
     for i = 1:M % M = antal brusnivåer
         wer_curr = 0;
         deletion = 0;
-        insertion = 0;
+        substitution = 0;
+        right = 0;
+        left = 0;
+        no_match = 0;
         %set noise decibel level, update segments,
         noise = set_decibel(noise, -DECIBEL_STEP);
         noise = divide_into_segments(noise, 5000);
@@ -217,8 +220,8 @@ for h = 1:L % L = antal micar
         ch2 = noise.segments(1,index).ch2 + noise.segments(1,index + 1).ch2;
         ch3 = noise.segments(1,index).ch3 + noise.segments(1,index + 1).ch3;
         ch4 = noise.segments(1,index).ch4 + noise.segments(1,index + 1).ch4;
-        noise_4_wiener = [ch1;ch2;ch3;ch4];   
-        W1 = LS_optimal(word_4_wiener(1:h,:) + noise_4_wiener(1:h,:),[zeros(1,K/2) word_4_wiener(2,1:end-K/2)],K);        
+        noise_4_wiener = [ch1;ch2;ch3;ch4];
+        W1 = LS_optimal(word_4_wiener(1:h,:) + noise_4_wiener(1:h,:),[zeros(1,K/2) word_4_wiener(2,1:end-K/2)],K);
         for j = 1:N  % N = antal ord
             % randomly pick a word which have not been used yet
             index = exceptions(j);
@@ -273,18 +276,33 @@ for h = 1:L % L = antal micar
                 % create_subsets
                 y_7 = create_subsets(y_6, SUBSET_LENGTH);
                 % matching against database --> y/n?
-                match = matching(y_7, 'DB\db.mat', current_word_name, SUBSET_LENGTH, N_REFLEC);
+                [match, reason] = matching(y_7, 'DB\db.mat', current_word_name, SUBSET_LENGTH, N_REFLEC);
                 if strcmp(match,'yes') == 1
                     wer_curr = wer_curr + 1;
+                    if strcmp(reason, 'höger') == 1
+                        right = right + 1;
+                    else
+                        left = left + 1;
+                    end
                 else
-                    insertion = insertion + 1;
+                    substitution = substitution + 1;
+                    if strcmp(reason, 'höger') == 1
+                        right = right + 1;
+                    elseif strcmp(reason, 'vänster') == 1
+                        left = left + 1;
+                    else
+                        no_match = no_match + 1;
+                    end
                 end
             end
         end
         s.wer = wer_curr;
         s.deletion = deletion;
-        s.insertion = insertion;
+        s.substitution = substitution;
         s.snr = current_snr;
+        s.right = right;
+        s.left = left;
+        s.no_match = no_match;
         eval(['result4.result4' num2str(h) ' = [ result4.result4' num2str(h)  ' s];']);
     end
 end
@@ -292,18 +310,21 @@ end
 
 for h = 1:1 % L = antal micar
     % räkna ut filter
- %   W1 = LS_optimal(word_4_wiener(1:h,:) + noise_4_wiener(1:h,:),[zeros(1,K/2) word_4_wiener(2,1:end-K/2)],K);
+    %   W1 = LS_optimal(word_4_wiener(1:h,:) + noise_4_wiener(1:h,:),[zeros(1,K/2) word_4_wiener(2,1:end-K/2)],K);
     display('1 mic - bf');
     noise = noise_orig;
     for i = 1:M % M = antal brusnivåer
         wer_curr = 0;
         deletion = 0;
-        insertion = 0;
+        substitution = 0;
+        right = 0;
+        left = 0;
+        no_match = 0;
         %set noise decibel level, update segments,
         noise = set_decibel(noise, -DECIBEL_STEP);
         noise = divide_into_segments(noise, 5000);
         current_snr = decibel_4 - noise.decibel;
-       for j = 1:N  % N = antal ord
+        for j = 1:N  % N = antal ord
             % randomly pick a word which have not been used yet
             index = exceptions(j);
             if j <= N/2 % take 'vänster'
@@ -357,18 +378,33 @@ for h = 1:1 % L = antal micar
                 % create_subsets
                 y_7 = create_subsets(y_6, SUBSET_LENGTH);
                 % matching against database --> y/n?
-                match = matching(y_7, 'DB\db.mat', current_word_name, SUBSET_LENGTH, N_REFLEC);
+                [match, reason] = matching(y_7, 'DB\db.mat', current_word_name, SUBSET_LENGTH, N_REFLEC);
                 if strcmp(match,'yes') == 1
                     wer_curr = wer_curr + 1;
+                    if strcmp(reason, 'höger') == 1
+                        right = right + 1;
+                    else
+                        left = left + 1;
+                    end
                 else
-                    insertion = insertion + 1;
+                    substitution = substitution + 1;
+                    if strcmp(reason, 'höger') == 1
+                        right = right + 1;
+                    elseif strcmp(reason, 'vänster') == 1
+                        left = left + 1;
+                    else
+                        no_match = no_match + 1;
+                    end
                 end
             end
         end
         s.wer = wer_curr;
         s.deletion = deletion;
-        s.insertion = insertion;
+        s.substitution = substitution;
         s.snr = current_snr;
+        s.right = right;
+        s.left = left;
+        s.no_match = no_match;
         eval(['result4.result41mbf = [result4.result41mbf s];']);
     end
 end

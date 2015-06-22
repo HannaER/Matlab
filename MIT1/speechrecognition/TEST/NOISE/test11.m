@@ -145,7 +145,7 @@ ch3= ch3 + rec1h(1,index).ch3;
 ch4= ch4 + rec1h(1,index).ch4;
 word_4_wiener = [ch1';ch2';ch3';ch4'];
 
-noise =  engine_noise;% factory_noise;  % white_noise;  % babble_noise;
+noise =  babble_noise;%engine_noise;% factory_noise;  % white_noise;   
 index = exceptions2(1);
 ch1 = noise.segments(1,index).ch1 + noise.segments(1,index + 1).ch1;
 ch2 = noise.segments(1,index).ch2 + noise.segments(1,index + 1).ch2;
@@ -209,7 +209,10 @@ for h = 1:L % L = antal micar
     for i = 1:M % M = antal brusnivåer
         wer_curr = 0;
         deletion = 0;
-        insertion = 0;
+        substitution = 0;
+        right = 0;
+        left = 0;
+        no_match = 0;
         %set noise decibel level, update segments,
         noise = set_decibel(noise, -DECIBEL_STEP);
         noise = divide_into_segments(noise, 5000);
@@ -275,18 +278,33 @@ for h = 1:L % L = antal micar
                 % create_subsets
                 y_7 = create_subsets(y_6, SUBSET_LENGTH);
                 % matching against database --> y/n?
-                match = matching(y_7, 'DB\db.mat', current_word_name, SUBSET_LENGTH, N_REFLEC);
+                [match, reason] = matching(y_7, 'DB\db.mat', current_word_name, SUBSET_LENGTH, N_REFLEC);
                 if strcmp(match,'yes') == 1
                     wer_curr = wer_curr + 1;
+                    if strcmp(reason, 'höger') == 1
+                        right = right + 1;
+                    else
+                        left = left + 1;
+                    end
                 else
-                    insertion = insertion + 1;
+                    substitution = substitution + 1;
+                    if strcmp(reason, 'höger') == 1
+                        right = right + 1;
+                    elseif strcmp(reason, 'vänster') == 1
+                        left = left + 1;
+                    else
+                        no_match = no_match + 1;
+                    end
                 end
             end
         end
         s.wer = wer_curr;
         s.deletion = deletion;
-        s.insertion = insertion;
+        s.substitution = substitution;
         s.snr = current_snr;
+        s.right = right;
+        s.left = left;
+        s.no_match = no_match;
         eval(['result1.result1' num2str(h) ' = [ result1.result1' num2str(h)  ' s];']);
     end
 end
@@ -301,7 +319,10 @@ for h = 1:1 % L = antal micar
     for i = 1:M % M = antal brusnivåer
         wer_curr = 0;
         deletion = 0;
-        insertion = 0;
+        substitution = 0;
+        right = 0;
+        left = 0;
+        no_match = 0;
         %set noise decibel level, update segments,
         noise = set_decibel(noise, -DECIBEL_STEP);
         noise = divide_into_segments(noise, 5000);
@@ -360,18 +381,33 @@ for h = 1:1 % L = antal micar
                 % create_subsets
                 y_7 = create_subsets(y_6, SUBSET_LENGTH);
                 % matching against database --> y/n?
-                match = matching(y_7, 'DB\db.mat', current_word_name, SUBSET_LENGTH, N_REFLEC);
+                [match, reason] = matching(y_7, 'DB\db.mat', current_word_name, SUBSET_LENGTH, N_REFLEC);
                 if strcmp(match,'yes') == 1
                     wer_curr = wer_curr + 1;
+                    if strcmp(reason, 'höger') == 1
+                        right = right + 1;
+                    else
+                        left = left + 1;
+                    end
                 else
-                    insertion = insertion + 1;
+                    substitution = substitution + 1;
+                    if strcmp(reason, 'höger') == 1
+                        right = right + 1;
+                    elseif strcmp(reason, 'vänster') == 1
+                        left = left + 1;
+                    else
+                        no_match = no_match + 1;
+                    end
                 end
             end
         end
         s.wer = wer_curr;
         s.deletion = deletion;
-        s.insertion = insertion;
+        s.substitution = substitution;
         s.snr = current_snr;
+        s.right = right;
+        s.left = left;
+        s.no_match = no_match;
         eval(['result1.result11mbf = [result1.result11mbf s];']);
     end
 end
