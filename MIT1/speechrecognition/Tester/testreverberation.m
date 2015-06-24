@@ -27,23 +27,33 @@ mx = sx;
 my = sy + distance;
 mz = sz;
 
-N_taps = 16;
-N_images = 2;% M [1x1] - real valed and positive integer scalar that corresponds to the number of images in all directions taken. I.e. total number of images is M^3 8.
-Fs = 8000;
+N_taps = 1500;
+N_images = 10;% M [1x1] - real valed and positive integer scalar that corresponds to the number of images in all directions taken. I.e. total number of images is M^3 8.
+Fs = 16000;
 
 RC = 0.5; % room absorption coefficient, satisfying 0<RC<1.
 Rsource = [sx sy sz]'; % xyz
 Rmic = [mx my mz]';
 Lroom = [x y z]';
-[Hdirect, Hreverb] = cIRFEstimationIM(Rsource, Rmic, Lroom, N_taps, Fs, RC, N_images);
-
-
-soundsc(t1.ch1 ,8000);
+[Hdirect, Hreverb] = IRFEstimationIM(Rsource, Rmic, Lroom, N_taps, Fs, RC, N_images);
 
 
 
+x = t1.ch1;
+
+ydirect = filter(Hdirect, 1, x);
+yreverb = filter(Hreverb, 1, x);
+ytot = ydirect + yreverb;
 
 
+
+soundsc(x)
+pause(1)
+soundsc(ydirect)
+pause(1)
+soundsc(yreverb)
+pause(1)
+soundsc(ytot)
 
 
 
