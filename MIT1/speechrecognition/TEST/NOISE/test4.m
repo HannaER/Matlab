@@ -412,7 +412,7 @@ end
 
 display('finished test');
 % display('saving results');
-% save('TEST\NOISE\result4x.mat', 'result4','-v7.3');
+% save('TEST\NOISE\result4.mat', 'result4','-v7.3');
 display('plotting');
 
 

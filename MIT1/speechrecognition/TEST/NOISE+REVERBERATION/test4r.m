@@ -23,11 +23,11 @@ DECIBEL_STEP = 1;
 
 %%%%%%%%%%% 4 meter %%%%%%%%%%%%%%%%%%%%%%%%%
 
-result4.result41 = [];
-result4.result42 = [];
-result4.result43 = [];
-result4.result44 = [];
-result4.result41mbf = [];
+result4r.result41 = [];
+result4r.result42 = [];
+result4r.result43 = [];
+result4r.result44 = [];
+result4r.result41mbf = [];
 snr4 = []; % x-vector - the same for all 4
 
 
@@ -38,18 +38,18 @@ snr4 = []; % x-vector - the same for all 4
 
 %VÄNSTER
 decibel_v = 0;
-load TEST_REC/4/v.mat
+load TEST_REC/r4/v.mat
 for i = 1:P % all words to iterate through
     temp1 = [];
     temp2 = [];
     temp3 = [];
     temp4 = [];
-    for j = 1:length(rec4v(1,1).ch1)
-        if  abs(rec4v(1,i).ch3(j)) > 0.005 % this value is chosen by looking at recordings
-            temp1 = [temp1 rec4v(1,i).ch1(j)];
-            temp2 = [temp2 rec4v(1,i).ch2(j)];
-            temp3 = [temp3 rec4v(1,i).ch3(j)];
-            temp4 = [temp4 rec4v(1,i).ch4(j)];
+    for j = 1:length(rec4vr(1,1).ch1)
+        if  abs(rec4vr(1,i).ch3(j)) > 0.0004 % this value is chosen by looking at recordings
+            temp1 = [temp1 rec4vr(1,i).ch1(j)];
+            temp2 = [temp2 rec4vr(1,i).ch2(j)];
+            temp3 = [temp3 rec4vr(1,i).ch3(j)];
+            temp4 = [temp4 rec4vr(1,i).ch4(j)];
         end
     end
     variance_ = mean([var(temp1) var(temp2) var(temp3) var(temp4)]);
@@ -58,18 +58,18 @@ end
 
 %HÖGER
 decibel_h = 0;
-load TEST_REC/4/h.mat
+load TEST_REC/r4/h.mat
 for i = 1:P % all words to iterate through
     temp1 = [];
     temp2 = [];
     temp3 = [];
     temp4 = [];
-    for j = 1:length(rec4h(1,1).ch1)
-        if  abs(rec4h(1,i).ch3(j)) > 0.005 % this value is chosen by looking at recordings
-            temp1 = [temp1 rec4h(1,i).ch1(j)];
-            temp2 = [temp2 rec4h(1,i).ch2(j)];
-            temp3 = [temp3 rec4h(1,i).ch3(j)];
-            temp4 = [temp4 rec4h(1,i).ch4(j)];
+    for j = 1:length(rec4hr(1,1).ch1)
+        if  abs(rec4hr(1,i).ch3(j)) > 0.0004 % this value is chosen by looking at recordings
+            temp1 = [temp1 rec4hr(1,i).ch1(j)];
+            temp2 = [temp2 rec4hr(1,i).ch2(j)];
+            temp3 = [temp3 rec4hr(1,i).ch3(j)];
+            temp4 = [temp4 rec4hr(1,i).ch4(j)];
         end
     end
     variance_ = mean([var(temp1) var(temp2) var(temp3) var(temp4)]);
@@ -133,18 +133,18 @@ exceptions = [exceptions temp];
 %GET ONE WORD AND NOISE FOR THE LS_OPTIMAL FILTER FUNCTION
 %index = get_random_word_index(1:1:P, []);
 index = exceptions(1);
-ch1=rec4v(1,index).ch1;
-ch2=rec4v(1,index).ch2;
-ch3=rec4v(1,index).ch3;
-ch4=rec4v(1,index).ch4;
+ch1=rec4vr(1,index).ch1;
+ch2=rec4vr(1,index).ch2;
+ch3=rec4vr(1,index).ch3;
+ch4=rec4vr(1,index).ch4;
 index = exceptions(2);
-ch1= ch1 + rec4h(1,index).ch1;
-ch2= ch2 + rec4h(1,index).ch2;
-ch3= ch3 + rec4h(1,index).ch3;
-ch4= ch4 + rec4h(1,index).ch4;
+ch1= ch1 + rec4hr(1,index).ch1;
+ch2= ch2 + rec4hr(1,index).ch2;
+ch3= ch3 + rec4hr(1,index).ch3;
+ch4= ch4 + rec4hr(1,index).ch4;
 word_4_wiener = [ch1';ch2';ch3';ch4'];
 
-noise =  babble_noise;%engine_noise;% factory_noise;  % white_noise;   
+noise =  white_noise;  %babble_noise; engine_noise; % factory_noise;  
 index = exceptions2(1);
 ch1 = noise.segments(1,index).ch1 + noise.segments(1,index + 1).ch1;
 ch2 = noise.segments(1,index).ch2 + noise.segments(1,index + 1).ch2;
@@ -169,16 +169,16 @@ noise_4_wiener = [ch1;ch2;ch3;ch4];
 %     index_w = exceptions(i);
 %     index_n = exceptions2(i);
 %     if i <= N/2
-%         ch1_w = [ch1_w rec4v(1,index_w).ch1'];
-%         ch2_w = [ch2_w rec4v(1,index_w).ch2'];
-%         ch3_w = [ch3_w rec4v(1,index_w).ch3'];
-%         ch4_w = [ch4_w rec4v(1,index_w).ch4'];
+%         ch1_w = [ch1_w rec4vr(1,index_w).ch1'];
+%         ch2_w = [ch2_w rec4vr(1,index_w).ch2'];
+%         ch3_w = [ch3_w rec4vr(1,index_w).ch3'];
+%         ch4_w = [ch4_w rec4vr(1,index_w).ch4'];
 %
 %     else
-%         ch1_w = [ch1_w rec4h(1,index_w).ch1'];
-%         ch2_w = [ch2_w rec4h(1,index_w).ch2'];
-%         ch3_w = [ch3_w rec4h(1,index_w).ch3'];
-%         ch4_w = [ch4_w rec4h(1,index_w).ch4'];
+%         ch1_w = [ch1_w rec4hr(1,index_w).ch1'];
+%         ch2_w = [ch2_w rec4hr(1,index_w).ch2'];
+%         ch3_w = [ch3_w rec4hr(1,index_w).ch3'];
+%         ch4_w = [ch4_w rec4hr(1,index_w).ch4'];
 %
 %     end
 %     ch1_n = [ch1_n noise.segments(1,index_n).ch1];
@@ -226,17 +226,17 @@ for h = 1:L % L = antal micar
             % randomly pick a word which have not been used yet
             index = exceptions(j);
             if j <= N/2 % take 'vänster'
-                ch1 = rec4v(1,index).ch1;
-                ch2 = rec4v(1,index).ch2;
-                ch3 = rec4v(1,index).ch3;
-                ch4 = rec4v(1,index).ch4;
-                current_word_name = rec4v(1).name;
+                ch1 = rec4vr(1,index).ch1;
+                ch2 = rec4vr(1,index).ch2;
+                ch3 = rec4vr(1,index).ch3;
+                ch4 = rec4vr(1,index).ch4;
+                current_word_name = rec4vr(1).name;
             else % take 'höger'
-                ch1 = rec4h(1,index).ch1;
-                ch2 = rec4h(1,index).ch2;
-                ch3 = rec4h(1,index).ch3;
-                ch4 = rec4h(1,index).ch4;
-                current_word_name = rec4h(1).name;
+                ch1 = rec4hr(1,index).ch1;
+                ch2 = rec4hr(1,index).ch2;
+                ch3 = rec4hr(1,index).ch3;
+                ch4 = rec4hr(1,index).ch4;
+                current_word_name = rec4hr(1).name;
             end
             w.ch1 = ch1;
             w.ch2 = ch2;
@@ -303,7 +303,7 @@ for h = 1:L % L = antal micar
         s.right = right;
         s.left = left;
         s.no_match = no_match;
-        eval(['result4.result4' num2str(h) ' = [ result4.result4' num2str(h)  ' s];']);
+        eval(['result4r.result4' num2str(h) ' = [ result4r.result4' num2str(h)  ' s];']);
     end
 end
 
@@ -328,17 +328,17 @@ for h = 1:1 % L = antal micar
             % randomly pick a word which have not been used yet
             index = exceptions(j);
             if j <= N/2 % take 'vänster'
-                ch1 = rec4v(1,index).ch1;
-                ch2 = rec4v(1,index).ch2;
-                ch3 = rec4v(1,index).ch3;
-                ch4 = rec4v(1,index).ch4;
-                current_word_name = rec4v(1).name;
+                ch1 = rec4vr(1,index).ch1;
+                ch2 = rec4vr(1,index).ch2;
+                ch3 = rec4vr(1,index).ch3;
+                ch4 = rec4vr(1,index).ch4;
+                current_word_name = rec4vr(1).name;
             else % take 'höger'
-                ch1 = rec4h(1,index).ch1;
-                ch2 = rec4h(1,index).ch2;
-                ch3 = rec4h(1,index).ch3;
-                ch4 = rec4h(1,index).ch4;
-                current_word_name = rec4h(1).name;
+                ch1 = rec4hr(1,index).ch1;
+                ch2 = rec4hr(1,index).ch2;
+                ch3 = rec4hr(1,index).ch3;
+                ch4 = rec4hr(1,index).ch4;
+                current_word_name = rec4hr(1).name;
             end
             w.ch1 = ch1;
             w.ch2 = ch2;
@@ -405,14 +405,14 @@ for h = 1:1 % L = antal micar
         s.right = right;
         s.left = left;
         s.no_match = no_match;
-        eval(['result4.result41mbf = [result4.result41mbf s];']);
+        eval(['result4r.result41mbf = [result4r.result41mbf s];']);
     end
 end
 
 
 display('finished test');
 % display('saving results');
-% save('TEST\NOISE\result4x.mat', 'result4','-v7.3');
+% save('TEST\NOISE\result4r.mat', 'result4r','-v7.3');
 display('plotting');
 
 
@@ -421,33 +421,33 @@ temp = (START_SNR + M*DECIBEL_STEP + 10);
 %PLOTTA
 figure (1)
 subplot(2,2,1)
-y = extractfield(result4.result41, 'wer');
+y = extractfield(result4r.result41, 'wer');
 plot(snr4,y);
-title('One mic  + noise - bf');
+title('One mic  + noise + reverberation - bf');
 xlabel('SNR [dB]');
 ylabel('Recognition rate [%]');
 %axis([START_SNR temp 0 100]);
 
 subplot(2,2,2)
-y = extractfield(result4.result42, 'wer');
+y = extractfield(result4r.result42, 'wer');
 plot(snr4,y, 'r');
-title('Two mics + noise + bf');
+title('Two mics + noise + reverberation + bf');
 xlabel('SNR [dB]');
 ylabel('Recognition rate [%]');
 %axis([START_SNR temp 0 100]);
 
 subplot(2,2,3)
-y = extractfield(result4.result43, 'wer');
+y = extractfield(result4r.result43, 'wer');
 plot(snr4, y, 'g');
-title('Three mics + noise + bf');
+title('Three mics + noise + reverberation + bf');
 xlabel('SNR [dB]');
 ylabel('Recognition rate [%]');
 %axis([START_SNR temp 0 100]);
 
 subplot(2,2,4)
-y = extractfield(result4.result44, 'wer');
+y = extractfield(result4r.result44, 'wer');
 plot(snr4, y, 'm');
-title('Four mics + noise + bf');
+title('Four mics + noise + reverberation + bf');
 xlabel('SNR [dB]');
 ylabel('Recognition rate [%]');
 %axis([START_SNR temp 0 100]);
@@ -455,20 +455,20 @@ ylabel('Recognition rate [%]');
 
 
 figure (2)
-y = extractfield(result4.result41mbf, 'wer');
+y = extractfield(result4r.result41mbf, 'wer');
 plot(snr4, y, 'k-o', 'LineWidth', 1.5);
 hold on;
-y = extractfield(result4.result41, 'wer');
+y = extractfield(result4r.result41, 'wer');
 plot(snr4,y, 'k-x', 'LineWidth', 1.5);
-y = extractfield(result4.result42, 'wer');
+y = extractfield(result4r.result42, 'wer');
 plot(snr4,y, 'k-s', 'LineWidth', 1.5);
-y = extractfield(result4.result43, 'wer');
+y = extractfield(result4r.result43, 'wer');
 plot(snr4, y, 'k-d', 'LineWidth', 1.5);
-y = extractfield(result4.result44, 'wer');
+y = extractfield(result4r.result44, 'wer');
 plot(snr4, y, 'k-p', 'LineWidth', 1.5);
 
 title('4 meters', 'FontSize', 16);
-legend( '1 mic  + noise - bf', '1 mic  + noise + bf','2 mics + noise + bf','3 mics + noise + bf','4 mics + noise + bf', 'Location', 'SouthEast');
+legend( '1 mic  + noise + reverberation - bf', '1 mic  + noise + reverberation + bf','2 mics + noise + reverberation + bf','3 mics + noise + reverberation + bf','4 mics + noise + reverberation + bf', 'Location', 'SouthEast');
 xlabel('SNR [dB]', 'FontSize', 16);
 ylabel('Recognition Rate [%]', 'FontSize', 16);
 set(gca, 'fontsize', 12);

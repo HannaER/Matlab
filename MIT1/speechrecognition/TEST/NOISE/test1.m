@@ -415,7 +415,7 @@ end
 
 display('finished test');
 % display('saving results');
-% save('TEST\NOISE\result1x.mat', 'result1','-v7.3');
+% save('TEST\NOISE\result1.mat', 'result1','-v7.3');
 display('plotting');
 
 
@@ -470,7 +470,7 @@ plot(snr1, y, 'k-d', 'LineWidth', 1.5);
 y = extractfield(result1.result14, 'wer');
 plot(snr1, y, 'k-p', 'LineWidth', 1.5);
 
-title('1 meters', 'FontSize', 16);
+title('1 meter', 'FontSize', 16);
 legend( '1 mic  + noise - bf', '1 mic  + noise + bf','2 mics + noise + bf','3 mics + noise + bf','4 mics + noise + bf', 'Location', 'SouthEast');
 xlabel('SNR [dB]', 'FontSize', 16);
 ylabel('Recognition Rate [%]', 'FontSize', 16);
