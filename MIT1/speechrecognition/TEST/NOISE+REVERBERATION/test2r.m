@@ -144,7 +144,7 @@ ch3= ch3 + rec2hr(1,index).ch3;
 ch4= ch4 + rec2hr(1,index).ch4;
 word_4_wiener = [ch1';ch2';ch3';ch4'];
 
-noise =  white_noise;  %babble_noise; engine_noise; % factory_noise;  
+noise =  white_noise;  %babble_noise; engine_noise; % factory_noise;
 index = exceptions2(1);
 ch1 = noise.segments(1,index).ch1 + noise.segments(1,index + 1).ch1;
 ch2 = noise.segments(1,index).ch2 + noise.segments(1,index + 1).ch2;
@@ -301,6 +301,7 @@ for h = 1:L % L = antal micar
         s.snr = current_snr;
         s.right = right;
         s.left = left;
+        s.wrong_word = right + left;
         s.no_match = no_match;
         eval(['result2r.result2' num2str(h) ' = [ result2r.result2' num2str(h)  ' s];']);
     end
@@ -404,6 +405,7 @@ for h = 1:1 % L = antal micar
         s.snr = current_snr;
         s.right = right;
         s.left = left;
+        s.wrong_word = right + left;
         s.no_match = no_match;
         eval(['result2r.result21mbf = [ result2r.result21mbf s];']);
     end
@@ -412,8 +414,8 @@ end
 
 
 display('finished test');
-% display('saving results');
-% save('TEST\NOISE\result2r.mat', 'result2r','-v7.3');
+display('saving results');
+save('TEST\NOISE\result2r.mat', 'result2r','-v7.3');
 display('plotting');
 
 
@@ -427,7 +429,6 @@ plot(snr2,y);
 title('One mic  + noise + reverberation - bf');
 xlabel('SNR [dB]');
 ylabel('Recognition rate [%]');
-%axis([START_SNR temp 0 100]);
 
 subplot(2,2,2)
 y = extractfield(result2r.result22, 'wer');
@@ -435,7 +436,6 @@ plot(snr2,y, 'r');
 title('Two mics + noise + reverberation + bf');
 xlabel('SNR [dB]');
 ylabel('Recognition rate [%]');
-%axis([START_SNR temp 0 100]);
 
 subplot(2,2,3)
 y = extractfield(result2r.result23, 'wer');
@@ -443,7 +443,6 @@ plot(snr2, y, 'g');
 title('Three mics + noise + reverberation + bf');
 xlabel('SNR [dB]');
 ylabel('Recognition rate [%]');
-%axis([START_SNR temp 0 100]);
 
 subplot(2,2,4)
 y = extractfield(result2r.result24, 'wer');
@@ -451,7 +450,6 @@ plot(snr2, y, 'm');
 title('Four mics + noise + reverberation + bf');
 xlabel('SNR [dB]');
 ylabel('Recognition rate [%]');
-%axis([START_SNR temp 0 100]);
 
 
 
@@ -473,6 +471,7 @@ legend( '1 mic  + noise + reverberation - bf', '1 mic  + noise + reverberation +
 xlabel('SNR [dB]', 'FontSize', 16);
 ylabel('Recognition Rate [%]', 'FontSize', 16);
 set(gca, 'fontsize', 12);
+axis([START_SNR (START_SNR + (M-1)*DECIBEL_STEP) 0 100]);
 
 
 

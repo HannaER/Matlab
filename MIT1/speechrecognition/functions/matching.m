@@ -12,9 +12,8 @@ load db
 
 N_WORDS = size(db,2);
 N_VERSIONS = size(db(1,2).db,2);
-% THRESHOLD_MIN = N_REFLEC*0.037*N_VERSIONS;
-THRESHOLD_MIN = N_REFLEC*0.05*N_VERSIONS*1.2;
-THRESHOLD_RIGHT = THRESHOLD_MIN*1.2;
+THRESHOLD_MIN = N_REFLEC*0.05*N_VERSIONS*1.0;
+THRESHOLD_RIGHT = THRESHOLD_MIN; %*1.1;
 THRESHOLD_LEFT = THRESHOLD_MIN;
 div1 = 1/(N_VERSIONS);
 div2 = 1/(SUBSET_LENGTH);
@@ -61,20 +60,25 @@ for i = 1:N_WORDS
       name_mean = result(i).name;
    end
 end
-if temp_min_error < THRESHOLD_RIGHT
-   if strcmp(name_min, current_word_name) == 1 && temp_min_error < THRESHOLD_MIN       
+temp_min_error;
+if temp_min_error < THRESHOLD_MIN
+   if strcmp(name_min, name_mean) == 1 && strcmp(name_min, current_word_name) == 1        
         output = 'yes';
         reason = current_word_name;
-   elseif temp_min_error > THRESHOLD_MIN 
-       output = 'no';
-       reason = 'no match';
-   elseif strcmp(name_min, current_word_name) == 0
+%    elseif temp_min_error > THRESHOLD_MIN 
+%        output = 'no';
+%        reason = 'no match';
+   elseif strcmp(name_min, name_mean) == 1 && strcmp(name_min, current_word_name) == 0
        output = 'no';
        if strcmp(name_min, 'höger') == 1
            reason = 'höger';
        else
            reason = 'vänster';
        end
+       
+   elseif  strcmp(name_min, name_mean) == 0
+       output = 'no';
+       reason = 'no match';
    end
 else   
    output = 'no';

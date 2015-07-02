@@ -145,7 +145,7 @@ ch3= ch3 + rec1hr(1,index).ch3;
 ch4= ch4 + rec1hr(1,index).ch4;
 word_4_wiener = [ch1';ch2';ch3';ch4'];
 
-noise =  white_noise;  %babble_noise; engine_noise; % factory_noise;  
+noise =  white_noise;  %babble_noise; engine_noise; % factory_noise;
 index = exceptions2(1);
 ch1 = noise.segments(1,index).ch1 + noise.segments(1,index + 1).ch1;
 ch2 = noise.segments(1,index).ch2 + noise.segments(1,index + 1).ch2;
@@ -153,20 +153,20 @@ ch3 = noise.segments(1,index).ch3 + noise.segments(1,index + 1).ch3;
 ch4 = noise.segments(1,index).ch4 + noise.segments(1,index + 1).ch4;
 noise_4_wiener = [ch1;ch2;ch3;ch4];
 
-% 
+%
 % noise = factory_noise;
-% 
+%
 % ch1_w = [];
 % ch2_w = [];
 % ch3_w = [];
 % ch4_w = [];
-% 
-% 
+%
+%
 % ch1_n = [];
 % ch2_n = [];
 % ch3_n = [];
 % ch4_n = [];
-% 
+%
 % for i = 1:N
 %     index_w = exceptions(i);
 %     index_n = exceptions2(i);
@@ -175,21 +175,21 @@ noise_4_wiener = [ch1;ch2;ch3;ch4];
 %         ch2_w = [ch2_w rec1vr(1,index_w).ch2'];
 %         ch3_w = [ch3_w rec1vr(1,index_w).ch3'];
 %         ch4_w = [ch4_w rec1vr(1,index_w).ch4'];
-%         
+%
 %     else
 %         ch1_w = [ch1_w rec1hr(1,index_w).ch1'];
 %         ch2_w = [ch2_w rec1hr(1,index_w).ch2'];
 %         ch3_w = [ch3_w rec1hr(1,index_w).ch3'];
 %         ch4_w = [ch4_w rec1hr(1,index_w).ch4'];
-%         
+%
 %     end
 %     ch1_n = [ch1_n noise.segments(1,index_n).ch1];
 %     ch2_n = [ch2_n noise.segments(1,index_n).ch2];
 %     ch3_n = [ch3_n noise.segments(1,index_n).ch3];
 %     ch4_n = [ch4_n noise.segments(1,index_n).ch4];
-%     
+%
 % end
-%  
+%
 % % word_4_wiener = [[ch1_w(1:5000*N/4) ch1_w(5000*N*3/4:end)];[ch2_w(1:5000*N/4) ch2_w(5000*N*3/4:end)];[ch3_w(1:5000*N/4) ch3_w(5000*N*3/4:end)];[ch4_w(1:5000*N/4) ch4_w(5000*N*3/4:end)]];
 % % noise_4_wiener = [[ch1_n(1:5000*N/4) ch1_n(5000*N*3/4:end)];[ch2_n(1:5000*N/4) ch2_n(5000*N*3/4:end)];[ch3_n(1:5000*N/4) ch3_n(5000*N*3/4:end)];[ch4_n(1:5000*N/4) ch4_n(5000*N*3/4:end)]];
 % word_4_wiener = [ch1_w(1:4*5000);ch2_w(1:4*5000);ch3_w(1:4*5000);ch4_w(1:4*5000)];
@@ -304,6 +304,7 @@ for h = 1:L % L = antal micar
         s.snr = current_snr;
         s.right = right;
         s.left = left;
+        s.wrong_word = right + left;
         s.no_match = no_match;
         eval(['result1r.result1' num2str(h) ' = [ result1r.result1' num2str(h)  ' s];']);
     end
@@ -407,6 +408,7 @@ for h = 1:1 % L = antal micar
         s.snr = current_snr;
         s.right = right;
         s.left = left;
+        s.wrong_word = right + left;
         s.no_match = no_match;
         eval(['result1r.result11mbf = [result1r.result11mbf s];']);
     end
@@ -414,8 +416,8 @@ end
 
 
 display('finished test');
-% display('saving results');
-% save('TEST\NOISE\result1r.mat', 'result1r','-v7.3');
+display('saving results');
+save('TEST\NOISE\result1r.mat', 'result1r','-v7.3');
 display('plotting');
 
 
@@ -429,7 +431,6 @@ plot(snr1,y);
 title('One mic  + noise + reverberation - bf');
 xlabel('SNR [dB]');
 ylabel('Recognition rate [%]');
-%axis([START_SNR temp 0 100]);
 
 subplot(2,2,2)
 y = extractfield(result1r.result12, 'wer');
@@ -437,7 +438,6 @@ plot(snr1,y, 'r');
 title('Two mics + noise + reverberation + bf');
 xlabel('SNR [dB]');
 ylabel('Recognition rate [%]');
-%axis([START_SNR temp 0 100]);
 
 subplot(2,2,3)
 y = extractfield(result1r.result13, 'wer');
@@ -445,7 +445,6 @@ plot(snr1, y, 'g');
 title('Three mics + noise + reverberation + bf');
 xlabel('SNR [dB]');
 ylabel('Recognition rate [%]');
-%axis([START_SNR temp 0 100]);
 
 subplot(2,2,4)
 y = extractfield(result1r.result14, 'wer');
@@ -453,7 +452,6 @@ plot(snr1, y, 'm');
 title('Four mics + noise + reverberation + bf');
 xlabel('SNR [dB]');
 ylabel('Recognition rate [%]');
-%axis([START_SNR temp 0 100]);
 
 
 
@@ -475,5 +473,6 @@ legend( '1 mic  + noise + reverberation - bf', '1 mic  + noise + reverberation +
 xlabel('SNR [dB]', 'FontSize', 16);
 ylabel('Recognition Rate [%]', 'FontSize', 16);
 set(gca, 'fontsize', 12);
+axis([START_SNR (START_SNR + (M-1)*DECIBEL_STEP) 0 100]);
 
 

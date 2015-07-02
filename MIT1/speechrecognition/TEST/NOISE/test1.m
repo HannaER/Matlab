@@ -6,7 +6,7 @@ clc;
 Fs = 8000;
 K = 32; % filter length
 L = 4; % antal micar som amn ska testa för, dvs. antalet kurvor i grafen
-M = 30;% antal brusnivåer, mätpunkter/kurva
+M = 7;% antal brusnivåer, mätpunkter/kurva
 N = 100;% 100 ord ska testas, 50/50 höger/vänster. Måste vara ett jämnt tal
 P = 200; % antal ord(vänster/höger)/avstånd som finns att utnyttja till tester
 
@@ -16,9 +16,9 @@ BLOCK_LENGTH = 160; %BLOCK_LENGTH
 OVERLAP = BLOCK_LENGTH/2; %OVERLAP
 SUBSET_LENGTH = 12; %SUBSET_LENGTH
 GAMMA = 0.5; % coefficient for pre_emhp
-THRESHOLD = 4;
+THRESHOLD = 5;
 START_SNR = -10;
-DECIBEL_STEP = 1;
+DECIBEL_STEP = 5;
 
 
 %%%%%%%%%%% 1 meter %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -116,8 +116,8 @@ end
 exceptions = [];
 exceptions2 = [];
 temp = [];
-for i = 1:N
-    if i <= N/2
+for i = 1:100
+    if i <= 100/2
         index = get_random_word_index(1:1:P, exceptions);
         exceptions = [exceptions index];
     else
@@ -145,7 +145,7 @@ ch3= ch3 + rec1h(1,index).ch3;
 ch4= ch4 + rec1h(1,index).ch4;
 word_4_wiener = [ch1';ch2';ch3';ch4'];
 
-noise =  babble_noise;%engine_noise;% factory_noise;  % white_noise;   
+noise = factory_noise;% babble_noise; engine_noise;%  % white_noise;   
 index = exceptions2(1);
 ch1 = noise.segments(1,index).ch1 + noise.segments(1,index + 1).ch1;
 ch2 = noise.segments(1,index).ch2 + noise.segments(1,index + 1).ch2;
@@ -258,8 +258,8 @@ for h = 1:L % L = antal micar
             n.ch4 = ch4;
             noise_4_beam = [ch1;ch2;ch3;ch4];
             noise_4_beam = noise_4_beam(1:h,:); % pick out the # of channels = # mics
-            % beamforming
-            y_1 = filter_beam((current_word + noise_4_beam),W1);
+            % beamforming           
+            y_1 = filter_beam((current_word + noise_4_beam),W1);          
             % VAD --> y/n?
             vad_index = vad(y_1, BLOCK_LENGTH, THRESHOLD);
             if vad_index > length(y_1)/2 % !detection
@@ -304,6 +304,7 @@ for h = 1:L % L = antal micar
         s.snr = current_snr;
         s.right = right;
         s.left = left;
+        s.wrong_word = right + left;
         s.no_match = no_match;
         eval(['result1.result1' num2str(h) ' = [ result1.result1' num2str(h)  ' s];']);
     end
@@ -362,7 +363,7 @@ for h = 1:1 % L = antal micar
             noise_4_beam = [ch1;ch2;ch3;ch4];
             noise_4_beam = noise_4_beam(1:h,:); % pick out the # of channels = # mics
             % no beamforming
-            y_1 = current_word(h,:) + noise_4_beam(h,:);
+            y_1 = current_word(h,:) + noise_4_beam(h,:);        
             % VAD --> y/n?
             vad_index = vad(y_1, BLOCK_LENGTH, THRESHOLD);
             if vad_index > length(y_1)/2 % !detection
@@ -374,6 +375,18 @@ for h = 1:1 % L = antal micar
                 y_3 = pre_emph(y_2, GAMMA);
                 % maybe cut the signal backwards
                 y_4 = cut_backwards(y_3, BLOCK_LENGTH, OVERLAP, THRESHOLD);
+                
+                % tests
+%                 soundsc(y_1)
+%                 pause(2);
+%                 soundsc(y_2)
+%                 pause(2);
+%                 soundsc(y_3)
+%                 pause(2);
+%                 soundsc(y_4)
+%                 pause(2);
+                
+                
                 % block_frame
                 y_5 = block_frame(y_4, BLOCK_LENGTH, OVERLAP);
                 % schur_algo
@@ -407,6 +420,7 @@ for h = 1:1 % L = antal micar
         s.snr = current_snr;
         s.right = right;
         s.left = left;
+        s.wrong_word = right + left;
         s.no_match = no_match;
         eval(['result1.result11mbf = [result1.result11mbf s];']);
     end
@@ -414,8 +428,8 @@ end
 
 
 display('finished test');
-% display('saving results');
-% save('TEST\NOISE\result1.mat', 'result1','-v7.3');
+display('saving results');
+save('TEST\NOISE\result1.mat', 'result1','-v7.3');
 display('plotting');
 
 
@@ -429,7 +443,6 @@ plot(snr1,y);
 title('One mic  + noise - bf');
 xlabel('SNR [dB]');
 ylabel('Recognition rate [%]');
-%axis([START_SNR temp 0 100]);
 
 subplot(2,2,2)
 y = extractfield(result1.result12, 'wer');
@@ -437,7 +450,6 @@ plot(snr1,y, 'r');
 title('Two mics + noise + bf');
 xlabel('SNR [dB]');
 ylabel('Recognition rate [%]');
-%axis([START_SNR temp 0 100]);
 
 subplot(2,2,3)
 y = extractfield(result1.result13, 'wer');
@@ -445,7 +457,6 @@ plot(snr1, y, 'g');
 title('Three mics + noise + bf');
 xlabel('SNR [dB]');
 ylabel('Recognition rate [%]');
-%axis([START_SNR temp 0 100]);
 
 subplot(2,2,4)
 y = extractfield(result1.result14, 'wer');
@@ -453,8 +464,6 @@ plot(snr1, y, 'm');
 title('Four mics + noise + bf');
 xlabel('SNR [dB]');
 ylabel('Recognition rate [%]');
-%axis([START_SNR temp 0 100]);
-
 
 
 figure (2)
@@ -475,5 +484,6 @@ legend( '1 mic  + noise - bf', '1 mic  + noise + bf','2 mics + noise + bf','3 mi
 xlabel('SNR [dB]', 'FontSize', 16);
 ylabel('Recognition Rate [%]', 'FontSize', 16);
 set(gca, 'fontsize', 12);
+axis([START_SNR (START_SNR + (M-1)*DECIBEL_STEP) 0 100]);
 
 
