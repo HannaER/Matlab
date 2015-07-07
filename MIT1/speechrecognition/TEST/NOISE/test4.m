@@ -144,7 +144,7 @@ ch3= ch3 + rec4h(1,index).ch3;
 ch4= ch4 + rec4h(1,index).ch4;
 word_4_wiener = [ch1';ch2';ch3';ch4'];
 
-noise = factory_noise;% babble_noise; engine_noise;%  % white_noise;   
+noise = factory_noise;% babble_noise; engine_noise;%  % white_noise;
 index = exceptions2(1);
 ch1 = noise.segments(1,index).ch1 + noise.segments(1,index + 1).ch1;
 ch2 = noise.segments(1,index).ch2 + noise.segments(1,index + 1).ch2;
@@ -279,11 +279,6 @@ for h = 1:L % L = antal micar
                 [match, reason] = matching(y_7, 'DB\db.mat', current_word_name, SUBSET_LENGTH, N_REFLEC);
                 if strcmp(match,'yes') == 1
                     wer_curr = wer_curr + 1;
-                    if strcmp(reason, 'höger') == 1
-                        right = right + 1;
-                    else
-                        left = left + 1;
-                    end
                 else
                     substitution = substitution + 1;
                     if strcmp(reason, 'höger') == 1
@@ -302,6 +297,7 @@ for h = 1:L % L = antal micar
         s.snr = current_snr;
         s.right = right;
         s.left = left;
+        s.wrong_word = right + left;
         s.no_match = no_match;
         eval(['result4.result4' num2str(h) ' = [ result4.result4' num2str(h)  ' s];']);
     end
@@ -381,11 +377,6 @@ for h = 1:1 % L = antal micar
                 [match, reason] = matching(y_7, 'DB\db.mat', current_word_name, SUBSET_LENGTH, N_REFLEC);
                 if strcmp(match,'yes') == 1
                     wer_curr = wer_curr + 1;
-                    if strcmp(reason, 'höger') == 1
-                        right = right + 1;
-                    else
-                        left = left + 1;
-                    end
                 else
                     substitution = substitution + 1;
                     if strcmp(reason, 'höger') == 1
@@ -404,6 +395,7 @@ for h = 1:1 % L = antal micar
         s.snr = current_snr;
         s.right = right;
         s.left = left;
+        s.wrong_word = right + left;
         s.no_match = no_match;
         eval(['result4.result41mbf = [result4.result41mbf s];']);
     end
@@ -471,4 +463,20 @@ set(gca, 'fontsize', 12);
 axis([START_SNR (START_SNR + (M-1)*DECIBEL_STEP) 0 100]);
 
 
+figure (3)
+y = extractfield(result4.result41mbf, 'wrong_word');
+plot(snr4, y, 'k-o', 'LineWidth', 1.5);
+hold on;
+y = extractfield(result4.result41mbf, 'no_match');
+plot(snr4,y, 'k-o', 'LineWidth', 1.5);
+y = extractfield(result4.result44, 'wrong_word');
+plot(snr4, y, 'k-x', 'LineWidth', 1.5);
+y = extractfield(result4.result44, 'no_match');
+plot(snr4,y, 'k-x', 'LineWidth', 1.5);
 
+title('4 meter: Errors ', 'FontSize', 16);
+legend( '1 mic  + noise - bf: WRONG WORD', '1 mic  + noise - bf: NO MATCH', '4 mics + noise + bf: WRONG WORD', '4 mics + noise + bf: NO MATCH', 'Location', 'NorthEast');
+xlabel('SNR [dB]', 'FontSize', 16);
+ylabel('Recognition Rate [%]', 'FontSize', 16);
+set(gca, 'fontsize', 12);
+axis([START_SNR (START_SNR + (M-1)*DECIBEL_STEP) 0 100]);

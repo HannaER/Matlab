@@ -278,11 +278,6 @@ for h = 1:L % L = antal micar
                 [match, reason] = matching(y_7, 'DB\db.mat', current_word_name, SUBSET_LENGTH, N_REFLEC);
                 if strcmp(match,'yes') == 1
                     wer_curr = wer_curr + 1;
-                    if strcmp(reason, 'höger') == 1
-                        right = right + 1;
-                    else
-                        left = left + 1;
-                    end
                 else
                     substitution = substitution + 1;
                     if strcmp(reason, 'höger') == 1
@@ -382,11 +377,6 @@ for h = 1:1 % L = antal micar
                 [match, reason] = matching(y_7, 'DB\db.mat', current_word_name, SUBSET_LENGTH, N_REFLEC);
                 if strcmp(match,'yes') == 1
                     wer_curr = wer_curr + 1;
-                    if strcmp(reason, 'höger') == 1
-                        right = right + 1;
-                    else
-                        left = left + 1;
-                    end
                 else
                     substitution = substitution + 1;
                     if strcmp(reason, 'höger') == 1
