@@ -11,7 +11,7 @@ f = fs/2*linspace(0,1,NFFT/2+1);
 
 % Plot single-sided amplitude spectrum.
 subplot (x)
-plot(f,2*abs(Y(1:NFFT/2+1)),color) 
+plot(f,2*abs(Y(1:NFFT/2+1)),color, 'LineWidth', 1.5) 
 title('Single-Sided Amplitude Spectrum of High Pitch Recording')
 xlabel('Frequency (Hz)')
 ylabel('|Y(f)|')

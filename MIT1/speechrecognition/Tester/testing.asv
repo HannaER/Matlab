@@ -43,7 +43,7 @@ fft_(rec, L, fs, 326, 'b');
 
 %% Undersöker huruvida pre_emph och rm_noise tar bort störningarna
 clc;
-% close all;
+close all;
 % clear all;
 
 GAMMA = 0.5;
@@ -73,18 +73,22 @@ hold on;
 fft_(knack, L, fs, 311, 'b');
 fft_(output1, L, fs, 311, 'r');
 fft_(output2, L, fs, 311, 'g');
-legend('Original signal', 'After high pass','After pre emph');
+%legend('Original signal', 'After high pass','After pre emph');
+axis([0 300 0 2*10^-4]);
+set(gca, 'fontsize', 12);
 
 figure (2)
 subplot(311)
 hold on;
-plot(duns, 'b');
-plot(output1, 'r');
-plot(output2, 'g');
-legend('Original signal', 'After high pass','After pre emph');
-title('THUMP IN THE TABLE');
-ylabel('Amplitude');
-xlabel('Samples');
+plot(duns, 'b', 'LineWidth', 1.5);
+plot(output1, 'r', 'LineWidth', 1.5);
+plot(output2, 'g', 'LineWidth', 1.5);
+%legend('Original signal', 'After high pass','After pre emph');
+title('THUMP IN THE TABLE', 'FontSize', 16);
+axis([0 12000 -0.035 0.035]);
+set(gca, 'fontsize', 12);
+% ylabel('Amplitude');
+% xlabel('Samples');
 
 %%%% KNACK  %%%%%%%%%%%
 %rmnoise
@@ -98,18 +102,22 @@ hold on;
 fft_(knack, L, fs, 312, 'b');
 fft_(output1, L, fs, 312, 'r');
 fft_(output2, L, fs, 312, 'g');
-legend('Original signal', 'After high pass','After pre emph');
+%legend('Original signal', 'After high pass','After pre emph');
+axis([0 300 0 2*10^-4]);
+set(gca, 'fontsize', 12);
 
 figure (2)
 subplot(312)
 hold on;
-plot(knack, 'b');
-plot(output1, 'r');
-plot(output2, 'g');
-legend('Original signal', 'After high pass','After pre emph');
-title('KNOCKING ON THE TABLE');
-ylabel('Amplitude');
-xlabel('Samples');
+plot(knack, 'b', 'LineWidth', 1.5);
+plot(output1, 'r', 'LineWidth', 1.5);
+plot(output2, 'g', 'LineWidth', 1.5);
+%legend('Original signal', 'After high pass','After pre emph');
+title('KNOCKING ON THE TABLE', 'FontSize', 16);
+axis([0 12000 -0.003 0.003]);
+ylabel('Amplitude', 'FontSize', 16);
+%xlabel('Samples', 'FontSize', 16);
+set(gca, 'fontsize', 12);
 
 
 
@@ -128,19 +136,23 @@ fft_(knack, L, fs, 313, 'b');
 fft_(output1, L, fs, 313, 'r');
 subplot(313)
 fft_(output2, L, fs, 313, 'g');
-legend('Original signal', 'After high pass','After pre emph');
+%legend('Original signal', 'After high pass','After pre emph');
+axis([0 300 0 15*10^-4]);
+set(gca, 'fontsize', 12);
 
 
 figure (2)
 subplot(313)
 hold on;
-plot(tal, 'b');
-plot(output1, 'r');
-plot(output2, 'g');
-legend('Original signal', 'After high pass','After pre emph');
-title('SPEECH');
-ylabel('Amplitude');
-xlabel('Samples');
+plot(tal, 'b', 'LineWidth', 1.5);
+plot(output1, 'r', 'LineWidth', 1.5);
+plot(output2, 'g', 'LineWidth', 1.5);
+%legend('Original signal', 'After high pass','After pre emph');
+title('SPEECH', 'FontSize', 16);
+axis([0 12000 -0.05 0.05]);
+%ylabel('Amplitude');
+xlabel('Samples', 'FontSize', 16);
+set(gca, 'fontsize', 12);
 
 
 figure (3)
@@ -187,6 +199,8 @@ fft_(knack, L, fs, 311, 'b');
 fft_(output1, L, fs, 311, 'r');
 fft_(output2, L, fs, 311, 'g');
 legend('Original signal', 'After high pass','After pre emph');
+axis([0 300 0 2*10^-4]);
+set(gca, 'fontsize', 12);
 
 figure (2)
 subplot(311)
@@ -195,9 +209,11 @@ plot(duns, 'b');
 plot(output1, 'r');
 plot(output2, 'g');
 legend('Original signal', 'After high pass','After pre emph');
-title('THUMP IN THE TABLE');
-ylabel('Amplitude');
-xlabel('Samples');
+title('THUMP IN THE TABLE', 'FontSize', 16);
+axis([0 12000 -0.035 0.035]);
+set(gca, 'fontsize', 12);
+% ylabel('Amplitude');
+% xlabel('Samples');
 
 %%%% KNACK  %%%%%%%%%%%
 %rmnoise
@@ -214,6 +230,9 @@ fft_(knack, L, fs, 312, 'b');
 fft_(output1, L, fs, 312, 'r');
 fft_(output2, L, fs, 312, 'g');
 legend('Original signal', 'After high pass','After pre emph');
+axis([0 300 0 2*10^-4]);
+set(gca, 'fontsize', 12);
+
 
 figure (2)
 subplot(312)
@@ -223,8 +242,10 @@ plot(output1, 'r');
 plot(output2, 'g');
 legend('Original signal', 'After high pass','After pre emph');
 title('KNOCKING ON THE TABLE');
-ylabel('Amplitude');
-xlabel('Samples');
+axis([0 12000 -0.035 0.035]);
+set(gca, 'fontsize', 12);
+% ylabel('Amplitude');
+% xlabel('Samples');
 
 
 
@@ -246,7 +267,8 @@ fft_(output1, L, fs, 313, 'r');
 subplot(313)
 fft_(output2, L, fs, 313, 'g');
 legend('Original signal', 'After high pass','After pre emph');
-
+axis([0 300 0 15*10^-4]);
+set(gca, 'fontsize', 12);
 
 figure (2)
 subplot(313)

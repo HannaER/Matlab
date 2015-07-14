@@ -3,7 +3,7 @@ function [W] = LS_opt(X,D,L)
 % D is the speech signal, desired signal
 % L is number of filter coefficients
 
-[XM,XN]=size(X); % XM i sth enumber of channels, XN is the length of each signal
+[XM,XN]=size(X); % XM is the number of channels, XN is the length of each signal
 Pxx=zeros(XM*L,XM*L);
 Pdx=zeros(XM*L,1);
 
