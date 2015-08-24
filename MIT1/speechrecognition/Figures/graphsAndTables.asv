@@ -1,0 +1,77 @@
+
+%% FIGURES
+clc;
+clear all;
+close all;
+
+%%% NOISE %%%
+
+%%% WHITE, FACTORY, ENGINE AND BABBLE
+load 'TEST\NOISE\white1.mat'
+w1 = result1;
+load 'TEST\NOISE\white2.mat'
+w2 = result2;
+load 'TEST\NOISE\white4.mat'
+w4 = result4;
+
+
+load 'TEST\NOISE\factory1.mat'
+f1 = result1;
+load 'TEST\NOISE\factory2.mat'
+f2 = result2;
+load 'TEST\NOISE\factory4.mat'
+f4 = result4;
+
+
+load 'TEST\NOISE\engine1.mat'
+e1 = result1;
+load 'TEST\NOISE\engine2.mat'
+e2 = result2;
+load 'TEST\NOISE\engine4.mat'
+e4 = result4;
+
+
+load 'TEST\NOISE\babble1.mat'
+1 = result1;
+load 'TEST\NOISE\babble2.mat'
+w2 = result2;
+load 'TEST\NOISE\babble4.mat'
+w4 = result4;
+
+%%% NOISE + REVERBERATION %%%
+
+
+
+
+
+
+
+
+
+
+%% TABLES
+clc;
+clear all;
+close all;
+
+%%% NOISE %%%
+
+
+
+
+
+
+
+
+%%% NOISE + REVERBERATION %%%
+
+
+
+
+
+
+
+
+
+
+

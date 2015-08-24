@@ -6,7 +6,7 @@ clc;
 Fs = 8000;
 K = 32; % filter length
 L = 4; % antal micar som amn ska testa för, dvs. antalet kurvor i grafen
-M = 7;% antal brusnivåer, mätpunkter/kurva
+M = 62;% antal brusnivåer, mätpunkter/kurva
 N = 100;% 100 ord ska testas, 50/50 höger/vänster. Måste vara ett jämnt tal
 P = 200; % antal ord(vänster/höger)/avstånd som finns att utnyttja till tester
 
@@ -18,7 +18,7 @@ SUBSET_LENGTH = 12; %SUBSET_LENGTH
 GAMMA = 0.5; % coefficient for pre_emhp
 THRESHOLD = 4;
 START_SNR = -10;
-DECIBEL_STEP = 5;
+DECIBEL_STEP = 0.5;
 
 
 %%%%%%%%%%% 4 meter %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -144,7 +144,7 @@ ch3= ch3 + rec4h(1,index).ch3;
 ch4= ch4 + rec4h(1,index).ch4;
 word_4_wiener = [ch1';ch2';ch3';ch4'];
 
-noise = factory_noise;% babble_noise; engine_noise;%  % white_noise;
+noise = white_noise;  %  engine_noise;%babble_noise;  %factory_noise;%    
 index = exceptions2(1);
 ch1 = noise.segments(1,index).ch1 + noise.segments(1,index + 1).ch1;
 ch2 = noise.segments(1,index).ch2 + noise.segments(1,index + 1).ch2;
