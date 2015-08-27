@@ -1,14 +1,13 @@
 
 %% FIGURES
-clc;
 clear all;
 close all;
-
+clc;
 
 Fs = 8000;
 K = 32; % filter length
 L = 4; % antal micar som amn ska testa för, dvs. antalet kurvor i grafen
-M = 31;% antal brusnivåer, mätpunkter/kurva
+M = 62;% antal brusnivåer, mätpunkter/kurva
 N = 100;% 100 ord ska testas, 50/50 höger/vänster. Måste vara ett jämnt tal
 P = 200; % antal ord(vänster/höger)/avstånd som finns att utnyttja till tester
 
@@ -20,8 +19,7 @@ SUBSET_LENGTH = 12; %SUBSET_LENGTH
 GAMMA = 0.5; % coefficient for pre_emhp
 THRESHOLD = 4;
 START_SNR = -10;
-DECIBEL_STEP = 1;
-result1.result11mbf = [];
+DECIBEL_STEP = 0.5;
 snr1 = []; % x-vector - the same for all 4
 %SKAPA SNR VEKTORN SOM ÄR X-AXELN
 for i = 1:M
@@ -87,7 +85,7 @@ b4 = result4;
 s.case = b4;
 eval(['cases.list = [cases.list s];']);
 
-
+set(0,'DefaultFigureWindowStyle','docked')
 names = {'w1', 'w2', 'w4', 'f1', 'f2', 'f4', 'e1', 'e2', 'e4', 'b1', 'b2', 'b4'};
 j = 1;
 for i = 1:length(cases.list)
@@ -110,13 +108,19 @@ for i = 1:length(cases.list)
     y = extractfield(setup.(resultCase), 'wer');
     plot(snr1, y, 'k-p', 'LineWidth', 1.5);
     
-    title(strcat(num2str(j), ' meter'), 'FontSize', 16);
-    legend( '1 mic  + noise - bf', '1 mic  + noise + bf','2 mics + noise + bf','3 mics + noise + bf','4 mics + noise + bf', 'Location', 'SouthEast');
+    if(j == 1)
+        title(strcat(num2str(j), ' meter'), 'FontSize', 16);
+    else
+        title(strcat(num2str(j), ' meters'), 'FontSize', 16);
+    end
+    l1 = legend( '1 mic   + noise - bf', '1 mic   + noise + bf','2 mics + noise + bf','3 mics + noise + bf','4 mics + noise + bf', 'Location', 'NorthWest');
     xlabel('SNR [dB]', 'FontSize', 16);
     ylabel('Recognition Rate [%]', 'FontSize', 16);
     set(gca, 'fontsize', 12);
+    set(l1 , 'FontSize', 14);
     axis([START_SNR (START_SNR + (M-1)*DECIBEL_STEP) 0 100]);
-    
+    %saveas(gcf, ['Figures/RESULTS/', names{i},'.eps']);
+   
     
     if(j == 1)
         j = 2;
@@ -126,36 +130,9 @@ for i = 1:length(cases.list)
         j = 1;
     end
 end
-%%
+
 %%%%%%%%%% NOISE + REVERBERATION %%%%%%%%%%
 
-clc;
-clear all;
-close all;
-
-
-Fs = 8000;
-K = 32; % filter length
-L = 4; % antal micar som amn ska testa för, dvs. antalet kurvor i grafen
-M = 31;% antal brusnivåer, mätpunkter/kurva
-N = 100;% 100 ord ska testas, 50/50 höger/vänster. Måste vara ett jämnt tal
-P = 200; % antal ord(vänster/höger)/avstånd som finns att utnyttja till tester
-
-
-N_REFLEC = 9; %N_REFLEC
-BLOCK_LENGTH = 160; %BLOCK_LENGTH
-OVERLAP = BLOCK_LENGTH/2; %OVERLAP
-SUBSET_LENGTH = 12; %SUBSET_LENGTH
-GAMMA = 0.5; % coefficient for pre_emhp
-THRESHOLD = 4;
-START_SNR = -10;
-DECIBEL_STEP = 1;
-result1.result11mbf = [];
-snr1 = []; % x-vector - the same for all 4
-%SKAPA SNR VEKTORN SOM ÄR X-AXELN
-for i = 1:M
-    snr1 = [snr1 (START_SNR + (i-1)*DECIBEL_STEP)]; % calc. the snr vector
-end
 
 casesr.list = [];
 
@@ -242,13 +219,18 @@ for i = 1:length(casesr.list)
     y = extractfield(setup.(resultCase), 'wer');
     plot(snr1, y, 'k-p', 'LineWidth', 1.5);
     
-    title(strcat(num2str(j), ' meter'), 'FontSize', 16);
-    legend( '1 mic  + noise - bf', '1 mic  + noise + bf','2 mics + noise + bf','3 mics + noise + bf','4 mics + noise + bf', 'Location', 'SouthEast');
+    if(j == 1)
+        title(strcat(num2str(j), ' meter'), 'FontSize', 16);
+    else
+        title(strcat(num2str(j), ' meters'), 'FontSize', 16);
+    end
+    l2 = legend( '1 mic   + noise + reverberation -  bf', '1 mic   + noise + reverberation + bf','2 mics + noise + reverberation + bf','3 mics + noise + reverberation + bf','4 mics + noise + reverberation + bf', 'Location', 'NorthWest');
     xlabel('SNR [dB]', 'FontSize', 16);
     ylabel('Recognition Rate [%]', 'FontSize', 16);
     set(gca, 'fontsize', 12);
+    set(l2 , 'FontSize', 14);
     axis([START_SNR (START_SNR + (M-1)*DECIBEL_STEP) 0 100]);
-    
+    %saveas(gcf, ['Figures/RESULTS/', namesr{i},'.eps']);
     
     if(j == 1)
         j = 2;

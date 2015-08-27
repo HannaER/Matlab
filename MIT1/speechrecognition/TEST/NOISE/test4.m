@@ -144,7 +144,7 @@ ch3= ch3 + rec4h(1,index).ch3;
 ch4= ch4 + rec4h(1,index).ch4;
 word_4_wiener = [ch1';ch2';ch3';ch4'];
 
-noise = white_noise;  %  engine_noise;%babble_noise;  %factory_noise;%    
+noise = babble_noise;  % engine_noise;%  factory_noise;% white_noise;  %      
 index = exceptions2(1);
 ch1 = noise.segments(1,index).ch1 + noise.segments(1,index + 1).ch1;
 ch2 = noise.segments(1,index).ch2 + noise.segments(1,index + 1).ch2;

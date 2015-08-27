@@ -68,6 +68,7 @@ eval(['cases.list = [cases.list s];']);
 
 names = {'w1', 'w2', 'w4', 'f1', 'f2', 'f4', 'e1', 'e2', 'e4', 'b1', 'b2', 'b4'};
 j = 1;
+noise_level = 79;
 toPrint = 'SPEECH & NOISE, 80 procent\n\nNoise/Distance\t\tNo bf\t\t1 mic\t\t2 mics\t\t3 mics\t\t4 mics\n';
 for i = 1:length(cases.list)
     setup = cases.list(i).case;
@@ -85,34 +86,33 @@ for i = 1:length(cases.list)
     
     
     toPrint = strcat(toPrint, names{i}, '\t\t\t\t\t\t');
-    
-    res = find(y1>80);
+    res = find(y1>noise_level);
     if(length(res)> 0)
-        toPrint = strcat(toPrint, num2str(round(snr(res(1)))), '\t\t\t');
+        toPrint = strcat(toPrint, num2str((snr(res(1)))), '\t\t\t');
     else
         toPrint = strcat(toPrint, '-\t\t\t');
     end
-    res = find(y2>80);
+    res = find(y2>noise_level);
     if(length(res)> 0)
-        toPrint = strcat(toPrint, num2str(round(snr(res(1)))), '\t\t\t');
+        toPrint = strcat(toPrint, num2str((snr(res(1)))), '\t\t\t');
     else
         toPrint = strcat(toPrint, '-\t\t\t');
     end
-    res = find(y3>80);
+    res = find(y3>noise_level);
     if(length(res)> 0)
-        toPrint = strcat(toPrint, num2str(round(snr(res(1)))), '\t\t\t');
+        toPrint = strcat(toPrint, num2str((snr(res(1)))), '\t\t\t');
     else
         toPrint = strcat(toPrint, '-\t\t\t');
     end
-    res = find(y4>80);
+    res = find(y4>noise_level);
     if(length(res)> 0)
-        toPrint = strcat(toPrint, num2str(round(snr(res(1)))), '\t\t\t');
+        toPrint = strcat(toPrint, num2str((snr(res(1)))), '\t\t\t');
     else
         toPrint = strcat(toPrint, '-\t\t\t');
     end
-    res = find(y5>80);
+    res = find(y5>noise_level);
     if(length(res)> 0)
-        toPrint = strcat(toPrint, num2str(round(snr(res(1)))), '\n');
+        toPrint = strcat(toPrint, num2str((snr(res(1)))), '\n');
     else
         toPrint = strcat(toPrint, '-\n');
     end
@@ -135,7 +135,7 @@ display(sprintf(toPrint));
 %%%%%%%%%% NOISE + REVERBERATION %%%%%%%%%%
 
 
-casesr.list = [];
+cases_r.list = [];
 
 
 %%% WHITE, FACTORY, ENGINE AND BABBLE  %%%
@@ -143,56 +143,56 @@ casesr.list = [];
 load 'TEST\NOISE+REVERBERATION\white1.mat'
 w1r = result1r;
 s.case = w1r;
-eval(['casesr.list = [casesr.list s];']);
+eval(['cases_r.list = [cases_r.list s];']);
 load 'TEST\NOISE+REVERBERATION\white2.mat'
 w2r = result2r;
 s.case = w2r;
-eval(['casesr.list = [casesr.list s];']);
+eval(['cases_r.list = [cases_r.list s];']);
 load 'TEST\NOISE+REVERBERATION\white4.mat'
 w4r = result4r;
 s.case = w4r;
-eval(['casesr.list = [casesr.list s];']);
+eval(['cases_r.list = [cases_r.list s];']);
 
 load 'TEST\NOISE+REVERBERATION\factory1.mat'
 f1r = result1r;
 s.case = f1r;
-eval(['casesr.list = [casesr.list s];']);
+eval(['cases_r.list = [cases_r.list s];']);
 load 'TEST\NOISE+REVERBERATION\factory2.mat'
 f2r = result2r;
 s.case = f2r;
-eval(['casesr.list = [casesr.list s];']);
+eval(['cases_r.list = [cases_r.list s];']);
 load 'TEST\NOISE+REVERBERATION\factory4.mat'
 f4r = result4r;
 s.case = f4r;
-eval(['casesr.list = [casesr.list s];']);
+eval(['cases_r.list = [cases_r.list s];']);
 
 
 load 'TEST\NOISE+REVERBERATION\engine1.mat'
 e1r = result1r;
 s.case = e1r;
-eval(['casesr.list = [casesr.list s];']);
+eval(['cases_r.list = [cases_r.list s];']);
 load 'TEST\NOISE+REVERBERATION\engine2.mat'
 e2r = result2r;
 s.case = e2r;
-eval(['casesr.list = [casesr.list s];']);
+eval(['cases_r.list = [cases_r.list s];']);
 load 'TEST\NOISE+REVERBERATION\engine4.mat'
 e4r = result4r;
 s.case = e4r;
-eval(['casesr.list = [casesr.list s];']);
+eval(['cases_r.list = [cases_r.list s];']);
 
 
 load 'TEST\NOISE+REVERBERATION\babble1.mat'
 b1r = result1r;
 s.case = b1r;
-eval(['casesr.list = [casesr.list s];']);
+eval(['cases_r.list = [cases_r.list s];']);
 load 'TEST\NOISE+REVERBERATION\babble2.mat'
 b2r = result2r;
 s.case = b2r;
-eval(['casesr.list = [casesr.list s];']);
+eval(['cases_r.list = [cases_r.list s];']);
 load 'TEST\NOISE+REVERBERATION\babble4.mat'
 b4r = result4r;
 s.case = b4r;
-eval(['casesr.list = [casesr.list s];']);
+eval(['cases_r.list = [cases_r.list s];']);
 
 
 
@@ -201,9 +201,10 @@ eval(['casesr.list = [casesr.list s];']);
 
 names = {'w1', 'w2', 'w4', 'f1', 'f2', 'f4', 'e1', 'e2', 'e4', 'b1', 'b2', 'b4'};
 j = 1;
+noise_reverb_level = 9;
 toPrint = 'SPEECH, NOISE & REVERBERATION, 40 procent \n\nNoise/Distance\t\tNo bf\t\t1 mic\t\t2 mics\t\t3 mics\t\t4 mics\n';
-for i = 1:length(casesr.list)
-    setup = casesr.list(i).case;
+for i = 1:length(cases_r.list)
+    setup = cases_r.list(i).case;
     resultCase = strcat('result', num2str(j), '1mbf');
     y1 = extractfield(setup.(resultCase), 'wer');
     snr = extractfield(setup.(resultCase), 'snr');
@@ -218,34 +219,33 @@ for i = 1:length(casesr.list)
     
     
     toPrint = strcat(toPrint, names{i}, '\t\t\t\t\t\t');
-    
-    res = find(y1>40);
+    res = find(y1>noise_reverb_level);
     if(length(res)> 0)
-        toPrint = strcat(toPrint, num2str(round(snr(res(1)))), '\t\t\t');
+        toPrint = strcat(toPrint, num2str((snr(res(1)))), '\t\t\t');
     else
         toPrint = strcat(toPrint, '-\t\t\t');
     end
-    res = find(y2>40);
+    res = find(y2>noise_reverb_level);
     if(length(res)> 0)
-        toPrint = strcat(toPrint, num2str(round(snr(res(1)))), '\t\t\t');
+        toPrint = strcat(toPrint, num2str((snr(res(1)))), '\t\t\t');
     else
         toPrint = strcat(toPrint, '-\t\t\t');
     end
-    res = find(y3>40);
+    res = find(y3>noise_reverb_level);
     if(length(res)> 0)
-        toPrint = strcat(toPrint, num2str(round(snr(res(1)))), '\t\t\t');
+        toPrint = strcat(toPrint, num2str((snr(res(1)))), '\t\t\t');
     else
         toPrint = strcat(toPrint, '-\t\t\t');
     end
-    res = find(y4>40);
+    res = find(y4>noise_reverb_level);
     if(length(res)> 0)
-        toPrint = strcat(toPrint, num2str(round(snr(res(1)))), '\t\t\t');
+        toPrint = strcat(toPrint, num2str((snr(res(1)))), '\t\t\t');
     else
         toPrint = strcat(toPrint, '-\t\t\t');
     end
-    res = find(y5>40);
+    res = find(y5>noise_reverb_level);
     if(length(res)> 0)
-        toPrint = strcat(toPrint, num2str(round(snr(res(1)))), '\n');
+        toPrint = strcat(toPrint, num2str((snr(res(1)))), '\n');
     else
         toPrint = strcat(toPrint, '-\n');
     end

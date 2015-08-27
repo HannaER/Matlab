@@ -144,7 +144,7 @@ ch3= ch3 + rec2hr(1,index).ch3;
 ch4= ch4 + rec2hr(1,index).ch4;
 word_4_wiener = [ch1';ch2';ch3';ch4'];
 
-noise = babble_noise;  % engine_noise;  %factory_noise; % white_noise;  %
+noise = white_noise;  %  babble_noise;  %engine_noise;  % factory_noise; % 
 index = exceptions2(1);
 ch1 = noise.segments(1,index).ch1 + noise.segments(1,index + 1).ch1;
 ch2 = noise.segments(1,index).ch2 + noise.segments(1,index + 1).ch2;
@@ -405,7 +405,7 @@ end
 
 display('finished test');
 display('saving results');
-save('TEST\NOISE\result2r.mat', 'result2r','-v7.3');
+save('TEST\NOISE+REVERBERATION\result2r.mat', 'result2r','-v7.3');
 display('plotting');
 
 
