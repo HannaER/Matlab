@@ -6,8 +6,8 @@ clc;
 Fs = 8000;
 K = 32; % filter length
 L = 4; % antal micar som amn ska testa för, dvs. antalet kurvor i grafen
-M = 5;%62;% antal brusnivåer, mätpunkter/kurva
-N = 2;%100;% 100 ord ska testas, 50/50 höger/vänster. Måste vara ett jämnt tal
+M = 31;% antal brusnivåer, mätpunkter/kurva
+N = 100;% 100 ord ska testas, 50/50 höger/vänster. Måste vara ett jämnt tal
 P = 200; % antal ord(vänster/höger)/avstånd som finns att utnyttja till tester
 
 
@@ -17,11 +17,8 @@ OVERLAP = BLOCK_LENGTH/2; %OVERLAP
 SUBSET_LENGTH = 12; %SUBSET_LENGTH
 GAMMA = 0.5; % coefficient for pre_emhp
 THRESHOLD = 4;
-START_SNR = 15;%-10;
-DECIBEL_STEP = 1;%0.5;
-
-
-%%%%%%%%%%% 1 meter %%%%%%%%%%%%%%%%%%%%%%%%%
+START_SNR = -10;
+DECIBEL_STEP = 1;
 
 result1.result11 = [];
 result1.result12 = [];
@@ -205,7 +202,7 @@ ch3= ch3 + rec1h_orig(1,index).ch3;
 ch4= ch4 + rec1h_orig(1,index).ch4;
 word_4_wiener = [ch1';ch2';ch3';ch4'];
 
-noise_orig = white_orig;  %babble_orig;  % engine_orig;%  factory_orig;%       
+noise_orig =  factory_orig;% white_orig;  %  babble_orig;  % engine_orig;%        
 index = exceptions2(1);
 ch1 = noise_orig.segments(1,index).ch1 + noise_orig.segments(1,index + 1).ch1;
 ch2 = noise_orig.segments(1,index).ch2 + noise_orig.segments(1,index + 1).ch2;
@@ -213,7 +210,7 @@ ch3 = noise_orig.segments(1,index).ch3 + noise_orig.segments(1,index + 1).ch3;
 ch4 = noise_orig.segments(1,index).ch4 + noise_orig.segments(1,index + 1).ch4;
 noise_4_wiener = [ch1;ch2;ch3;ch4];
 
-noise = white_noise;  %babble_noise;  % engine_noise;%  factory_noise;%       
+noise = factory_noise;% white_noise;  %babble_noise;  % engine_noise;%       
 noise = set_decibel(noise, DECIBEL_STEP);
 noise_orig = set_decibel(noise_orig, DECIBEL_STEP);
 current_word_name = '';
@@ -237,8 +234,9 @@ for h = 1:L % L = antal micar
         noise = divide_into_segments(noise, 40000);
         current_snr = decibel_1 - noise.decibel;
         noise_orig = set_decibel(noise_orig, -DECIBEL_STEP);
-        noise_orig = divide_into_segments(noise_orig, 40000);
+        noise_orig = divide_into_segments(noise_orig, 5000);
         index = exceptions2(1);
+        %display('testtest')
         ch1 = noise_orig.segments(1,index).ch1 + noise_orig.segments(1,index + 1).ch1;
         ch2 = noise_orig.segments(1,index).ch2 + noise_orig.segments(1,index + 1).ch2;
         ch3 = noise_orig.segments(1,index).ch3 + noise_orig.segments(1,index + 1).ch3;
@@ -292,14 +290,8 @@ for h = 1:L % L = antal micar
                 y_3 = pre_emph(y_2, GAMMA);
                 % cut the signal forwards and backwards
                 y_4 = cut_forwards(y_3, BLOCK_LENGTH, OVERLAP, THRESHOLD);
-                soundsc(y_4);
-                figure
-                plot(y_4)
-                pause(1);
                 y_4 = cut_backwards(y_4, BLOCK_LENGTH, OVERLAP, THRESHOLD);
-                soundsc(y_4);
-                pause(1);
-                % block_frame
+                %put the signal in blocks
                 y_5 = block_frame(y_4, BLOCK_LENGTH, OVERLAP);
                 % schur_algo
                 y_6 = schur_algo(y_5, N_REFLEC);

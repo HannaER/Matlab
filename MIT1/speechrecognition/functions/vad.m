@@ -28,7 +28,7 @@ function index = vad( input, b_length, threshold)
         P_S = beta*P_S + (1 - beta)*energy(i);
         R = P_S/P_L;
         if R > threshold              
-            first = (i-4)*b_length;%((i-4)*b_length);
+            first = (i - 4)*b_length;
             break;
         end
     end    
@@ -36,8 +36,6 @@ function index = vad( input, b_length, threshold)
         first = 1;
     end
 
-%     P_L = energy(n_cols); 
-%     P_S = energy(n_cols); 
     index = first;
     
 end

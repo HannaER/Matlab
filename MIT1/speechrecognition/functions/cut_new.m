@@ -1,14 +1,14 @@
 function output = cut_new( input, b_length, overlap, threshold)
-% Cut out the important values of a speech signal.
-    % cut(signal, b_length, overlap, threshold)
-    % b_length = block length
-    % overlap = amount of overlap in samples
+Cut out the important values of a speech signal.
+    cut(signal, b_length, overlap, threshold)
+    b_length = block length
+    overlap = amount of overlap in samples
     
     
-    %a = 0.99, b = 0.6 t = 5
+    a = 0.99, b = 0.6 t = 5
     alfa = 0.99; % långsamt integrerande för bakgrundsbrus
     beta = 0.8; % snabbare integrering för tal(korttidsenergi)
-    %threshold = 4;
+    threshold = 4;
 
     first = 1;
     last = length(input);
@@ -23,7 +23,7 @@ function output = cut_new( input, b_length, overlap, threshold)
     end
     P_L = energy(1); 
     P_S = energy(1);
-    %FORWARD
+    FORWARD
     for i = 1:n_cols
         P_L = alfa*P_L + (1 - alfa)*energy(i);
         P_S = beta*P_S + (1 - beta)*energy(i);
@@ -39,7 +39,7 @@ function output = cut_new( input, b_length, overlap, threshold)
 
     P_L = energy(n_cols); 
     P_S = energy(n_cols); 
-    %BACKWARD
+    BACKWARD
     for i = fliplr(1:n_cols)
         P_L = alfa*P_L + (1 - alfa)*energy(i);
         P_S = beta*P_S + (1 - beta)*energy(i);
@@ -60,7 +60,7 @@ function output = cut_new( input, b_length, overlap, threshold)
         output = input(first:last);
         return;
     end
-    %fprintf('\nfirst < last, first = %d, last = %d\n\n', first , last);
+    fprintf('\nfirst < last, first = %d, last = %d\n\n', first , last);
     output = input(first:last);
     
 end

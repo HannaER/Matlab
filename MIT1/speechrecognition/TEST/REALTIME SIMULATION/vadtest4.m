@@ -1,4 +1,4 @@
-%%%%% Testa 1 meter mot databasen %%%%
+%%%%% Testa 4 meter mot databasen %%%%
 clear all;
 close all;
 clc;
@@ -6,8 +6,8 @@ clc;
 Fs = 8000;
 K = 32; % filter length
 L = 4; % antal micar som amn ska testa för, dvs. antalet kurvor i grafen
-M = 5;%62;% antal brusnivåer, mätpunkter/kurva
-N = 2;%100;% 100 ord ska testas, 50/50 höger/vänster. Måste vara ett jämnt tal
+M = 31;% antal brusnivåer, mätpunkter/kurva
+N = 100;% 100 ord ska testas, 50/50 höger/vänster. Måste vara ett jämnt tal
 P = 200; % antal ord(vänster/höger)/avstånd som finns att utnyttja till tester
 
 
@@ -17,18 +17,15 @@ OVERLAP = BLOCK_LENGTH/2; %OVERLAP
 SUBSET_LENGTH = 12; %SUBSET_LENGTH
 GAMMA = 0.5; % coefficient for pre_emhp
 THRESHOLD = 4;
-START_SNR = 15;%-10;
-DECIBEL_STEP = 1;%0.5;
+START_SNR = -10;
+DECIBEL_STEP = 1;
 
-
-%%%%%%%%%%% 1 meter %%%%%%%%%%%%%%%%%%%%%%%%%
-
-result1.result11 = [];
-result1.result12 = [];
-result1.result13 = [];
-result1.result14 = [];
-result1.result11mbf = [];
-snr1 = []; % x-vector - the same for all 4
+result4.result41 = [];
+result4.result42 = [];
+result4.result43 = [];
+result4.result44 = [];
+result4.result41mbf = [];
+snr4 = []; % x-vector - the same for all 4
 
 
 
@@ -38,18 +35,18 @@ snr1 = []; % x-vector - the same for all 4
 
 %VÄNSTER
 decibel_v = 0;
-load TEST_REC/1/v.mat
+load TEST_REC/4/v.mat
 for i = 1:P % all words to iterate through
     temp1 = [];
     temp2 = [];
     temp3 = [];
     temp4 = [];
-    for j = 1:length(rec1v(1,1).ch1)
-        if  abs(rec1v(1,i).ch3(j)) > 0.005 % this value is chosen by looking at recordings
-            temp1 = [temp1 rec1v(1,i).ch1(j)];
-            temp2 = [temp2 rec1v(1,i).ch2(j)];
-            temp3 = [temp3 rec1v(1,i).ch3(j)];
-            temp4 = [temp4 rec1v(1,i).ch4(j)];
+    for j = 1:length(rec4v(1,1).ch1)
+        if  abs(rec4v(1,i).ch3(j)) > 0.005 % this value is chosen by looking at recordings
+            temp1 = [temp1 rec4v(1,i).ch1(j)];
+            temp2 = [temp2 rec4v(1,i).ch2(j)];
+            temp3 = [temp3 rec4v(1,i).ch3(j)];
+            temp4 = [temp4 rec4v(1,i).ch4(j)];
         end
     end
     variance_ = mean([var(temp1) var(temp2) var(temp3) var(temp4)]);
@@ -58,25 +55,25 @@ end
 
 %HÖGER
 decibel_h = 0;
-load TEST_REC/1/h.mat
+load TEST_REC/4/h.mat
 for i = 1:P % all words to iterate through
     temp1 = [];
     temp2 = [];
     temp3 = [];
     temp4 = [];
-    for j = 1:length(rec1h(1,1).ch1)
-        if  abs(rec1h(1,i).ch3(j)) > 0.005 % this value is chosen by looking at recordings
-            temp1 = [temp1 rec1h(1,i).ch1(j)];
-            temp2 = [temp2 rec1h(1,i).ch2(j)];
-            temp3 = [temp3 rec1h(1,i).ch3(j)];
-            temp4 = [temp4 rec1h(1,i).ch4(j)];
+    for j = 1:length(rec4h(1,1).ch1)
+        if  abs(rec4h(1,i).ch3(j)) > 0.005 % this value is chosen by looking at recordings
+            temp1 = [temp1 rec4h(1,i).ch1(j)];
+            temp2 = [temp2 rec4h(1,i).ch2(j)];
+            temp3 = [temp3 rec4h(1,i).ch3(j)];
+            temp4 = [temp4 rec4h(1,i).ch4(j)];
         end
     end
     variance_ = mean([var(temp1) var(temp2) var(temp3) var(temp4)]);
     decibel_h = decibel_h + pow2db(variance_)*(1/P);
 end
 
-decibel_1 = mean([decibel_v decibel_h]);
+decibel_4 = mean([decibel_v decibel_h]);
 
 % anpassa noise-signalerna till decibel_ så att start värdet på SNR är 0. SNR =
 % decibel_speech - decibel_noise = 0.
@@ -118,31 +115,31 @@ babble_noise.ch4 = [babble_noise.ch4 babble_noise.ch4 babble_noise.ch4 babble_no
 
 %increase the speech recordings to 5 seconds by zeropadding
 
-rec1v_orig = rec1v;
-rec1h_orig = rec1h;
-for i = 1:length(rec1v)
-    rec1v(i).ch1 = [zeros((40000/2), 1); rec1v(i).ch1; zeros(((40000/2) - length(rec1v(i).ch1)),1)];
-    rec1v(i).ch2 = [zeros((40000/2), 1); rec1v(i).ch2; zeros(((40000/2) - length(rec1v(i).ch2)),1)];
-    rec1v(i).ch3 = [zeros((40000/2), 1); rec1v(i).ch3; zeros(((40000/2) - length(rec1v(i).ch3)),1)];
-    rec1v(i).ch4 = [zeros((40000/2), 1); rec1v(i).ch4; zeros(((40000/2) - length(rec1v(i).ch4)),1)];
+rec4v_orig = rec4v;
+rec4h_orig = rec4h;
+for i = 1:length(rec4v)
+    rec4v(i).ch1 = [zeros((40000/2), 1); rec4v(i).ch1; zeros(((40000/2) - length(rec4v(i).ch1)),1)];
+    rec4v(i).ch2 = [zeros((40000/2), 1); rec4v(i).ch2; zeros(((40000/2) - length(rec4v(i).ch2)),1)];
+    rec4v(i).ch3 = [zeros((40000/2), 1); rec4v(i).ch3; zeros(((40000/2) - length(rec4v(i).ch3)),1)];
+    rec4v(i).ch4 = [zeros((40000/2), 1); rec4v(i).ch4; zeros(((40000/2) - length(rec4v(i).ch4)),1)];
 end
 
-for i = 1:length(rec1h)
-    rec1h(i).ch1 = [zeros((40000/2), 1); rec1h(i).ch1; zeros(((40000/2) - length(rec1h(i).ch1)),1)];
-    rec1h(i).ch2 = [zeros((40000/2), 1); rec1h(i).ch2; zeros(((40000/2) - length(rec1h(i).ch2)),1)];
-    rec1h(i).ch3 = [zeros((40000/2), 1); rec1h(i).ch3; zeros(((40000/2) - length(rec1h(i).ch3)),1)];
-    rec1h(i).ch4 = [zeros((40000/2), 1); rec1h(i).ch4; zeros(((40000/2) - length(rec1h(i).ch4)),1)];    
+for i = 1:length(rec4h)
+    rec4h(i).ch1 = [zeros((40000/2), 1); rec4h(i).ch1; zeros(((40000/2) - length(rec4h(i).ch1)),1)];
+    rec4h(i).ch2 = [zeros((40000/2), 1); rec4h(i).ch2; zeros(((40000/2) - length(rec4h(i).ch2)),1)];
+    rec4h(i).ch3 = [zeros((40000/2), 1); rec4h(i).ch3; zeros(((40000/2) - length(rec4h(i).ch3)),1)];
+    rec4h(i).ch4 = [zeros((40000/2), 1); rec4h(i).ch4; zeros(((40000/2) - length(rec4h(i).ch4)),1)];    
 end
 
 
 %BALANSERA NOISE mot SNR = START_SNR
-decibel_diff = decibel_1 - engine_noise.decibel - START_SNR;
+decibel_diff = decibel_4 - engine_noise.decibel - START_SNR;
 engine_noise = set_decibel(engine_noise, decibel_diff);
-decibel_diff = decibel_1 - factory_noise.decibel - START_SNR;
+decibel_diff = decibel_4 - factory_noise.decibel - START_SNR;
 factory_noise = set_decibel(factory_noise, decibel_diff);
-decibel_diff = decibel_1 - white_noise.decibel - START_SNR;
+decibel_diff = decibel_4 - white_noise.decibel - START_SNR;
 white_noise = set_decibel(white_noise, decibel_diff);
-decibel_diff = decibel_1 - babble_noise.decibel - START_SNR;
+decibel_diff = decibel_4 - babble_noise.decibel - START_SNR;
 babble_noise = set_decibel(babble_noise, decibel_diff);
 
 %DELA UPP NOISE OM 40000 SAMPLES
@@ -153,13 +150,13 @@ babble_noise = divide_into_segments(babble_noise, 40000);
 
 
 %BALANSERA NOISE mot SNR = START_SNR
-decibel_diff = decibel_1 - engine_orig.decibel - START_SNR;
+decibel_diff = decibel_4 - engine_orig.decibel - START_SNR;
 engine_orig = set_decibel(engine_orig, decibel_diff);
-decibel_diff = decibel_1 - factory_orig.decibel - START_SNR;
+decibel_diff = decibel_4 - factory_orig.decibel - START_SNR;
 factory_orig = set_decibel(factory_orig, decibel_diff);
-decibel_diff = decibel_1 - white_orig.decibel - START_SNR;
+decibel_diff = decibel_4 - white_orig.decibel - START_SNR;
 white_orig = set_decibel(white_orig, decibel_diff);
-decibel_diff = decibel_1 - babble_orig.decibel - START_SNR;
+decibel_diff = decibel_4 - babble_orig.decibel - START_SNR;
 babble_orig = set_decibel(babble_orig, decibel_diff);
 
 %DELA UPP NOISE OM 5000 SAMPLES
@@ -170,7 +167,7 @@ babble_orig = divide_into_segments(babble_orig, 5000);
 
 %SKAPA SNR VEKTORN SOM ÄR X-AXELN
 for i = 1:M
-    snr1 = [snr1 (START_SNR + (i-1)*DECIBEL_STEP)]; % calc. the snr vector
+    snr4 = [snr4 (START_SNR + (i-1)*DECIBEL_STEP)]; % calc. the snr vector
 end
 
 %SKAPA VEKTORERNA MED INDEXEN SOM SKALL ANVÄNDAS
@@ -194,18 +191,18 @@ exceptions = [exceptions temp];
 
 %GET ONE WORD AND NOISE FOR THE LS_OPTIMAL FILTER FUNCTION
 index = exceptions(1);
-ch1=rec1v_orig(1,index).ch1;
-ch2=rec1v_orig(1,index).ch2;
-ch3=rec1v_orig(1,index).ch3;
-ch4=rec1v_orig(1,index).ch4;
+ch1=rec4v_orig(1,index).ch1;
+ch2=rec4v_orig(1,index).ch2;
+ch3=rec4v_orig(1,index).ch3;
+ch4=rec4v_orig(1,index).ch4;
 index = exceptions(2);
-ch1= ch1 + rec1h_orig(1,index).ch1;
-ch2= ch2 + rec1h_orig(1,index).ch2;
-ch3= ch3 + rec1h_orig(1,index).ch3;
-ch4= ch4 + rec1h_orig(1,index).ch4;
+ch1= ch1 + rec4h_orig(1,index).ch1;
+ch2= ch2 + rec4h_orig(1,index).ch2;
+ch3= ch3 + rec4h_orig(1,index).ch3;
+ch4= ch4 + rec4h_orig(1,index).ch4;
 word_4_wiener = [ch1';ch2';ch3';ch4'];
 
-noise_orig = white_orig;  %babble_orig;  % engine_orig;%  factory_orig;%       
+noise_orig =  factory_orig;% white_orig;  %  babble_orig;  % engine_orig;%        
 index = exceptions2(1);
 ch1 = noise_orig.segments(1,index).ch1 + noise_orig.segments(1,index + 1).ch1;
 ch2 = noise_orig.segments(1,index).ch2 + noise_orig.segments(1,index + 1).ch2;
@@ -213,7 +210,7 @@ ch3 = noise_orig.segments(1,index).ch3 + noise_orig.segments(1,index + 1).ch3;
 ch4 = noise_orig.segments(1,index).ch4 + noise_orig.segments(1,index + 1).ch4;
 noise_4_wiener = [ch1;ch2;ch3;ch4];
 
-noise = white_noise;  %babble_noise;  % engine_noise;%  factory_noise;%       
+noise = factory_noise;% white_noise;  %babble_noise;  % engine_noise;%           
 noise = set_decibel(noise, DECIBEL_STEP);
 noise_orig = set_decibel(noise_orig, DECIBEL_STEP);
 current_word_name = '';
@@ -235,10 +232,11 @@ for h = 1:L % L = antal micar
         %set noise decibel level, update segments,
         noise = set_decibel(noise, -DECIBEL_STEP);
         noise = divide_into_segments(noise, 40000);
-        current_snr = decibel_1 - noise.decibel;
+        current_snr = decibel_4 - noise.decibel;
         noise_orig = set_decibel(noise_orig, -DECIBEL_STEP);
-        noise_orig = divide_into_segments(noise_orig, 40000);
+        noise_orig = divide_into_segments(noise_orig, 5000);
         index = exceptions2(1);
+        %display('testtest')
         ch1 = noise_orig.segments(1,index).ch1 + noise_orig.segments(1,index + 1).ch1;
         ch2 = noise_orig.segments(1,index).ch2 + noise_orig.segments(1,index + 1).ch2;
         ch3 = noise_orig.segments(1,index).ch3 + noise_orig.segments(1,index + 1).ch3;
@@ -249,17 +247,17 @@ for h = 1:L % L = antal micar
             % randomly pick a word which have not been used yet
             index = exceptions(j);
             if j <= N/2 % take 'vänster'
-                ch1 = rec1v(1,index).ch1;
-                ch2 = rec1v(1,index).ch2;
-                ch3 = rec1v(1,index).ch3;
-                ch4 = rec1v(1,index).ch4;
-                current_word_name = rec1v(1).name;
+                ch1 = rec4v(1,index).ch1;
+                ch2 = rec4v(1,index).ch2;
+                ch3 = rec4v(1,index).ch3;
+                ch4 = rec4v(1,index).ch4;
+                current_word_name = rec4v(1).name;
             else % take 'höger'
-                ch1 = rec1h(1,index).ch1;
-                ch2 = rec1h(1,index).ch2;
-                ch3 = rec1h(1,index).ch3;
-                ch4 = rec1h(1,index).ch4;
-                current_word_name = rec1h(1).name;
+                ch1 = rec4h(1,index).ch1;
+                ch2 = rec4h(1,index).ch2;
+                ch3 = rec4h(1,index).ch3;
+                ch4 = rec4h(1,index).ch4;
+                current_word_name = rec4h(1).name;
             end
             w.ch1 = ch1;
             w.ch2 = ch2;
@@ -292,14 +290,8 @@ for h = 1:L % L = antal micar
                 y_3 = pre_emph(y_2, GAMMA);
                 % cut the signal forwards and backwards
                 y_4 = cut_forwards(y_3, BLOCK_LENGTH, OVERLAP, THRESHOLD);
-                soundsc(y_4);
-                figure
-                plot(y_4)
-                pause(1);
                 y_4 = cut_backwards(y_4, BLOCK_LENGTH, OVERLAP, THRESHOLD);
-                soundsc(y_4);
-                pause(1);
-                % block_frame
+                %put the signal in blocks
                 y_5 = block_frame(y_4, BLOCK_LENGTH, OVERLAP);
                 % schur_algo
                 y_6 = schur_algo(y_5, N_REFLEC);
@@ -329,7 +321,7 @@ for h = 1:L % L = antal micar
         s.left = left;
         s.wrong_word = right + left;
         s.no_match = no_match;
-        eval(['result1.result1' num2str(h) ' = [ result1.result1' num2str(h)  ' s];']);
+        eval(['result4.result4' num2str(h) ' = [ result4.result4' num2str(h)  ' s];']);
     end
 end
 
@@ -351,22 +343,22 @@ for h = 1:1 % L = antal micar
         %set noise decibel level, update segments,
         noise = set_decibel(noise, -DECIBEL_STEP);
         noise = divide_into_segments(noise, 40000);
-        current_snr = decibel_1 - noise.decibel;
+        current_snr = decibel_4 - noise.decibel;
         for j = 1:N  % N = antal ord
             % randomly pick a word which have not been used yet
             index = exceptions(j);
             if j <= N/2 % take 'vänster'
-                ch1 = rec1v(1,index).ch1;
-                ch2 = rec1v(1,index).ch2;
-                ch3 = rec1v(1,index).ch3;
-                ch4 = rec1v(1,index).ch4;
-                current_word_name = rec1v(1).name;
+                ch1 = rec4v(1,index).ch1;
+                ch2 = rec4v(1,index).ch2;
+                ch3 = rec4v(1,index).ch3;
+                ch4 = rec4v(1,index).ch4;
+                current_word_name = rec4v(1).name;
             else % take 'höger'
-                ch1 = rec1h(1,index).ch1;
-                ch2 = rec1h(1,index).ch2;
-                ch3 = rec1h(1,index).ch3;
-                ch4 = rec1h(1,index).ch4;
-                current_word_name = rec1h(1).name;
+                ch1 = rec4h(1,index).ch1;
+                ch2 = rec4h(1,index).ch2;
+                ch3 = rec4h(1,index).ch3;
+                ch4 = rec4h(1,index).ch4;
+                current_word_name = rec4h(1).name;
             end
             w.ch1 = ch1;
             w.ch2 = ch2;
@@ -430,14 +422,14 @@ for h = 1:1 % L = antal micar
         s.left = left;
         s.wrong_word = right + left;
         s.no_match = no_match;
-        eval(['result1.result11mbf = [result1.result11mbf s];']);
+        eval(['result4.result41mbf = [result4.result41mbf s];']);
     end
 end
 
 
 display('finished test');
 display('saving results');
-save('TEST\REALTIME SIMULATION\result1.mat', 'result1','-v7.3');
+save('TEST\REALTIME SIMULATION\result4.mat', 'result4','-v7.3');
 display('plotting');
 
 
@@ -446,48 +438,48 @@ temp = (START_SNR + M*DECIBEL_STEP + 10);
 %PLOTTA
 figure (1)
 subplot(2,2,1)
-y = extractfield(result1.result11, 'wer');
-plot(snr1,y);
+y = extractfield(result4.result41, 'wer');
+plot(snr4,y);
 title('One mic  + noise - bf');
 xlabel('SNR [dB]');
 ylabel('Recognition rate [%]');
 
 subplot(2,2,2)
-y = extractfield(result1.result12, 'wer');
-plot(snr1,y, 'r');
+y = extractfield(result4.result42, 'wer');
+plot(snr4,y, 'r');
 title('Two mics + noise + bf');
 xlabel('SNR [dB]');
 ylabel('Recognition rate [%]');
 
 subplot(2,2,3)
-y = extractfield(result1.result13, 'wer');
-plot(snr1, y, 'g');
+y = extractfield(result4.result43, 'wer');
+plot(snr4, y, 'g');
 title('Three mics + noise + bf');
 xlabel('SNR [dB]');
 ylabel('Recognition rate [%]');
 
 subplot(2,2,4)
-y = extractfield(result1.result14, 'wer');
-plot(snr1, y, 'm');
+y = extractfield(result4.result44, 'wer');
+plot(snr4, y, 'm');
 title('Four mics + noise + bf');
 xlabel('SNR [dB]');
 ylabel('Recognition rate [%]');
 
 
 figure (2)
-y = extractfield(result1.result11mbf, 'wer');
-plot(snr1, y, 'k-o', 'LineWidth', 1.5);
+y = extractfield(result4.result41mbf, 'wer');
+plot(snr4, y, 'k-o', 'LineWidth', 1.5);
 hold on;
-y = extractfield(result1.result11, 'wer');
-plot(snr1,y, 'k-x', 'LineWidth', 1.5);
-y = extractfield(result1.result12, 'wer');
-plot(snr1,y, 'k-s', 'LineWidth', 1.5);
-y = extractfield(result1.result13, 'wer');
-plot(snr1, y, 'k-d', 'LineWidth', 1.5);
-y = extractfield(result1.result14, 'wer');
-plot(snr1, y, 'k-p', 'LineWidth', 1.5);
+y = extractfield(result4.result41, 'wer');
+plot(snr4,y, 'k-x', 'LineWidth', 1.5);
+y = extractfield(result4.result42, 'wer');
+plot(snr4,y, 'k-s', 'LineWidth', 1.5);
+y = extractfield(result4.result43, 'wer');
+plot(snr4, y, 'k-d', 'LineWidth', 1.5);
+y = extractfield(result4.result44, 'wer');
+plot(snr4, y, 'k-p', 'LineWidth', 1.5);
 
-title('1 meter', 'FontSize', 16);
+title('4 meter', 'FontSize', 16);
 legend( '1 mic  + noise - bf', '1 mic  + noise + bf','2 mics + noise + bf','3 mics + noise + bf','4 mics + noise + bf', 'Location', 'SouthEast');
 xlabel('SNR [dB]', 'FontSize', 16);
 ylabel('Recognition Rate [%]', 'FontSize', 16);
@@ -495,18 +487,18 @@ set(gca, 'fontsize', 12);
 axis([START_SNR (START_SNR + (M-1)*DECIBEL_STEP) 0 100]);
 
 figure (3)
-y = extractfield(result1.result11mbf, 'wrong_word');
-plot(snr1, y, 'k-o', 'LineWidth', 1.5);
+y = extractfield(result4.result41mbf, 'wrong_word');
+plot(snr4, y, 'k-o', 'LineWidth', 1.5);
 hold on;
-y = extractfield(result1.result11mbf, 'no_match');
-plot(snr1,y, 'k-o', 'LineWidth', 1.5);
-y = extractfield(result1.result14, 'wrong_word');
-plot(snr1, y, 'k-x', 'LineWidth', 1.5);
-y = extractfield(result1.result14, 'no_match');
-plot(snr1,y, 'k-x', 'LineWidth', 1.5);
+y = extractfield(result4.result41mbf, 'no_match');
+plot(snr4,y, 'k-o', 'LineWidth', 1.5);
+y = extractfield(result4.result44, 'wrong_word');
+plot(snr4, y, 'k-x', 'LineWidth', 1.5);
+y = extractfield(result4.result44, 'no_match');
+plot(snr4,y, 'k-x', 'LineWidth', 1.5);
 
 
-title('1 meter: Errors ', 'FontSize', 16);
+title('4 meter: Errors ', 'FontSize', 16);
 legend( '1 mic  + noise - bf: WRONG WORD', '1 mic  + noise - bf: NO MATCH', '4 mics + noise + bf: WRONG WORD', '4 mics + noise + bf: NO MATCH', 'Location', 'NorthEast');
 xlabel('SNR [dB]', 'FontSize', 16);
 ylabel('Recognition Rate [%]', 'FontSize', 16);

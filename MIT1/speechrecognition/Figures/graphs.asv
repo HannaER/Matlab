@@ -113,7 +113,7 @@ for i = 1:length(cases.list)
     else
         title(strcat(num2str(j), ' meters'), 'FontSize', 16);
     end
-    l1 = legend( '1 mic  + noise - bf', '1 mic  + noise + bf','2 mics + noise + bf','3 mics + noise + bf','4 mics + noise + bf', 'Location', 'NorthWest');
+    l1 = legend( '1 mic   + noise - bf', '1 mic   + noise + bf','2 mics + noise + bf','3 mics + noise + bf','4 mics + noise + bf', 'Location', 'NorthWest');
     xlabel('SNR [dB]', 'FontSize', 16);
     ylabel('Recognition Rate [%]', 'FontSize', 16);
     set(gca, 'fontsize', 12);
@@ -243,11 +243,105 @@ end
 
 
 
+%%% REALTIME SIMULATIONS %%%
+
+Fs = 8000;
+K = 32; % filter length
+L = 4; % antal micar som amn ska testa för, dvs. antalet kurvor i grafen
+M = 31;% antal brusnivåer, mätpunkter/kurva
+N = 100;% 100 ord ska testas, 50/50 höger/vänster. Måste vara ett jämnt tal
+P = 200; % antal ord(vänster/höger)/avstånd som finns att utnyttja till tester
 
 
+N_REFLEC = 9; %N_REFLEC
+BLOCK_LENGTH = 160; %BLOCK_LENGTH
+OVERLAP = BLOCK_LENGTH/2; %OVERLAP
+SUBSET_LENGTH = 12; %SUBSET_LENGTH
+GAMMA = 0.5; % coefficient for pre_emhp
+THRESHOLD = 4;
+START_SNR = -10;
+DECIBEL_STEP = 1;
 
 
+for i = 1:M
+    snr1 = [snr1 (START_SNR + (i-1)*DECIBEL_STEP)]; % calc. the snr vector
+end
 
+
+casesvad.list = [];
+
+
+load 'TEST\REALTIME SIMULATION\w1.mat'
+w1vad = result1;
+s.case = w1vad;
+eval(['casesvad.list = [casesvad.list s];']);
+load 'TEST\REALTIME SIMULATION\w2.mat'
+w2vad = result2;
+s.case = w2vad;
+eval(['casesvad.list = [casesvad.list s];']);
+load 'TEST\REALTIME SIMULATION\w4.mat'
+w4vad = result4;
+s.case = w4vad;
+eval(['casesvad.list = [casesvad.list s];']);
+
+
+load 'TEST\REALTIME SIMULATION\f1.mat'
+f1vad = result1;
+s.case = f1vad;
+eval(['casesvad.list = [casesvad.list s];']);
+load 'TEST\REALTIME SIMULATION\f2.mat'
+f2vad = result2;
+s.case = f2vad;
+eval(['casesvad.list = [casesvad.list s];']);
+load 'TEST\REALTIME SIMULATION\f4.mat'
+f4vad = result4;
+s.case = f4vad;
+eval(['casesvad.list = [casesvad.list s];']);
+
+
+namesvad = {'w1vad', 'w2vad', 'w4vad', 'f1vad', 'f2vad', 'f4vad'};
+j = 1;
+for i = 1:length(casesvad.list)
+    setup = casesvad.list(i).case;
+    figure('Name', namesvad{i});
+    resultCase = strcat('result', num2str(j), '1mbf');
+    y = extractfield(setup.(resultCase), 'wer');
+    plot(snrvad, y, 'k-o', 'LineWidth', 1.5);
+    hold on;
+    resultCase = strcat('result', num2str(j), '1');
+    y = extractfield(setup.(resultCase), 'wer');
+    plot(snrvad,y, 'k-x', 'LineWidth', 1.5);
+    resultCase = strcat('result', num2str(j), '2');
+    y = extractfield(setup.(resultCase), 'wer');
+    plot(snrvad,y, 'k-s', 'LineWidth', 1.5);
+    resultCase = strcat('result', num2str(j), '3');
+    y = extractfield(setup.(resultCase), 'wer');
+    plot(snrvad, y, 'k-d', 'LineWidth', 1.5);
+    resultCase = strcat('result', num2str(j), '4');
+    y = extractfield(setup.(resultCase), 'wer');
+    plot(snrvad, y, 'k-p', 'LineWidth', 1.5);
+    
+    if(j == 1)
+        title(strcat(num2str(j), ' meter'), 'FontSize', 16);
+    else
+        title(strcat(num2str(j), ' meters'), 'FontSize', 16);
+    end
+    l3 = legend( '1 mic   + noise - bf', '1 mic   + noise + bf','2 mics + noise + bf','3 mics + noise + bf','4 mics + noise + bf', 'Location', 'NorthWest');
+    xlabel('SNR [dB]', 'FontSize', 16);
+    ylabel('Recognition Rate [%]', 'FontSize', 16);
+    set(gca, 'fontsize', 12);
+    set(l3 , 'FontSize', 14);
+    axis([START_SNR (START_SNR + (M-1)*DECIBEL_STEP) 0 100]);
+    %saveas(gcf, ['Figures/RESULTS/', namesr{i},'.eps']);
+    
+    if(j == 1)
+        j = 2;
+    elseif(j == 2)
+        j = 4;
+    elseif(j == 4)
+        j = 1;
+    end
+end
 
 
 

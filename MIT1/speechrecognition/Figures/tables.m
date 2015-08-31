@@ -202,7 +202,7 @@ eval(['cases_r.list = [cases_r.list s];']);
 names = {'w1', 'w2', 'w4', 'f1', 'f2', 'f4', 'e1', 'e2', 'e4', 'b1', 'b2', 'b4'};
 j = 1;
 noise_reverb_level = 9;
-toPrint = 'SPEECH, NOISE & REVERBERATION, 40 procent \n\nNoise/Distance\t\tNo bf\t\t1 mic\t\t2 mics\t\t3 mics\t\t4 mics\n';
+toPrint = 'SPEECH, NOISE & REVERBERATION, 10 procent \n\nNoise/Distance\t\tNo bf\t\t1 mic\t\t2 mics\t\t3 mics\t\t4 mics\n';
 for i = 1:length(cases_r.list)
     setup = cases_r.list(i).case;
     resultCase = strcat('result', num2str(j), '1mbf');
@@ -263,3 +263,104 @@ display(sprintf(toPrint));
 
 
 
+%%%%%%%%%% REALTIME SIMULATION %%%%%%%%%%
+
+
+cases_vad.list = [];
+
+
+%%% WHITE AND FACTORY  %%%
+
+load 'TEST\REALTIME SIMULATION\w1.mat'
+w1vad = result1;
+s.case = w1vad;
+eval(['cases_vad.list = [cases_vad.list s];']);
+load 'TEST\REALTIME SIMULATION\w2.mat'
+w2vad = result2;
+s.case = w2vad;
+eval(['cases_vad.list = [cases_vad.list s];']);
+load 'TEST\REALTIME SIMULATION\w4.mat'
+w4vad = result4;
+s.case = w4vad;
+eval(['cases_vad.list = [cases_vad.list s];']);
+
+load 'TEST\REALTIME SIMULATION\f1.mat'
+f1vad = result1;
+s.case = f1vad;
+eval(['cases_vad.list = [cases_vad.list s];']);
+load 'TEST\REALTIME SIMULATION\f2.mat'
+f2vad = result2;
+s.case = f2vad;
+eval(['cases_vad.list = [cases_vad.list s];']);
+load 'TEST\REALTIME SIMULATION\f4.mat'
+f4vad = result4;
+s.case = f4vad;
+eval(['cases_vad.list = [cases_vad.list s];']);
+
+
+
+
+
+
+
+
+names = {'w1', 'w2', 'w4', 'f1', 'f2', 'f4'};
+j = 1;
+noise_level_vad = 9;
+toPrint = 'SPEECH, NOISE & REVERBERATION, 10 procent \n\nNoise/Distance\t\tNo bf\t\t1 mic\t\t2 mics\t\t3 mics\t\t4 mics\n';
+for i = 1:length(cases_vad.list)
+    setup = cases_vad.list(i).case;
+    resultCase = strcat('result', num2str(j), '1mbf');
+    y1 = extractfield(setup.(resultCase), 'wer');
+    snr = extractfield(setup.(resultCase), 'snr');
+    resultCase = strcat('result', num2str(j), '1');
+    y2 = extractfield(setup.(resultCase), 'wer');
+    resultCase = strcat('result', num2str(j), '2');
+    y3 = extractfield(setup.(resultCase), 'wer');
+    resultCase = strcat('result', num2str(j), '3');
+    y4 = extractfield(setup.(resultCase), 'wer');
+    resultCase = strcat('result', num2str(j), '4');
+    y5 = extractfield(setup.(resultCase), 'wer');
+    
+    
+    toPrint = strcat(toPrint, names{i}, '\t\t\t\t\t\t');
+    res = find(y1>noise_level_vad);
+    if(length(res)> 0)
+        toPrint = strcat(toPrint, num2str((snr(res(1)))), '\t\t\t');
+    else
+        toPrint = strcat(toPrint, '-\t\t\t');
+    end
+    res = find(y2>noise_level_vad);
+    if(length(res)> 0)
+        toPrint = strcat(toPrint, num2str((snr(res(1)))), '\t\t\t');
+    else
+        toPrint = strcat(toPrint, '-\t\t\t');
+    end
+    res = find(y3>noise_level_vad);
+    if(length(res)> 0)
+        toPrint = strcat(toPrint, num2str((snr(res(1)))), '\t\t\t');
+    else
+        toPrint = strcat(toPrint, '-\t\t\t');
+    end
+    res = find(y4>noise_level_vad);
+    if(length(res)> 0)
+        toPrint = strcat(toPrint, num2str((snr(res(1)))), '\t\t\t');
+    else
+        toPrint = strcat(toPrint, '-\t\t\t');
+    end
+    res = find(y5>noise_level_vad);
+    if(length(res)> 0)
+        toPrint = strcat(toPrint, num2str((snr(res(1)))), '\n');
+    else
+        toPrint = strcat(toPrint, '-\n');
+    end
+    
+    if(j == 1)
+        j = 2;
+    elseif(j == 2)
+        j = 4;
+    elseif(j == 4)
+        j = 1;
+    end
+end
+display(sprintf(toPrint));
