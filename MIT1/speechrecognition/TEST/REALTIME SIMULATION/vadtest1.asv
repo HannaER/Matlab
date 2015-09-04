@@ -487,21 +487,20 @@ set(gca, 'fontsize', 12);
 axis([START_SNR (START_SNR + (M-1)*DECIBEL_STEP) 0 100]);
 
 figure (3)
-y = extractfield(result1.result11mbf, 'deletion');
+y = extractfield(result1.result11mbf, 'wrong_word');
 plot(snr1, y, 'k-o', 'LineWidth', 1.5);
 hold on;
-y = extractfield(result1.result11, 'deletion');
+y = extractfield(result1.result11mbf, 'no_match');
 plot(snr1,y, 'k-x', 'LineWidth', 1.5);
-y = extractfield(result1.result12, 'deletion');
-plot(snr1,y, 'k-s', 'LineWidth', 1.5);
-y = extractfield(result1.result13, 'deletion');
-plot(snr1, y, 'k-d', 'LineWidth', 1.5);
-y = extractfield(result1.result14, 'deletion');
-plot(snr1, y, 'k-p', 'LineWidth', 1.5);
+y = extractfield(result1.result14, 'wrong_word');
+plot(snr1, y, 'k-s', 'LineWidth', 1.5);
+y = extractfield(result1.result14, 'no_match');
+plot(snr1,y, 'k-d', 'LineWidth', 1.5);
 
-title('1 meter: Errors: Deletions ', 'FontSize', 16);
-legend( '1 mic  + noise - bf', '1 mic  + noise + bf','2 mics + noise + bf','3 mics + noise + bf','4 mics + noise + bf', 'Location', 'SouthEast');
+
+title('1 meter: Errors ', 'FontSize', 16);
+legend( '1 mic  + noise - bf: WRONG WORD', '1 mic  + noise - bf: NO MATCH', '4 mics + noise + bf: WRONG WORD', '4 mics + noise + bf: NO MATCH', 'Location', 'NorthEast');
 xlabel('SNR [dB]', 'FontSize', 16);
-ylabel('Deletions [%]', 'FontSize', 16);
+ylabel('Recognition Rate [%]', 'FontSize', 16);
 set(gca, 'fontsize', 12);
 axis([START_SNR (START_SNR + (M-1)*DECIBEL_STEP) 0 100]);

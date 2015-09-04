@@ -107,20 +107,45 @@ for i = 1:length(cases.list)
     resultCase = strcat('result', num2str(j), '4');
     y = extractfield(setup.(resultCase), 'wer');
     plot(snr1, y, 'k-p', 'LineWidth', 1.5);
-    
-    if(j == 1)
-        title(strcat(num2str(j), ' meter'), 'FontSize', 16);
-    else
-        title(strcat(num2str(j), ' meters'), 'FontSize', 16);
-    end
     l1 = legend( '1 mic   + noise - bf', '1 mic   + noise + bf','2 mics + noise + bf','3 mics + noise + bf','4 mics + noise + bf', 'Location', 'NorthWest');
     xlabel('SNR [dB]', 'FontSize', 16);
     ylabel('Recognition Rate [%]', 'FontSize', 16);
     set(gca, 'fontsize', 12);
     set(l1 , 'FontSize', 14);
     axis([START_SNR (START_SNR + (M-1)*DECIBEL_STEP) 0 100]);
-    %saveas(gcf, ['Figures/RESULTS/', names{i},'.eps']);
-   
+    if(j == 1)
+        title(strcat(num2str(j), ' meter'), 'FontSize', 16);
+        figure('Name', strcat(names{i}, ': Errors'));
+        resultCase = strcat('result', num2str(j), '1mbf');
+        y = extractfield(setup.(resultCase), 'deletion');
+        plot(snr1, y, 'k-o', 'LineWidth', 1.5);
+        hold on;
+        resultCase = strcat('result', num2str(j), '1mbf');
+        y = extractfield(setup.(resultCase), 'substitution');
+        plot(snr1, y, 'r-o', 'LineWidth', 1.5);
+        resultCase = strcat('result', num2str(j), '1mbf');
+        y = extractfield(setup.(resultCase), 'wrong_word');
+        plot(snr1, y, 'b-o', 'LineWidth', 1.5);        
+        resultCase = strcat('result', num2str(j), '4');
+        y = extractfield(setup.(resultCase), 'deletion');
+        plot(snr1,y, 'k-x', 'LineWidth', 1.5);
+        resultCase = strcat('result', num2str(j), '4');
+        y = extractfield(setup.(resultCase), 'substitution');
+        plot(snr1,y, 'r-x', 'LineWidth', 1.5);
+        resultCase = strcat('result', num2str(j), '4');
+        y = extractfield(setup.(resultCase), 'wrong_word');
+        plot(snr1,y, 'b-x', 'LineWidth', 1.5);
+        title(strcat(num2str(j), ' meter: Noise: Errors'), 'FontSize', 16);
+        l11 = legend(  '1 mic - bf: deletion', '1 mic - bf: substitution', '1 mic - bf: wrong word', '4 mic + bf: deletion', '4 mic + bf: substitution', '4 mic + bf: wrong word', 'Location', 'NorthEast');
+        xlabel('SNR [dB]', 'FontSize', 16);
+        ylabel('Error [%]', 'FontSize', 16);
+        set(gca, 'fontsize', 12);
+        set(l11 , 'FontSize', 14);
+        axis([START_SNR (START_SNR + (M-1)*DECIBEL_STEP) 0 100]);
+    else
+        title(strcat(num2str(j), ' meters'), 'FontSize', 16);
+    end
+    
     
     if(j == 1)
         j = 2;
@@ -218,19 +243,45 @@ for i = 1:length(casesr.list)
     resultCase = strcat('result', num2str(j), '4');
     y = extractfield(setup.(resultCase), 'wer');
     plot(snr1, y, 'k-p', 'LineWidth', 1.5);
-    
-    if(j == 1)
-        title(strcat(num2str(j), ' meter'), 'FontSize', 16);
-    else
-        title(strcat(num2str(j), ' meters'), 'FontSize', 16);
-    end
     l2 = legend( '1 mic   + noise + reverberation -  bf', '1 mic   + noise + reverberation + bf','2 mics + noise + reverberation + bf','3 mics + noise + reverberation + bf','4 mics + noise + reverberation + bf', 'Location', 'NorthWest');
     xlabel('SNR [dB]', 'FontSize', 16);
     ylabel('Recognition Rate [%]', 'FontSize', 16);
     set(gca, 'fontsize', 12);
     set(l2 , 'FontSize', 14);
     axis([START_SNR (START_SNR + (M-1)*DECIBEL_STEP) 0 100]);
-    %saveas(gcf, ['Figures/RESULTS/', namesr{i},'.eps']);
+    if(j == 1)
+        title(strcat(num2str(j), ' meter'), 'FontSize', 16);
+        figure('Name', strcat(namesr{i}, ': Errors'));
+        resultCase = strcat('result', num2str(j), '1mbf');
+        y = extractfield(setup.(resultCase), 'deletion');
+        plot(snr1, y, 'k-o', 'LineWidth', 1.5);
+        hold on;
+        resultCase = strcat('result', num2str(j), '1mbf');
+        y = extractfield(setup.(resultCase), 'substitution');
+        plot(snr1, y, 'r-o', 'LineWidth', 1.5);
+        resultCase = strcat('result', num2str(j), '1mbf');
+        y = extractfield(setup.(resultCase), 'wrong_word');
+        plot(snr1, y, 'b-o', 'LineWidth', 1.5);
+        resultCase = strcat('result', num2str(j), '4');
+        y = extractfield(setup.(resultCase), 'deletion');
+        plot(snr1,y, 'k-x', 'LineWidth', 1.5);
+        resultCase = strcat('result', num2str(j), '4');
+        y = extractfield(setup.(resultCase), 'substitution');
+        plot(snr1,y, 'r-x', 'LineWidth', 1.5);
+        resultCase = strcat('result', num2str(j), '4');
+        y = extractfield(setup.(resultCase), 'wrong_word');
+        plot(snr1,y, 'b-x', 'LineWidth', 1.5);
+        title(strcat(num2str(j), ' meter: Noise + Reverberation: Errors'), 'FontSize', 16);
+        l11 = legend(  '1 mic - bf: deletion', '1 mic - bf: substitution', '1 mic - bf: wrong word', '4 mic + bf: deletion', '4 mic + bf: substitution', '4 mic + bf: wrong word', 'Location', 'NorthEast');
+        xlabel('SNR [dB]', 'FontSize', 16);
+        ylabel('Error [%]', 'FontSize', 16);
+        set(gca, 'fontsize', 12);
+        set(l11 , 'FontSize', 14);
+        axis([START_SNR (START_SNR + (M-1)*DECIBEL_STEP) 0 100]);
+        
+    else
+        title(strcat(num2str(j), ' meters'), 'FontSize', 16);
+    end
     
     if(j == 1)
         j = 2;
@@ -262,9 +313,10 @@ THRESHOLD = 4;
 START_SNR = -10;
 DECIBEL_STEP = 1;
 
+snrvad = [];
 
 for i = 1:M
-    snr1 = [snr1 (START_SNR + (i-1)*DECIBEL_STEP)]; % calc. the snr vector
+    snrvad = [snrvad (START_SNR + (i-1)*DECIBEL_STEP)]; % calc. the snr vector
 end
 
 
@@ -285,21 +337,23 @@ s.case = w4vad;
 eval(['casesvad.list = [casesvad.list s];']);
 
 
-load 'TEST\REALTIME SIMULATION\f1.mat'
-f1vad = result1;
-s.case = f1vad;
-eval(['casesvad.list = [casesvad.list s];']);
-load 'TEST\REALTIME SIMULATION\f2.mat'
-f2vad = result2;
-s.case = f2vad;
-eval(['casesvad.list = [casesvad.list s];']);
-load 'TEST\REALTIME SIMULATION\f4.mat'
-f4vad = result4;
-s.case = f4vad;
-eval(['casesvad.list = [casesvad.list s];']);
+% load 'TEST\REALTIME SIMULATION\f1.mat'
+% f1vad = result1;
+% s.case = f1vad;
+% eval(['casesvad.list = [casesvad.list s];']);
+% load 'TEST\REALTIME SIMULATION\f2.mat'
+% f2vad = result2;
+% s.case = f2vad;
+% eval(['casesvad.list = [casesvad.list s];']);
+% load 'TEST\REALTIME SIMULATION\f4.mat'
+% f4vad = result4;
+% s.case = f4vad;
+% eval(['casesvad.list = [casesvad.list s];']);
 
 
-namesvad = {'w1vad', 'w2vad', 'w4vad', 'f1vad', 'f2vad', 'f4vad'};
+% namesvad = {'w1vad', 'w2vad', 'w4vad', 'f1vad', 'f2vad', 'f4vad'};
+namesvad = {'w1vad', 'w2vad', 'w4vad'};
+
 j = 1;
 for i = 1:length(casesvad.list)
     setup = casesvad.list(i).case;
@@ -323,6 +377,33 @@ for i = 1:length(casesvad.list)
     
     if(j == 1)
         title(strcat(num2str(j), ' meter'), 'FontSize', 16);
+        figure('Name', strcat(namesvad{i}, ': Errors'));
+        resultCase = strcat('result', num2str(j), '1mbf');
+        y = extractfield(setup.(resultCase), 'deletion');
+        plot(snr1, y, 'k-o', 'LineWidth', 1.5);
+        hold on;
+        resultCase = strcat('result', num2str(j), '1mbf');
+        y = extractfield(setup.(resultCase), 'substitution');
+        plot(snr1, y, 'r-o', 'LineWidth', 1.5);
+        resultCase = strcat('result', num2str(j), '1mbf');
+        y = extractfield(setup.(resultCase), 'wrong_word');
+        plot(snr1, y, 'b-o', 'LineWidth', 1.5);        
+        resultCase = strcat('result', num2str(j), '4');
+        y = extractfield(setup.(resultCase), 'deletion');
+        plot(snr1,y, 'k-x', 'LineWidth', 1.5);
+        resultCase = strcat('result', num2str(j), '4');
+        y = extractfield(setup.(resultCase), 'substitution');
+        plot(snr1,y, 'r-x', 'LineWidth', 1.5);
+        resultCase = strcat('result', num2str(j), '4');
+        y = extractfield(setup.(resultCase), 'wrong_word');
+        plot(snr1,y, 'b-x', 'LineWidth', 1.5);
+        title(strcat(num2str(j), ' meter: Real-Time : Errors'), 'FontSize', 16);
+        l11 = legend(  '1 mic - bf: deletion', '1 mic - bf: substitution', '1 mic - bf: wrong word', '4 mic + bf: deletion', '4 mic + bf: substitution', '4 mic + bf: wrong word', 'Location', 'NorthEast');
+        xlabel('SNR [dB]', 'FontSize', 16);
+        ylabel('Error [%]', 'FontSize', 16);
+        set(gca, 'fontsize', 12);
+        set(l11 , 'FontSize', 14);
+        axis([START_SNR (START_SNR + (M-1)*DECIBEL_STEP) 0 100]);        
     else
         title(strcat(num2str(j), ' meters'), 'FontSize', 16);
     end
@@ -332,7 +413,37 @@ for i = 1:length(casesvad.list)
     set(gca, 'fontsize', 12);
     set(l3 , 'FontSize', 14);
     axis([START_SNR (START_SNR + (M-1)*DECIBEL_STEP) 0 100]);
-    %saveas(gcf, ['Figures/RESULTS/', namesr{i},'.eps']);
+    
+    
+    figure('Name', strcat(namesvad{i}, ' Errors'));
+    resultCase = strcat('result', num2str(j), '1mbf');
+    y = extractfield(setup.(resultCase), 'deletion');
+    plot(snrvad, y, 'k-o', 'LineWidth', 1.5);
+    hold on;
+    resultCase = strcat('result', num2str(j), '1');
+    y = extractfield(setup.(resultCase), 'deletion');
+    plot(snrvad,y, 'k-x', 'LineWidth', 1.5);
+    resultCase = strcat('result', num2str(j), '2');
+    y = extractfield(setup.(resultCase), 'deletion');
+    plot(snrvad,y, 'k-s', 'LineWidth', 1.5);
+    resultCase = strcat('result', num2str(j), '3');
+    y = extractfield(setup.(resultCase), 'deletion');
+    plot(snrvad, y, 'k-d', 'LineWidth', 1.5);
+    resultCase = strcat('result', num2str(j), '4');
+    y = extractfield(setup.(resultCase), 'deletion');
+    plot(snrvad, y, 'k-p', 'LineWidth', 1.5);
+    
+    if(j == 1)
+        title(strcat(num2str(j), ' meter: Errors: Deletions'), 'FontSize', 16);
+    else
+        title(strcat(num2str(j), ' meters: Errors: Deletions'), 'FontSize', 16);
+    end
+    l4 = legend( '1 mic   + noise - bf', '1 mic   + noise + bf','2 mics + noise + bf','3 mics + noise + bf','4 mics + noise + bf', 'Location', 'NorthWest');
+    xlabel('SNR [dB]', 'FontSize', 16);
+    ylabel('Deletions [%]', 'FontSize', 16);
+    set(gca, 'fontsize', 12);
+    set(l4 , 'FontSize', 14);
+    axis([START_SNR (START_SNR + (M-1)*DECIBEL_STEP) 0 100]);
     
     if(j == 1)
         j = 2;
