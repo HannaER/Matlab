@@ -44,8 +44,9 @@ b_length = L;
 
 figure (1)
 subplot(211);
-plot(input_1(first:last));
+plot(input_1(first:last), 'k','LineWidth', 1.5);
 title('The recordning before cutting');
+set(gca, 'fontsize', 12);
 
     P_L = energy(n_cols); 
     P_S = energy(n_cols); 
@@ -75,10 +76,11 @@ title('The recordning before cutting');
   
 
 subplot(212);
-plot(output);
+plot(output, 'k','LineWidth', 1.5);
 title('The recording after cutting');
-xlabel('Samples');
-ylabel('Amplitude');
+xlabel('Samples','FontSize', 16);
+ylabel('Amplitude','FontSize', 16);
+set(gca, 'fontsize', 12);
 
 
 %%
@@ -163,6 +165,12 @@ file = fopen('hammingh.txt', 'w');
 fprintf(file, temp);
 
 
+plot(ham, 'k', 'LineWidth', 2)
+set(gca, 'fontsize', 12);
+ylabel('Amplitude', 'FontSize', 16);
+xlabel('Samples', 'FontSize', 16);
+title('Hamming window', 'FontSize', 16);
+
 %%
 close all;
 clear all;
@@ -227,16 +235,6 @@ temp1 = rm_noise(x);
 temp1 = pre_emph(temp1);
 plot(temp1, 'm');
 legend('original','after rm noise and pre emph');
-
-
-%%
-test = [1 2 3 4 4 5 6 7 8 9];
-
-
-string = 'Viktor_db/database/testfile.mat';
-save(string, 'test')
-
-
 
 
 

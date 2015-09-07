@@ -157,19 +157,16 @@ set(gca, 'fontsize', 12);
 
 figure (3)
 freqz([1, -1, 0], [1,-DELTA,0]);
-title('High-pass filter', 'FontSize', 16);
-set(gca, 'fontsize', 12);
-
+title(' rm noise');
 figure (4)
 freqz([1 -GAMMA], 1);
-title('Pre-emphasis filter', 'FontSize', 16);
-set(gca, 'fontsize', 12);
+title(' pre emph');
 
 
 %% Ska testa lägga till filter och undersöka om störningarna dämpas mer
-% clc;
-% close all;
-% clear all;
+%clc;
+%close all;
+%clear all;
 
 GAMMA = 0.5;
 DELTA = 0.91;

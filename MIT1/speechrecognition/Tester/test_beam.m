@@ -4,11 +4,11 @@ close all;
 
 
 %load tal_brus_signaler
-load TEST_REC/1/v.mat
+load TEST_REC/4/v.mat
 load NOISE/engine/engine.mat
 load NOISE/factory/factory.mat
-Xtd = rec1v;
-Xbu = engine;% factory;  
+Xtd = rec4v;
+Xbu = factory;  
 
 
 % Xtd is the speech recording on 6-channels
@@ -20,7 +20,7 @@ Fs = 8000;
 
 % normalizing speech signal against largest value in signal
 % sp=Xtd/max(max(abs(Xtd)));
-i = 1;
+i = 15;
 ch1=Xtd(1,i).ch1;
 ch2=Xtd(1,i).ch2;
 ch3=Xtd(1,i).ch3;
@@ -35,7 +35,7 @@ ch2=Xbu.ch2(:,1:size(sp,2));
 ch3=Xbu.ch3(:,1:size(sp,2));
 ch4=Xbu.ch4(:,1:size(sp,2));
 noise = [ch1;ch2;ch3;ch4];
-L=16; %Filter length
+L=32; %Filter length
 
 %%%%%%%%%%%%%%%%%%%%%%  LS  Beamformer %%%%%%%%%%%%%%%%%%%%%%%
 
@@ -43,10 +43,10 @@ L=16; %Filter length
 [W1] = LS_opt(sp+noise,[zeros(1,L/2) sp(2,1:end-L/2)],L);
 
 [y_ls] = filter_beam((sp+noise),W1); % Here we can filter any noise + speech sequence
-
-soundsc(sp(2,:)+noise(2,:),Fs)
-pause(4)
-soundsc(y_ls,Fs)
+% 
+% soundsc(sp(2,:)+noise(2,:),Fs)
+% pause(4)
+% soundsc(y_ls,Fs)
 
 %wavwrite(0.80*[y_ls]/max(max(abs(y_ls))),Fs,'y_ls.wav')
 
